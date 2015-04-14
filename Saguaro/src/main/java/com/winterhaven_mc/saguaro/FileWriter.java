@@ -13,6 +13,7 @@ public class FileWriter extends BukkitRunnable {
 
 	/**
 	 * Class constructor method
+	 * 
 	 * @param plugin
 	 */
 	FileWriter(SaguaroMain plugin) {
@@ -22,7 +23,7 @@ public class FileWriter extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		
+
 		File dataFile = new File(fileName);
 		try {
 			FileUtils.writeStringToFile(dataFile,plugin.dataCache.getDataString());

@@ -7,11 +7,11 @@ import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class DataCache {
-	
+
 	final SaguaroMain plugin;
-	
+
 	private long serverStartTime = 0;
-	
+
 	private double tps = 0;
 	private long uptime = 0;
 	private int playerCount = 0;
@@ -23,55 +23,57 @@ public class DataCache {
 	private long memoryMax = 0;
 	private long memoryTotal = 0;
 	private long memoryFree = 0;
-	
+
 	/**
 	 * Class constructor method
+	 * 
 	 * @param plugin
 	 */
 	DataCache(final SaguaroMain plugin) {
 		this.plugin = plugin;
 		this.serverStartTime = System.currentTimeMillis();
-		
-        // Create the task anonymously and schedule to run every 30 seconds (600 ticks)
-        new BukkitRunnable() {
- 
-            @Override
-            public void run() {
-            	
-        		int entityCount = 0;
-        		int chunkCount = 0;
-        		long totalWorldSize = 0;
-        		
-        		for (World world : plugin.getServer().getWorlds()) {
-        			entityCount += world.getEntities().size();
-        			chunkCount += world.getLoadedChunks().length;
-        			totalWorldSize += FileUtils.sizeOfDirectory(new File(world.getWorldFolder().getAbsolutePath()));
-        		}
-        		setEntityCount(entityCount);
-        		setChunkCount(chunkCount);
-        		setTotalWorldSize(totalWorldSize);
-        		setPluginCount(plugin.getServer().getPluginManager().getPlugins().length);
-        		setPlayerCount(plugin.getServer().getOnlinePlayers().length);
-        		setPlayerMax(plugin.getServer().getMaxPlayers());
-        		setMemoryMax(Runtime.getRuntime().maxMemory());
-        		setMemoryTotal(Runtime.getRuntime().totalMemory());
-        		setMemoryFree(Runtime.getRuntime().freeMemory());
-        		setUptime(System.currentTimeMillis() - serverStartTime);
-        		setTps(TpsMeter.tps);
-            } 
-        }.runTaskTimer(plugin, 0, 600);
+
+		// Create the task anonymously and schedule to run every 30 seconds (600
+		// ticks)
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+
+				int entityCount = 0;
+				int chunkCount = 0;
+				long totalWorldSize = 0;
+
+				for (World world : plugin.getServer().getWorlds()) {
+					entityCount += world.getEntities().size();
+					chunkCount += world.getLoadedChunks().length;
+					totalWorldSize += FileUtils.sizeOfDirectory(new File(world
+							.getWorldFolder().getAbsolutePath()));
+				}
+				setEntityCount(entityCount);
+				setChunkCount(chunkCount);
+				setTotalWorldSize(totalWorldSize);
+				setPluginCount(plugin.getServer().getPluginManager()
+						.getPlugins().length);
+				setPlayerCount(plugin.getServer().getOnlinePlayers().length);
+				setPlayerMax(plugin.getServer().getMaxPlayers());
+				setMemoryMax(Runtime.getRuntime().maxMemory());
+				setMemoryTotal(Runtime.getRuntime().totalMemory());
+				setMemoryFree(Runtime.getRuntime().freeMemory());
+				setUptime(System.currentTimeMillis() - serverStartTime);
+				setTps(TpsMeter.tps);
+			}
+		}.runTaskTimer(plugin, 0, 600);
 	}
 
-	
 	public synchronized String getDataString() {
-		
+
 		String dataString = "";
 		dataString = dataString + "uptime:" + getUptime() + " ";
 		dataString = dataString + "tps:";
 		if (getTps() < 0) {
 			dataString = dataString + "U" + " ";
-		}
-		else {
+		} else {
 			dataString = dataString + getTps() + " ";
 		}
 		dataString = dataString + "playerCount:" + getPlayerCount() + " ";

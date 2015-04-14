@@ -24,23 +24,22 @@ import java.io.OutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-
 /***
  * Simple TCP server. Waits for connections on a TCP port in a separate thread.
-
+ * 
  * Original code by:
+ * 
  * @author Bruno D'Avanzo
  *
- * <p>
- * Modified by:
- * @author Tim Savage
+ * @author Modified by:<br>
+ *         Tim Savage
  * 
  ***/
 public class TelnetServer implements Runnable {
-	
+
 	// reference to main class
 	SaguaroMain plugin;
-	
+
 	ServerSocket serverSocket = null;
 	Socket clientSocket = null;
 	Thread listener = null;
@@ -56,7 +55,7 @@ public class TelnetServer implements Runnable {
 	public TelnetServer(SaguaroMain plugin, int port) throws IOException {
 
 		this.plugin = plugin;
-		
+
 		serverSocket = new ServerSocket(port);
 		listener = new Thread(this);
 		listener.start();
@@ -71,13 +70,15 @@ public class TelnetServer implements Runnable {
 			try {
 				clientSocket = serverSocket.accept();
 				synchronized (clientSocket) {
-					PrintWriter out = new PrintWriter(clientSocket.getOutputStream(), true);
+					PrintWriter out = new PrintWriter(
+							clientSocket.getOutputStream(), true);
 					out.print(plugin.dataCache.getDataString() + "\n");
 					out.flush();
 					try {
 						clientSocket.close();
 					} catch (Exception e) {
-						System.err.println("Exception in close, " + e.getMessage());
+						System.err.println("Exception in close, "
+								+ e.getMessage());
 					}
 				}
 
