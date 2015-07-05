@@ -1,0 +1,41 @@
+name: HomeStar
+main: com.winterhaven_mc.homestar.PluginMain
+author: ${project.author}
+version: ${project.version}
+softdepend: [Multiverse-Core]
+
+commands:
+  homestar:
+    description: This is the HomeStar command.
+    usage: /homestar [command]
+
+permissions:
+  homestar.use:
+    description: Allows the use of a homestar.
+    default: true
+
+  homestar.status:
+    description: Allows display of config settings.
+    default: op
+
+  homestar.reload:
+    description: Allows reloading the config file.
+    default: op
+
+  homestar.give:
+    description: Allows giving HomeStar items to players.
+    default: op
+
+  homestar.destroy:
+    description: Allows destroying HomeStar items in hand.
+    default: op
+
+  homestar.admin:
+    description: Allows all admin commands
+    default: op
+    children:
+      homestar.status: true
+      homestar.reload: true
+      homestar.give: true
+      homestar.destroy: true
+      
