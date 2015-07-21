@@ -77,8 +77,8 @@ class DelayedTeleportTask extends BukkitRunnable {
 				}
 			}
 
-			// teleport player to spawn location
-			player.teleport(destination.add(0,1,0));
+			// teleport player to bed spawn location
+			player.teleport(destination);
 
 			// send player respawn message
 			plugin.messageManager.sendPlayerMessage(player, "teleport-success", destinationName);
@@ -91,25 +91,25 @@ class DelayedTeleportTask extends BukkitRunnable {
 			// set player cooldown
 			plugin.cooldownManager.setPlayerCooldown(player);
 
-			// try to prevent player spawning inside block and suffocating
-			preventSuffocation(player, destination);
+//			// try to prevent player spawning inside block and suffocating
+//			preventSuffocation(player, destination);
 		}
 	}
 
 	
-	private void preventSuffocation(final Player player, final Location spawnLoc) {
-		
-		final int spawnAir = player.getRemainingAir();
-		
-		new BukkitRunnable(){
-
-			public void run() {
-				if (player.getRemainingAir() < spawnAir) {
-					player.teleport(spawnLoc.add(0,1,0));
-					player.setRemainingAir(spawnAir);
-				}
-			}
-		}.runTaskLater(plugin, 20);		
-	}
-
+//	private void preventSuffocation(final Player player, final Location spawnLoc) {
+//		
+//		final int spawnAir = player.getRemainingAir();
+//		
+//		new BukkitRunnable(){
+//
+//			public void run() {
+//				if (player.getRemainingAir() < spawnAir) {
+//					player.teleport(spawnLoc.add(0,1,0));
+//					player.setRemainingAir(spawnAir);
+//				}
+//			}
+//		}.runTaskLater(plugin, 20);		
+//	}
+//
 }

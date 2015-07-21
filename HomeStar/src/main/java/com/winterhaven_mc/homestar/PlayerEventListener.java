@@ -121,14 +121,27 @@ class PlayerEventListener implements Listener {
 		World playerWorld = player.getWorld();
 		
 		Location destination = null;
+		
+		if (player.getBedSpawnLocation() != null) {
+			destination = plugin.utilities.getSafeBedSpawn(player.getBedSpawnLocation());
+		}
+		else {
+			if (plugin.debug) {
+				plugin.getLogger().info("Player bedspawn is null.");
+			}
+		}
+		
 		String destinationName = plugin.messageManager.getHomeDisplayName();
 		
+		
 		// if bedspawn location is null, test if bedspawn-fallback configured
-		if (player.getBedSpawnLocation() == null) {
+		if (destination == null) {
 			
-			// if bedspawn-fallback is configured false, send message and return
+			// send missing or obstructed message
+			plugin.messageManager.sendPlayerMessage(player, "teleport-fail-no-bedspawn");
+			
+			// if bedspawn-fallback is configured false, do nothing and return
 			if (! plugin.getConfig().getBoolean("bedspawn-fallback")) {
-				plugin.messageManager.sendPlayerMessage(player, "teleport-fail-no-bedspawn");
 				return;
 			}
 			// else set destination to spawn location

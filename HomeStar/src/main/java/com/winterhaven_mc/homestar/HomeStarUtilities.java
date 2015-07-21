@@ -1,10 +1,14 @@
 package com.winterhaven_mc.homestar;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -21,7 +25,8 @@ public class HomeStarUtilities implements HomeStarAPI {
 
 	private final PluginMain plugin;
 	private final String itemTag = hiddenString("HomeStarV1");
-	
+	private	HashSet<Material> safeMaterials = new HashSet<Material>();
+
 	
 	/**
 	 * Class constructor
@@ -29,6 +34,7 @@ public class HomeStarUtilities implements HomeStarAPI {
 	 */
 	HomeStarUtilities(PluginMain plugin) {
 		this.plugin = plugin;
+		safeMaterials = getSafeMaterials();
 	}
 	
 	/**
@@ -76,14 +82,11 @@ public class HomeStarUtilities implements HomeStarAPI {
 			coloredLore.add(ChatColor.translateAlternateColorCodes('&', line));
 		}
 		
-		// set invisible tag in first line of lore
-		coloredLore.set(0, itemTag + coloredLore.get(0));
-
 		// get item metadata object
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		
 		// set item metadata display name to value from config file
-		itemMeta.setDisplayName(displayName);
+		itemMeta.setDisplayName(itemTag + displayName);
 		
 		// set item metadata Lore to value from config file
 		itemMeta.setLore(coloredLore);
@@ -102,34 +105,20 @@ public class HomeStarUtilities implements HomeStarAPI {
 		
 		// if item stack is empty (null or air) return false
 		if (itemStack == null || itemStack.getType().equals(Material.AIR)) {
-			if (plugin.debug) {
-				plugin.getLogger().info("");
-			}
 			return false;
 		}
 				
-		// if item stack does not have lore return false
-		if (! itemStack.getItemMeta().hasLore()) {
-			if (plugin.debug) {
-				plugin.getLogger().info("Item does not have lore.");
-			}
+		// if item stack does not have display name return false
+		if (! itemStack.getItemMeta().hasDisplayName()) {
 			return false;
 		}
 		
-		// get item lore
-		List<String> itemLore = itemStack.getItemMeta().getLore();
-		if (plugin.debug) {
-			for (String string : itemLore) {
-				plugin.getLogger().info(string);				
-			}
-		}
+		// get item display name
+		String itemDisplayName = itemStack.getItemMeta().getDisplayName();
 		
 		// check that lore contains hidden token
-		if (! itemLore.isEmpty() && itemLore.get(0).startsWith(itemTag)) {
+		if (! itemDisplayName.isEmpty() && itemDisplayName.startsWith(itemTag)) {
 			return true;
-		}
-		else if (plugin.debug) {
-			plugin.getLogger().info("Item lore does not start with itemTag.");
 		}
 		return false;
 	}
@@ -205,13 +194,7 @@ public class HomeStarUtilities implements HomeStarAPI {
 		PluginMain.instance.warmupManager.cancelTeleport(player);
 	}
 
-
-
-
-
-
-
-
+	
 	/**
 	 * Create an itemStack with default material and data from config
 	 * @return ItemStack
@@ -221,6 +204,7 @@ public class HomeStarUtilities implements HomeStarAPI {
 		
 		// get material type and data from config file
 		String materialString = plugin.getConfig().getString("item-material");
+		byte configMaterialDataByte = 0;
 
 		// if material string is null or empty, set to NETHER_STAR
 		if (materialString == null || materialString.isEmpty()) {
@@ -237,22 +221,20 @@ public class HomeStarUtilities implements HomeStarAPI {
 		if (configMaterial == null) {
 			configMaterial = Material.NETHER_STAR;
 		}
-		
-		// parse material data from config file if present
-		byte configMaterialDataByte;
-		
-		// if data set in config try to parse as byte; set to zero if it doesn't parse
-		if (configMaterialElements.length > 1) {
-			try {
-				configMaterialDataByte = Byte.parseByte(configMaterialElements[1]);
+		else {
+			// if data set in config try to parse as byte; set to zero if it doesn't parse
+			if (configMaterialElements.length > 1) {
+				try {
+					configMaterialDataByte = Byte.parseByte(configMaterialElements[1]);
+				}
+				catch (NumberFormatException e) {
+					configMaterialDataByte = (byte) 0;
+				}
 			}
-			catch (NumberFormatException e) {
+			// if no data set in config default to zero
+			else {
 				configMaterialDataByte = (byte) 0;
 			}
-		}
-		// if no data set in config default to zero
-		else {
-			configMaterialDataByte = (byte) 0;
 		}
 		
 		// create item stack with configured material and data
@@ -261,10 +243,117 @@ public class HomeStarUtilities implements HomeStarAPI {
 		return newItem;
 	}
 
+	
 	@Override
 	public String getItemName() {
 		return plugin.messageManager.getItemName();
 	}
+	
+	
+	/**
+	 * Check if bedspawn location is missing or obstructed
+	 * @param bedSpawnLocation
+	 * @return safe location or null if none found
+	 */
+	Location getSafeBedSpawn(Location bedSpawnLocation) {
+		
+		if (bedSpawnLocation == null) {
+			return null;
+		}
+		
+		bedSpawnLocation = getRoundedDestination(bedSpawnLocation);
+		
+		Block bedSpawnBlock = null;
+		
+		if (bedSpawnLocation.getBlock() != null) {
+			bedSpawnBlock = bedSpawnLocation.getBlock();
+		}
+		else {
+			return null;
+		}
+		
+		// test if actual bedspawn location is safe
+		if (safeMaterials.contains(bedSpawnBlock.getType())
+				&& safeMaterials.contains(bedSpawnBlock.getRelative(0,1,0).getType())) {
+			return bedSpawnLocation;
+		}
 
+//			// test if location one block to north is safe
+//			if (bedSpawnBlock.getRelative(1,0,0).getType() == null
+//					|| bedSpawnBlock.getRelative(1,1,0).getType() == null
+//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(1,0,0).getType())
+//					&& safeMaterials.contains(bedSpawnBlock.getRelative(1,1,0).getType()))) {
+//				return bedSpawnLocation.add(1,0,0);
+//			}
+//			
+//			// test if location one block to south is safe
+//			if (bedSpawnBlock.getRelative(-1,0,0).getType() == null
+//					|| bedSpawnBlock.getRelative(-1,1,0).getType() == null
+//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(-1,0,0).getType())
+//					&& safeMaterials.contains(bedSpawnBlock.getRelative(-1,1,0).getType()))) {
+//				return bedSpawnLocation.add(-1,0,0);
+//			}
+//
+//			// test if location one block to east is safe
+//			if (bedSpawnBlock.getRelative(0,0,1).getType() == null
+//					|| bedSpawnBlock.getRelative(0,1,1).getType() == null
+//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(0,0,1).getType())
+//					&& safeMaterials.contains(bedSpawnBlock.getRelative(0,1,1).getType()))) {
+//				return bedSpawnLocation.add(0,0,1);
+//			}
+//			
+//			// test if location one block to west is safe
+//			if (bedSpawnBlock.getRelative(0,0,-1).getType() == null
+//					|| bedSpawnBlock.getRelative(0,1,-1).getType() == null
+//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(0,0,-1).getType())
+//					&& safeMaterials.contains(bedSpawnBlock.getRelative(0,1,-1).getType()))) {
+//				return bedSpawnLocation.add(0,0,-1);
+//			}
+//		}
+		return null;
+	}
+
+	
+	// Not needed if using getSafeDestination(loc)
+	Location getRoundedDestination(final Location loc)
+	{
+		final World world = loc.getWorld();
+		int x = loc.getBlockX();
+		int y = (int)Math.round(loc.getY());
+		int z = loc.getBlockZ();
+		return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
+	}
+
+	
+	HashSet<Material> getSafeMaterials() {
+		
+		HashSet<Material> safeMaterials = new HashSet<Material>();
+		
+		safeMaterials.add(Material.AIR);
+		safeMaterials.add(Material.CARPET);
+		safeMaterials.add(Material.CROPS);
+		safeMaterials.add(Material.DEAD_BUSH);
+		safeMaterials.add(Material.DOUBLE_PLANT);
+		safeMaterials.add(Material.LADDER);
+		safeMaterials.add(Material.LEAVES);
+		safeMaterials.add(Material.LEAVES_2);
+		safeMaterials.add(Material.LEVER);
+		safeMaterials.add(Material.LONG_GRASS);
+		safeMaterials.add(Material.MELON_STEM);
+		safeMaterials.add(Material.PUMPKIN_STEM);
+		safeMaterials.add(Material.RED_ROSE);
+		safeMaterials.add(Material.SIGN_POST);
+		safeMaterials.add(Material.SUGAR_CANE_BLOCK);
+		safeMaterials.add(Material.TORCH);
+		safeMaterials.add(Material.TRIPWIRE);
+		safeMaterials.add(Material.TRIPWIRE_HOOK);
+		safeMaterials.add(Material.VINE);
+		safeMaterials.add(Material.WALL_SIGN);
+		safeMaterials.add(Material.WEB);
+		safeMaterials.add(Material.WHEAT);
+		safeMaterials.add(Material.YELLOW_FLOWER);
+		
+		return safeMaterials;
+	}
 }
 

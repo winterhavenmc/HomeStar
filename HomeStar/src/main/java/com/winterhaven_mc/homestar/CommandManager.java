@@ -82,6 +82,7 @@ public class CommandManager implements CommandExecutor {
 			sender.sendMessage(ChatColor.GREEN + "Minimum distance: " + ChatColor.RESET + plugin.getConfig().getInt("minimum-distance"));
 			sender.sendMessage(ChatColor.GREEN + "Warmup: " + ChatColor.RESET + plugin.getConfig().getInt("teleport-warmup") + " seconds");
 			sender.sendMessage(ChatColor.GREEN + "Cooldown: " + ChatColor.RESET + plugin.getConfig().getInt("teleport-cooldown") + " seconds");
+			sender.sendMessage(ChatColor.GREEN + "Left-click allowed: " + ChatColor.RESET + plugin.getConfig().getBoolean("left-click"));
 			sender.sendMessage(ChatColor.GREEN + "Shift-click required: " + ChatColor.RESET + plugin.getConfig().getBoolean("shift-click"));
 			sender.sendMessage(ChatColor.GREEN + "Cancel on damage/movement/interaction: " + ChatColor.RESET + "[ "
 					+ plugin.getConfig().getBoolean("cancel-on-damage") + "/"
@@ -213,7 +214,7 @@ public class CommandManager implements CommandExecutor {
 			quantity = quantity - noFitCount;
 			
 			// send message to player
-			plugin.messageManager.sendPlayerMessage(sender, "command-success-give", quantity);
+			plugin.messageManager.sendPlayerMessage(sender, "command-success-give", quantity, player);
 			return true;
 		}
 		
@@ -243,7 +244,7 @@ public class CommandManager implements CommandExecutor {
 			int quantity = playerItem.getAmount();
 			playerItem.setAmount(0);
 			player.setItemInHand(playerItem);
-			plugin.messageManager.sendPlayerMessage(sender, "command-success-destroy",quantity);			
+			plugin.messageManager.sendPlayerMessage(sender, "command-success-destroy", quantity);			
 			return true;
 		}
 		

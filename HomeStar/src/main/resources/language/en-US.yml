@@ -18,17 +18,18 @@ home-display-name: 'Home'
 # Variable substitutions:
 # %itemname%            Item name as defined in messages (this file)
 # %playername%          Player's name
-# %playernickname%      Player's nickname
-# %playerdisplayname%   Player's display name, including prefix/suffix
+# %destination%			Destination name
 # %worldname%           World name that player is in
 # %timeremaining%		seconds remaining in cooldown (valid in cooldown message only)
 # %warmuptime%			seconds until teleport (valid in warmup message only)
 # %quantity%			number of items (valid in give command message only)
+#%targetplayer%			target player's name
 #
-# %PLAYERNAME%          Player's name, with no color codes
-# %PLAYERNICKNAME%      Player's nickname, with no color codes
 # %ITEMNAME%            Item name, with no color codes
+# %PLAYERNAME%          Player's name, with no color codes
+# %DESTINATION%			Destination name with no color codes
 # %WORLDNAME%           World name that player is in, with no color codes
+# %TARGETPLAYER%        Target player's name, with no color codes
 
 # repeat-delay is the number of seconds to wait before
 # displaying a message again (only used on appropriate messages)
@@ -48,7 +49,7 @@ messages:
     string: '&3[HomeStar] &cThe item you are holding is not a HomeStar item!'
   command-fail-give-inventory-full:
     enabled: true
-    string: '&3Could not give %itemname% to %playername% because their inventory is full.'
+    string: '&3Could not give %ITEMNAME% to %TARGETPLAYER% because their inventory is full.'
   command-fail-player-not-found:
     enabled: true
     string: '&3That player could not be found.'
@@ -60,10 +61,10 @@ messages:
     string: '&3[HomeStar] &cInvalid quantity!'
   command-success-destroy:
     enabled: true
-    string: '&3[HomeStar] &c%itemname% destroyed!'
+    string: '&3[HomeStar] &c%ITEMNAME% destroyed!'
   command-success-give:
     enabled: true
-    string: '&3You gave %quantity% %itemname% to %playername%.'
+    string: '&3You gave %QUANTITY% %ITEMNAME% to %TARGETPLAYER%.'
   command-success-reload:
     enabled: true
     string: '&3[HomeStar] &bconfiguration reloaded.'
@@ -82,7 +83,8 @@ messages:
   permission-denied-use:
     enabled: true
     repeat-delay: 1
-    string: '&cYou do not have permission to use &b%itemname%&3 in %worldname%.'
+    string: '&cYou do not have permission to use &b%ITEMNAME%&3 in %WORLDNAME%.'
+
   teleport-cancelled-damage:
     enabled: true
     string: '&cTeleport cancelled by damage!'
@@ -98,19 +100,22 @@ messages:
   teleport-cooldown:
     enabled: true
     repeat-delay: 1
-    string: '&3You need to wait &b%timeremaining%&3 seconds to use another %itemname%.'
+    string: '&3You need to wait &b%timeremaining%&3 seconds to use another %ITEMNAME%.'
+  teleport-fail-no-bedspawn:
+    enabled: true
+    string: '&3Bed spawn is missing or obstructed!'
   teleport-min-distance:
     enabled: true
     repeat-delay: 1
-    string: '&3You are too close to spawn to use a %itemname%.'
+    string: '&3You are too close to spawn to use a %ITEMNAME%.'
   teleport-success:
     enabled: true
-    string: '&3Returned to %destination%.'
+    string: '&3Returned to %DESTINATION%.'
   teleport-warmup:
     enabled: true
-    string: '&3Teleporting to %destination% in &b%warmuptime%&3 seconds...'
+    string: '&3Teleporting to %DESTINATION% in &b%WARMUPTIME%&3 seconds...'
   usage-shift-click:
     enabled: true
     repeat-delay: 1
-    string: '&3You must shift-click to use a %itemname%.'
+    string: '&3You must shift-click to use a %ITEMNAME%.'
  

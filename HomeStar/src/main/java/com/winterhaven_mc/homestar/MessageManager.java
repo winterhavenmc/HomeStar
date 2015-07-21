@@ -15,6 +15,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+
 /**
  * Implements message manager for <code>HomeStar</code>.
  * 
@@ -61,131 +62,300 @@ class MessageManager {
 
     }
 
+	/**
+	 *  Send message to player
+	 * 
+	 * @param sender			player receiving message
+	 * @param messageId			message identifier in messages file
+	 */
+    void sendPlayerMessage(CommandSender sender, String messageId) {
+		this.sendPlayerMessage(sender, messageId, 1, "", null);
+	}
+
+	/**
+	 *  Send message to player
+	 * 
+	 * @param sender			player receiving message
+	 * @param messageId			message identifier in messages file
+	 */
+    void sendPlayerMessage(CommandSender sender, String messageId, String destinationName) {
+		this.sendPlayerMessage(sender, messageId, 1, destinationName, null);
+	}
+
+    /**
+     * Send message to player
+     * 
+     * @param sender			player receiving message
+     * @param messageId			message identifier in messages file
+     * @param quantity			number of items
+     */
+    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity) {
+		this.sendPlayerMessage(sender, messageId, quantity, "", null);
+	}
+
+    /**
+     * Send message to player
+     * 
+     * @param sender			player recieving message
+     * @param messageId			message identifier in messages file
+     */
+    void sendPlayerMessage(CommandSender sender, String messageId, Player targetPlayer) {
+		this.sendPlayerMessage(sender, messageId, 1, "", targetPlayer);
+	}
+
+    /**
+     * Send message to player
+     * 
+     * @param sender			player recieving message
+     * @param messageId			message identifier in messages file
+     */
+    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity, Player targetPlayer) {
+		this.sendPlayerMessage(sender, messageId, quantity, "", targetPlayer);
+	}
 
 	/** Send message to player
 	 * 
-	 * @param player		Player to message
-	 * @param messageId		Identifier of message to send from messages.yml
-	 */
-    void sendPlayerMessage(CommandSender sender, String messageId) {
-		this.sendPlayerMessage(sender, messageId, "", 1);
-	}
-
-    
-    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity) {
-		this.sendPlayerMessage(sender, messageId, "", quantity);
-	}
-
-    void sendPlayerMessage(CommandSender sender, String messageId, String destinationName) {
-		this.sendPlayerMessage(sender, messageId, destinationName, 1);
-	}
-
-    
-    /** Send message to player
-	 * 
-	 * @param player		Player to message
-	 * @param messageId		Identifier of message to send from messages.yml
-	 * @param parameter1	Additional data
-	 */
-	void sendPlayerMessage(CommandSender sender, String messageId, String destinationName, Integer quantity) {
-		
-		// if message is set to enabled in messages file
-		if (messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
-
-			// set some string defaults in case sender is not a player
-			String playerName = sender.getName();
-			String playerNickname = playerName;
-			String playerDisplayName = playerName;
-			String worldName = "unknown";
-			Long remainingTime = 0L;
-
-			// if sender is a player...
-			if (sender instanceof Player) {
-				
-				Player player = (Player) sender;
-
-				// get message cooldown time remaining
-				Long lastDisplayed = getMessageCooldown(player,messageId);
-
-				// get message repeat delay
-				int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
-
-				// if message has repeat delay value and was displayed to player more recently, do nothing and return
-				if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
-					return;
-				}
-		        
-				// if repeat delay value is greater than zero, add entry to messageCooldownMap
-		        if (messageRepeatDelay > 0) {
-		        	putMessageCooldown(player,messageId);
-		        }
-				
-				// assign player dependent variables
-	        	playerName = player.getName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-	        	playerNickname = player.getPlayerListName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-	        	playerDisplayName = player.getDisplayName();
-	        	worldName = player.getWorld().getName();
-		        remainingTime = plugin.cooldownManager.getTimeRemaining(player);
-			}
-			
-			// get message from file
-			String message = messages.getConfig().getString("messages." + messageId + ".string");
-	
-			// get item name and strip color codes
-	        String itemName = getItemName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-
-	        // get warmup value from config file
-	        Integer warmupTime = plugin.getConfig().getInt("teleport-warmup");
-	        
-			// if Multiverse is installed, use Multiverse world alias for world name
-			if (plugin.mvEnabled && plugin.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
-				
-				// if Multiverse alias is not blank, set world name to alias
-				if (!plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias().isEmpty()) {
-					worldName = plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias();
-				}
-			}
-	        
-			// if quantity is greater than one, use plural item name
-			if (quantity > 1) {
-				// get plural item name and strip color codes
-				itemName = getItemNamePlural().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-			}
-			
-			// do variable substitutions
-	        message = message.replaceAll("%itemname%", itemName);
-	        message = message.replaceAll("%playername%", playerName);
-	        message = message.replaceAll("%playerdisplayname%", playerDisplayName);
-	        message = message.replaceAll("%playernickname%", playerNickname);
-	        message = message.replaceAll("%worldname%", worldName);
-	        message = message.replaceAll("%destination%", destinationName);
-	        message = message.replaceAll("%timeremaining%", remainingTime.toString());
-	        message = message.replaceAll("%warmuptime%", warmupTime.toString());
-	        message = message.replaceAll("%quantity%", quantity.toString());
-	        
-			// do variable substitutions, stripping color codes from all caps variables
-			message = message.replace("%ITEMNAME%", 
-					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',itemName)));
-			message = message.replace("%PLAYERNAME%", 
-					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerName)));
-			message = message.replace("%PLAYERNICKNAME%", 
-					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerNickname)));
-			message = message.replace("%WORLDNAME%", 
-					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',worldName)));
-			message = message.replace("%DESTINATION%", 
-					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',destinationName)));
-
-			// no stripping of color codes necessary, but do variable substitutions anyhow
-			// in case all caps variables were used
-			message = message.replace("%PLAYERDISPLAYNAME%", playerDisplayName);
-			message = message.replace("%TIMEREMAINING%", remainingTime.toString());
-			message = message.replace("%WARMUPTIME%", warmupTime.toString());
-			message = message.replace("%QUANTITY%", quantity.toString());
-
-			// send message to player
-			sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
+	 * @param sender			Player receiving message
+	 * @param messageId			message identifier in messages file
+	 * @param quantity			number of items
+	 * @param targetPlayer		player targeted
+	 */	
+    void sendPlayerMessage(CommandSender sender,
+    		String messageId,
+    		Integer quantity,
+    		String destinationName,
+    		Player targetPlayer) {
+    	
+		// if message is not enabled in messages file, do nothing and return
+		if (!messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
+			return;
 		}
+
+		// set substitution variable defaults
+		String playerName = "console";
+		String targetPlayerName = "player";
+		String worldName = "world";
+		Long remainingTime = 0L;
+
+		if (targetPlayer != null) {
+			targetPlayerName = targetPlayer.getName();
+		}
+
+		// if sender is a player...
+		if (sender instanceof Player) {
+
+			Player player = (Player) sender;
+
+			// get message cooldown time remaining
+			Long lastDisplayed = getMessageCooldown(player,messageId);
+
+			// get message repeat delay
+			int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
+
+			// if message has repeat delay value and was displayed to player more recently, do nothing and return
+			if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
+				return;
+			}
+
+			// if repeat delay value is greater than zero, add entry to messageCooldownMap
+			if (messageRepeatDelay > 0) {
+				putMessageCooldown(player,messageId);
+			}
+
+			// assign player dependent variables
+			playerName = player.getName();
+			worldName = player.getWorld().getName();
+			remainingTime = plugin.cooldownManager.getTimeRemaining(player);
+		}
+
+		// get message from file
+		String message = messages.getConfig().getString("messages." + messageId + ".string");
+
+		// get item name and strip color codes
+		String itemName = getItemName();
+
+		// get warmup value from config file
+		Integer warmupTime = plugin.getConfig().getInt("teleport-warmup");
+
+		// if Multiverse is installed, use Multiverse world alias for world name
+		if (plugin.mvEnabled && plugin.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
+
+			// if Multiverse alias is not blank, set world name to alias
+			if (!plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias().isEmpty()) {
+				worldName = plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias();
+			}
+		}
+
+		// if quantity is greater than one, use plural item name
+		if (quantity > 1) {
+			// get plural item name
+			itemName = getItemNamePlural();
+		}
+
+		// do variable substitutions
+		message = message.replace("%itemname%", itemName);
+		message = message.replace("%playername%", playerName);
+		message = message.replace("%worldname%", worldName);
+		message = message.replace("%timeremaining%", remainingTime.toString());
+		message = message.replace("%warmuptime%", warmupTime.toString());
+		message = message.replace("%quantity%", quantity.toString());
+		message = message.replace("%destination%", destinationName);
+		message = message.replace("%targetplayer%", targetPlayerName);
+
+		// do variable substitutions, stripping color codes from all caps variables
+		message = message.replace("%ITEMNAME%", 
+				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',itemName)));
+		message = message.replace("%PLAYERNAME%", 
+				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerName)));
+		message = message.replace("%WORLDNAME%", 
+				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',worldName)));
+		message = message.replace("%TARGETPLAYER%", 
+				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',targetPlayerName)));
+		message = message.replace("%DESTINATION%", 
+				ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',destinationName)));
+
+		// no stripping of color codes necessary, but do variable substitutions anyhow
+		// in case all caps variables were used
+		message = message.replace("%TIMEREMAINING%", remainingTime.toString());
+		message = message.replace("%WARMUPTIME%", warmupTime.toString());
+		message = message.replace("%QUANTITY%", quantity.toString());
+
+		// send message to player
+		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
     }
+	
+
+	
+	
+	
+	
+	
+	
+
+//	/** Send message to player
+//	 * 
+//	 * @param player		Player to message
+//	 * @param messageId		Identifier of message to send from messages.yml
+//	 */
+//    void sendPlayerMessage(CommandSender sender, String messageId) {
+//		this.sendPlayerMessage(sender, messageId, "", 1);
+//	}
+//
+//    
+//    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity) {
+//		this.sendPlayerMessage(sender, messageId, "", quantity);
+//	}
+//
+//    void sendPlayerMessage(CommandSender sender, String messageId, String destinationName) {
+//		this.sendPlayerMessage(sender, messageId, destinationName, 1);
+//	}
+//
+//    
+//    /** Send message to player
+//	 * 
+//	 * @param player		Player to message
+//	 * @param messageId		Identifier of message to send from messages.yml
+//	 * @param parameter1	Additional data
+//	 */
+//	void sendPlayerMessage(CommandSender sender, String messageId, String destinationName, Integer quantity) {
+//		
+//		// if message is set to enabled in messages file
+//		if (messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
+//
+//			// set some string defaults in case sender is not a player
+//			String playerName = sender.getName();
+//			String playerNickname = playerName;
+//			String playerDisplayName = playerName;
+//			String worldName = "unknown";
+//			Long remainingTime = 0L;
+//
+//			// if sender is a player...
+//			if (sender instanceof Player) {
+//				
+//				Player player = (Player) sender;
+//
+//				// get message cooldown time remaining
+//				Long lastDisplayed = getMessageCooldown(player,messageId);
+//
+//				// get message repeat delay
+//				int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
+//
+//				// if message has repeat delay value and was displayed to player more recently, do nothing and return
+//				if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
+//					return;
+//				}
+//		        
+//				// if repeat delay value is greater than zero, add entry to messageCooldownMap
+//		        if (messageRepeatDelay > 0) {
+//		        	putMessageCooldown(player,messageId);
+//		        }
+//				
+//				// assign player dependent variables
+//	        	playerName = player.getName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
+//	        	playerNickname = player.getPlayerListName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
+//	        	playerDisplayName = player.getDisplayName();
+//	        	worldName = player.getWorld().getName();
+//		        remainingTime = plugin.cooldownManager.getTimeRemaining(player);
+//			}
+//			
+//			// get message from file
+//			String message = messages.getConfig().getString("messages." + messageId + ".string");
+//	
+//			// get item name and strip color codes
+//	        String itemName = getItemName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
+//
+//	        // get warmup value from config file
+//	        Integer warmupTime = plugin.getConfig().getInt("teleport-warmup");
+//	        
+//			// if Multiverse is installed, use Multiverse world alias for world name
+//			if (plugin.mvEnabled && plugin.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
+//				
+//				// if Multiverse alias is not blank, set world name to alias
+//				if (!plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias().isEmpty()) {
+//					worldName = plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias();
+//				}
+//			}
+//	        
+//			// if quantity is greater than one, use plural item name
+//			if (quantity > 1) {
+//				// get plural item name and strip color codes
+//				itemName = getItemNamePlural().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
+//			}
+//			
+//			// do variable substitutions
+//	        message = message.replaceAll("%itemname%", itemName);
+//	        message = message.replaceAll("%playername%", playerName);
+//	        message = message.replaceAll("%playerdisplayname%", playerDisplayName);
+//	        message = message.replaceAll("%playernickname%", playerNickname);
+//	        message = message.replaceAll("%worldname%", worldName);
+//	        message = message.replaceAll("%destination%", destinationName);
+//	        message = message.replaceAll("%timeremaining%", remainingTime.toString());
+//	        message = message.replaceAll("%warmuptime%", warmupTime.toString());
+//	        message = message.replaceAll("%quantity%", quantity.toString());
+//	        
+//			// do variable substitutions, stripping color codes from all caps variables
+//			message = message.replace("%ITEMNAME%", 
+//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',itemName)));
+//			message = message.replace("%PLAYERNAME%", 
+//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerName)));
+//			message = message.replace("%PLAYERNICKNAME%", 
+//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerNickname)));
+//			message = message.replace("%WORLDNAME%", 
+//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',worldName)));
+//			message = message.replace("%DESTINATION%", 
+//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',destinationName)));
+//
+//			// no stripping of color codes necessary, but do variable substitutions anyhow
+//			// in case all caps variables were used
+//			message = message.replace("%PLAYERDISPLAYNAME%", playerDisplayName);
+//			message = message.replace("%TIMEREMAINING%", remainingTime.toString());
+//			message = message.replace("%WARMUPTIME%", warmupTime.toString());
+//			message = message.replace("%QUANTITY%", quantity.toString());
+//
+//			// send message to player
+//			sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
+//		}
+//    }
 	
 	
     /**
