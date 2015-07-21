@@ -1,0 +1,121 @@
+# Item Name
+item-name: '&aHomeStar'
+item-name-plural: '&aHomeStars'
+
+# Item Lore
+item-lore:
+  - '&eUse to Return'
+  - '&eto Home'
+
+# Spawn Display Name
+spawn-display-name: 'Spawn'
+
+# Home Display Name
+home-display-name: 'Home'
+
+# Custom Messages
+#
+# Variable substitutions:
+# %itemname%            Item name as defined in messages (this file)
+# %playername%          Player's name
+# %destination%			Destination name
+# %worldname%           World name that player is in
+# %timeremaining%		seconds remaining in cooldown (valid in cooldown message only)
+# %warmuptime%			seconds until teleport (valid in warmup message only)
+# %quantity%			number of items (valid in give command message only)
+#%targetplayer%			target player's name
+#
+# %ITEMNAME%            Item name, with no color codes
+# %PLAYERNAME%          Player's name, with no color codes
+# %DESTINATION%			Destination name with no color codes
+# %WORLDNAME%           World name that player is in, with no color codes
+# %TARGETPLAYER%        Target player's name, with no color codes
+
+# repeat-delay is the number of seconds to wait before
+# displaying a message again (only used on appropriate messages)
+
+messages:
+  command-fail-args-count-over:
+    enabled: true
+    string: '&3[HomeStar] &cToo many arguments!'
+  command-fail-args-count-under:
+    enabled: true
+    string: '&3[HomeStar] &cToo few arguments!'
+  command-fail-destroy-console:
+    enabled: true
+    string: '&3[HomeStar] &cYou must be in game to destroy HomeStar items!'
+  command-fail-destroy-no-match:
+    enabled: true
+    string: '&3[HomeStar] &cThe item you are holding is not a HomeStar item!'
+  command-fail-give-inventory-full:
+    enabled: true
+    string: '&3Could not give %ITEMNAME% to %TARGETPLAYER% because their inventory is full.'
+  command-fail-player-not-found:
+    enabled: true
+    string: '&3That player could not be found.'
+  command-fail-player-not-online:
+    enabled: true
+    string: '&3That player is not online.'
+  command-fail-quantity-invalid:
+    enabled: true
+    string: '&3[HomeStar] &cInvalid quantity!'
+  command-success-destroy:
+    enabled: true
+    string: '&3[HomeStar] &c%ITEMNAME% destroyed!'
+  command-success-give:
+    enabled: true
+    string: '&3You gave %QUANTITY% %ITEMNAME% to %TARGETPLAYER%.'
+  command-success-reload:
+    enabled: true
+    string: '&3[HomeStar] &bconfiguration reloaded.'
+  permission-denied-destroy:
+    enabled: true
+    string: '&cYou do not have permission to destroy HomeStar items!'
+  permission-denied-give:
+    enabled: true
+    string: '&cYou do not have permission to give HomeStar items!'
+  permission-denied-reload:
+    enabled: true
+    string: '&cYou do not have permission to reload the configuration!'
+  permission-denied-status:
+    enabled: true
+    string: '&cYou do not have permission to view HomeStar settings!'
+  permission-denied-use:
+    enabled: true
+    repeat-delay: 1
+    string: '&cYou do not have permission to use &b%ITEMNAME%&3 in %WORLDNAME%.'
+
+  teleport-cancelled-damage:
+    enabled: true
+    string: '&cTeleport cancelled by damage!'
+  teleport-cancelled-interaction:
+    enabled: true
+    string: '&cTeleport cancelled by interaction!'
+  teleport-cancelled-movement:
+    enabled: true
+    string: '&cTeleport cancelled by movement!'
+  teleport-cancelled-no-item:
+    enabled: true
+    string: '&cYou no longer have a HomeStar item!'
+  teleport-cooldown:
+    enabled: true
+    repeat-delay: 1
+    string: '&3You need to wait &b%timeremaining%&3 seconds to use another %ITEMNAME%.'
+  teleport-fail-no-bedspawn:
+    enabled: true
+    string: '&3Bed spawn is missing or obstructed!'
+  teleport-min-distance:
+    enabled: true
+    repeat-delay: 1
+    string: '&3You are too close to spawn to use a %ITEMNAME%.'
+  teleport-success:
+    enabled: true
+    string: '&3Returned to %DESTINATION%.'
+  teleport-warmup:
+    enabled: true
+    string: '&3Teleporting to %DESTINATION% in &b%WARMUPTIME%&3 seconds...'
+  usage-shift-click:
+    enabled: true
+    repeat-delay: 1
+    string: '&3You must shift-click to use a %ITEMNAME%.'
+ 

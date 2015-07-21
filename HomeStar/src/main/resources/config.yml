@@ -1,0 +1,61 @@
+# This is the config file for HomeStar plugin v1.0
+
+# localized language support
+language: en-US
+
+# Note: use only one enabled/disabled list, and comment out or remove the other
+# enabled worlds list (use this list for a default-deny world policy)
+#enabled-worlds:
+#  - enabled_world1
+#  - enabled_world2
+
+# disabled worlds list (use this list for a default-allow world policy)
+disabled-worlds:
+  - disabled_world1
+  - disabled_world2
+
+# material to be used as homestar item. Set item data using a colon, example: WOOL:5
+# invalid item data may be reset, so use only valid item data values for a given material
+item-material: NETHER_STAR
+
+# minimum distance from destination
+minimum-distance: 10
+
+# cooldown time in seconds
+teleport-cooldown: 60
+
+# warmup time in seconds
+teleport-warmup: 5
+
+# particle effects during warmup
+particle-effects: true
+
+# allow left-click to use
+left-click: false
+
+# require shift-click to use homestar item
+shift-click: true
+
+# remove item from inventory ( on-use | on-success | never )
+remove-from-inventory: on-use
+
+# allow homestar items to be used in crafting recipes
+allow-in-recipes: false
+
+# cancel teleport if player takes damage
+cancel-on-damage: false
+
+# cancel teleport if player moves
+cancel-on-movement: false
+
+# cancel teleport if player interacts with another block
+cancel-on-interaction: false
+
+# maximum number of homestar items that can be given at once (-1 for no limit)
+max-give-amount: -1
+
+# lightning strike at destination on use
+lightning: true
+
+# write log entry on use
+log-use: true
