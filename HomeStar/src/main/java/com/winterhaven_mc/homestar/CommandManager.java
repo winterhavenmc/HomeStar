@@ -71,6 +71,35 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 				}
 			}
 		}
+		
+		// return list of online players, or commands if subcommand is 'help'
+		if (args.length == 2) {
+			if (args[0].equalsIgnoreCase("help")) {
+				for (SubCommand subcmd : SubCommand.values()) {
+					if (sender.hasPermission("homestar." + subcmd.toString()) 
+							&& subcmd.toString().startsWith(args[1].toLowerCase())) {
+						returnList.add(subcmd.toString());
+					}
+				}
+			}
+			else {
+				@SuppressWarnings("deprecation")
+				List<Player> matchedPlayers = plugin.getServer().matchPlayer(args[1]);
+				for (Player player : matchedPlayers) {
+					returnList.add(player.getName());
+				}
+			}
+		}
+
+		// return some useful quantities
+		if (args.length == 3) {
+			returnList.add("1");
+			returnList.add("2");
+			returnList.add("3");
+			returnList.add("5");
+			returnList.add("10");
+		}
+		
 		return returnList;
 	}
 
@@ -363,7 +392,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		Player player = (Player) sender;
-		ItemStack playerItem = player.getItemInHand();
+		ItemStack playerItem = player.getInventory().getItemInMainHand();
 			
 		// check that player is holding a homestar stack
 		if (!plugin.utilities.isHomeStar(playerItem)) {
@@ -373,7 +402,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		int quantity = playerItem.getAmount();
 		playerItem.setAmount(0);
-		player.setItemInHand(playerItem);
+		player.getInventory().setItemInMainHand(playerItem);
 		plugin.messageManager.sendPlayerMessage(sender, "command-success-destroy", quantity);
 		plugin.messageManager.playerSound(player,"command-success-destroy");
 		return true;
@@ -403,7 +432,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		if ((command.equalsIgnoreCase("give") 
 				|| command.equalsIgnoreCase("all"))
 				&& sender.hasPermission("homestar.give")) {
-			sender.sendMessage(usageColor + "/homestar give <player>");
+			sender.sendMessage(usageColor + "/homestar give <player> [quantity]");
 		}
 		if ((command.equalsIgnoreCase("destroy") 
 				|| command.equalsIgnoreCase("all"))
@@ -451,7 +480,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			helpMessage = "Gives a HomeStar to a player.";
 		}
 		if (command.equalsIgnoreCase("destroy")) {
-			helpMessage = "Destroys a HomeStar you are holding.";
+			helpMessage = "Destroys the stack of HomeStars you are holding.";
 		}
 		if (command.equalsIgnoreCase("help")) {
 			helpMessage = "Displays help for HomeStar commands.";

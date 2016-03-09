@@ -5,7 +5,8 @@ public enum SubCommand {
 	GIVE,
 	DESTROY,
 	STATUS,
-	RELOAD;
+	RELOAD,
+	HELP;
 
 	@Override
 	public String toString() {
