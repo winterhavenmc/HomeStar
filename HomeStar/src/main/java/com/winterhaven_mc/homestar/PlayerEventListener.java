@@ -49,6 +49,7 @@ class PlayerEventListener implements Listener {
 	/**
 	 * Player interact event listener
 	 */
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	void onPlayerUse(PlayerInteractEvent event) {
 
@@ -65,6 +66,9 @@ class PlayerEventListener implements Listener {
 				if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {			
 					plugin.warmupManager.cancelTeleport(player);
 					plugin.messageManager.sendPlayerMessage(player, "teleport-cancelled-interaction");
+
+					// play sound effects if enabled
+					plugin.messageManager.playerSound(player, "teleport-fail");
 					return;
 				}
 			}
@@ -87,6 +91,10 @@ class PlayerEventListener implements Listener {
 				return;
 		}
 		
+		// cancel event
+		event.setCancelled(true);
+		player.updateInventory();
+		
 		// if players current world is not enabled in config, do nothing and return
 		if (!playerWorldEnabled(player)) {
 			return;
@@ -95,6 +103,7 @@ class PlayerEventListener implements Listener {
 		// if player does not have homestar.use permission, send message and return
 		if (!player.hasPermission("homestar.use")) {
 			plugin.messageManager.sendPlayerMessage(player, "permission-denied-use");
+			plugin.messageManager.playerSound(player, "teleport-denied-permission");
 			return;
 		}
 		
@@ -103,9 +112,6 @@ class PlayerEventListener implements Listener {
 			plugin.messageManager.sendPlayerMessage(player, "usage-shift-click");
 			return;
 		}
-		
-		// cancel event
-		event.setCancelled(true);
 		
 		// if player cooldown has not expired, send player cooldown message and return
 		if (plugin.cooldownManager.getTimeRemaining(player) > 0) {
@@ -140,8 +146,9 @@ class PlayerEventListener implements Listener {
 			// send missing or obstructed message
 			plugin.messageManager.sendPlayerMessage(player, "teleport-fail-no-bedspawn");
 			
-			// if bedspawn-fallback is configured false, do nothing and return
+			// if bedspawn-fallback is configured false, play teleport fail sound and return
 			if (! plugin.getConfig().getBoolean("bedspawn-fallback")) {
+				plugin.messageManager.playerSound(player, "teleport-fail");
 				return;
 			}
 			// else set destination to spawn location
@@ -185,6 +192,9 @@ class PlayerEventListener implements Listener {
 		// if warmup setting is greater than zero, send warmup message
 		if (plugin.getConfig().getInt("teleport-warmup") > 0) {
 			plugin.messageManager.sendPlayerMessage(player, "teleport-warmup",destinationName);
+			
+			// if enabled, play sound effect
+			plugin.messageManager.playerSound(player, "teleport-warmup");
 		}
 		
 		// initiate delayed teleport for player to destination
@@ -281,6 +291,7 @@ class PlayerEventListener implements Listener {
 				if (plugin.warmupManager.isWarmingUp((Player) entity)) {
 					plugin.warmupManager.cancelTeleport((Player) entity);
 					plugin.messageManager.sendPlayerMessage((Player) entity, "teleport-cancelled-damage");
+					plugin.messageManager.playerSound((Player) entity, "teleport-cancelled");
 				}				
 			}
 		}
@@ -304,6 +315,7 @@ class PlayerEventListener implements Listener {
 			if (event.getFrom().distance(event.getTo()) > 0) {
 				plugin.warmupManager.cancelTeleport(player);
 				plugin.messageManager.sendPlayerMessage(player,"teleport-cancelled-movement");
+				plugin.messageManager.playerSound(player, "teleport-cancelled");
 			}
 		}
 	}

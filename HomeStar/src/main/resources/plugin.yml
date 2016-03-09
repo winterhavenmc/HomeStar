@@ -11,7 +11,11 @@ commands:
 
 permissions:
   homestar.use:
-    description: Allows the use of a homestar.
+    description: Allows the use of a HomeStar.
+    default: true
+
+  homestar.help:
+    description: Display help for HomeStar commands.
     default: true
 
   homestar.status:
