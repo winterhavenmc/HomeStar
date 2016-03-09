@@ -398,13 +398,18 @@ class MessageManager {
 			// get sound pitch from config file
 			float pitch = (float) plugin.getConfig().getDouble("sounds." + soundId + ".pitch");
 	
-			// if sound is set player only, use player.playSound()
-			if (playerOnly) {
-				player.playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
-			}
-			// else use world.playSound() so other players in vicinity can hear
-			else {
-				player.getWorld().playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
+			try {
+				// if sound is set player only, use player.playSound()
+				if (playerOnly) {
+					player.playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
+				}
+				// else use world.playSound() so other players in vicinity can hear
+				else {
+					player.getWorld().playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
+				}
+			} catch (IllegalArgumentException e) {
+				plugin.getLogger().warning("An error occured while trying to play the sound '" + soundName 
+						+ "'. You probably need to update the sound name in your config.yml file.");
 			}
 		}
 	}

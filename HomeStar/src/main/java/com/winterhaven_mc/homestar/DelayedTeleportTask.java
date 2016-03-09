@@ -77,11 +77,17 @@ class DelayedTeleportTask extends BukkitRunnable {
 				}
 			}
 
+			// play pre-teleport sound if sound effects are enabled
+			plugin.messageManager.playerSound(player, "teleport-success-departure");
+
 			// teleport player to bed spawn location
 			player.teleport(destination);
 
 			// send player respawn message
 			plugin.messageManager.sendPlayerMessage(player, "teleport-success", destinationName);
+
+			// play post-teleport sound if sound effects are enabled
+			plugin.messageManager.playerSound(player, "teleport-success-arrival");
 
 			// if lightning is enabled in config, strike lightning at spawn location
 			if (plugin.getConfig().getBoolean("lightning")) {
@@ -90,26 +96,7 @@ class DelayedTeleportTask extends BukkitRunnable {
 			
 			// set player cooldown
 			plugin.cooldownManager.setPlayerCooldown(player);
-
-//			// try to prevent player spawning inside block and suffocating
-//			preventSuffocation(player, destination);
 		}
 	}
-
 	
-//	private void preventSuffocation(final Player player, final Location spawnLoc) {
-//		
-//		final int spawnAir = player.getRemainingAir();
-//		
-//		new BukkitRunnable(){
-//
-//			public void run() {
-//				if (player.getRemainingAir() < spawnAir) {
-//					player.teleport(spawnLoc.add(0,1,0));
-//					player.setRemainingAir(spawnAir);
-//				}
-//			}
-//		}.runTaskLater(plugin, 20);		
-//	}
-//
 }

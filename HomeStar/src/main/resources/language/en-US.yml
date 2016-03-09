@@ -84,6 +84,10 @@ messages:
     enabled: true
     repeat-delay: 1
     string: '&cYou do not have permission to use &b%ITEMNAME%&3 in %WORLDNAME%.'
+  permission-denied-help:
+    enabled: true
+    string: '&cYou do not have permission to view HomeStar help!'
+    
 
   teleport-cancelled-damage:
     enabled: true
