@@ -33,7 +33,7 @@ second_plural: 'seconds'
 # %timeremaining%		time remaining in cooldown (valid in cooldown message only)
 # %warmuptime%			seconds until teleport (valid in warmup message only)
 # %quantity%			number of items (valid in give command message only)
-#%targetplayer%			target player's name
+# %targetplayer%		target player's name
 #
 # %ITEMNAME%            Item name, with no color codes
 # %PLAYERNAME%          Player's name, with no color codes

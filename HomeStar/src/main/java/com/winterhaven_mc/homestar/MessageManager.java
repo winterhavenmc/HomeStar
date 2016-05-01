@@ -25,10 +25,19 @@ import org.bukkit.entity.Player;
  */
 class MessageManager {
 
-	private final PluginMain plugin; // reference to main class
+	// reference to main class
+	private final PluginMain plugin;
+	
+	// configuration file manager for messages
 	private ConfigAccessor messages;
+	
+	// configuration file manager for sounds
 	private ConfigAccessor sounds;
+	
+	// selected language
 	private String language;
+	
+	// hashmap for per player message cooldowns
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
 
 	/**
@@ -38,7 +47,7 @@ class MessageManager {
 	 */
 	MessageManager(final PluginMain plugin) {
 		
-		// create pointer to main class
+		// set reference to main class
 		this.plugin = plugin;
 
 		// install localization files
@@ -491,8 +500,8 @@ class MessageManager {
 		
 		StringBuilder timeString = new StringBuilder();
 		
-		int hours = (int)duration / 3600;
-		int minutes = (int)duration / 60;
+		int hours =   (int)duration / 3600;
+		int minutes = (int)(duration % 3600) / 60;
 		int seconds = (int)duration % 60;
 		
 		String hour_string = this.messages.getConfig().getString("hour");
@@ -543,4 +552,3 @@ class MessageManager {
 	}
 	
 }
-
