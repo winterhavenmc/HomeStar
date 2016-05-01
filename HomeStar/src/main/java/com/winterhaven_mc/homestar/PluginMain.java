@@ -24,7 +24,7 @@ public final class PluginMain extends JavaPlugin {
 	MessageManager messageManager;
 	CommandManager commandManager;
 	PlayerEventListener playerEventListener;
-	HomeStarUtilities utilities;
+	public HomeStarUtilities utilities;
 
 	MultiverseCore mvCore;
 	Boolean mvEnabled = false;

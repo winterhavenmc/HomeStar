@@ -46,7 +46,7 @@ public class ConfigAccessor {
 	 * @param fileName (will always contain system file separator character if there are subdirectories) 
 	 * @throws IOException
 	 */
-	public ConfigAccessor(JavaPlugin plugin, String fileName) {
+	public ConfigAccessor(final JavaPlugin plugin, final String fileName) {
 
 		// check if passed reference to plugin is null
 		if (plugin == null) {

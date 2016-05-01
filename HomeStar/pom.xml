@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>HomeStar</artifactId>
-	<version>1.2.1</version>
+	<version>1.2.2</version>
 	<name>HomeStar</name>
 	<properties>
 		<project.author>Tim Savage</project.author>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.9-R0.1-SNAPSHOT</version>
+			<version>1.8.8-R0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.onarandombox.multiversecore</groupId>

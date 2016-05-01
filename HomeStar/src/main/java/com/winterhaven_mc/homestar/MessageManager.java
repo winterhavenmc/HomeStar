@@ -25,9 +25,19 @@ import org.bukkit.entity.Player;
  */
 class MessageManager {
 
-	private final PluginMain plugin; // reference to main class
+	// reference to main class
+	private final PluginMain plugin;
+	
+	// configuration file manager for messages
 	private ConfigAccessor messages;
+	
+	// configuration file manager for sounds
+	private ConfigAccessor sounds;
+	
+	// selected language
 	private String language;
+	
+	// hashmap for per player message cooldowns
 	private ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
 
 	/**
@@ -35,9 +45,9 @@ class MessageManager {
 	 * 
 	 * @param plugin
 	 */
-	MessageManager(PluginMain plugin) {
+	MessageManager(final PluginMain plugin) {
 		
-		// create pointer to main class
+		// set reference to main class
 		this.plugin = plugin;
 
 		// install localization files
@@ -59,7 +69,19 @@ class MessageManager {
 		
 		// initalize messageCooldownMap
 		messageCooldownMap = new ConcurrentHashMap<UUID,ConcurrentHashMap<String,Long>>();
-
+		
+		// default sound file name
+		String soundFileName = "sounds.yml";
+		
+		// instantiate custom sound manager
+		sounds = new ConfigAccessor(plugin, soundFileName);
+		
+		// install sound file if not present
+		sounds.saveDefaultConfig();
+		
+		// install alternate sound file if not present
+		plugin.saveResource("pre-1.9_sounds.yml", false);
+		
     }
 
 	/**
@@ -68,7 +90,7 @@ class MessageManager {
 	 * @param sender			player receiving message
 	 * @param messageId			message identifier in messages file
 	 */
-    void sendPlayerMessage(CommandSender sender, String messageId) {
+    void sendPlayerMessage(final CommandSender sender, final String messageId) {
 		this.sendPlayerMessage(sender, messageId, 1, "", null);
 	}
 
@@ -78,7 +100,7 @@ class MessageManager {
 	 * @param sender			player receiving message
 	 * @param messageId			message identifier in messages file
 	 */
-    void sendPlayerMessage(CommandSender sender, String messageId, String destinationName) {
+    void sendPlayerMessage(final CommandSender sender, final String messageId, final String destinationName) {
 		this.sendPlayerMessage(sender, messageId, 1, destinationName, null);
 	}
 
@@ -89,7 +111,7 @@ class MessageManager {
      * @param messageId			message identifier in messages file
      * @param quantity			number of items
      */
-    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity) {
+    void sendPlayerMessage(final CommandSender sender, final String messageId, final Integer quantity) {
 		this.sendPlayerMessage(sender, messageId, quantity, "", null);
 	}
 
@@ -99,7 +121,7 @@ class MessageManager {
      * @param sender			player recieving message
      * @param messageId			message identifier in messages file
      */
-    void sendPlayerMessage(CommandSender sender, String messageId, Player targetPlayer) {
+    void sendPlayerMessage(final CommandSender sender, final String messageId, final Player targetPlayer) {
 		this.sendPlayerMessage(sender, messageId, 1, "", targetPlayer);
 	}
 
@@ -109,7 +131,8 @@ class MessageManager {
      * @param sender			player recieving message
      * @param messageId			message identifier in messages file
      */
-    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity, Player targetPlayer) {
+    void sendPlayerMessage(final CommandSender sender, final String messageId, 
+    		final Integer quantity, final Player targetPlayer) {
 		this.sendPlayerMessage(sender, messageId, quantity, "", targetPlayer);
 	}
 
@@ -120,11 +143,11 @@ class MessageManager {
 	 * @param quantity			number of items
 	 * @param targetPlayer		player targeted
 	 */	
-    void sendPlayerMessage(CommandSender sender,
-    		String messageId,
-    		Integer quantity,
-    		String destinationName,
-    		Player targetPlayer) {
+    void sendPlayerMessage(final CommandSender sender,
+    		final String messageId,
+    		final Integer quantity,
+    		final String destinationName,
+    		final Player targetPlayer) {
     	
 		// if message is not enabled in messages file, do nothing and return
 		if (!messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
@@ -135,7 +158,8 @@ class MessageManager {
 		String playerName = "console";
 		String targetPlayerName = "player";
 		String worldName = "world";
-		Long remainingTime = 0L;
+		String cooldownString = "";
+		String warmupString = "";
 
 		if (targetPlayer != null) {
 			targetPlayerName = targetPlayer.getName();
@@ -165,7 +189,9 @@ class MessageManager {
 			// assign player dependent variables
 			playerName = player.getName();
 			worldName = player.getWorld().getName();
-			remainingTime = plugin.cooldownManager.getTimeRemaining(player);
+
+			cooldownString = getTimeString(plugin.cooldownManager.getTimeRemaining(player));
+			
 		}
 
 		// get message from file
@@ -175,7 +201,7 @@ class MessageManager {
 		String itemName = getItemName();
 
 		// get warmup value from config file
-		Integer warmupTime = plugin.getConfig().getInt("teleport-warmup");
+		warmupString = getTimeString(plugin.getConfig().getInt("teleport-warmup"));
 
 		// if Multiverse is installed, use Multiverse world alias for world name
 		if (plugin.mvEnabled && plugin.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
@@ -196,8 +222,8 @@ class MessageManager {
 		message = message.replace("%itemname%", itemName);
 		message = message.replace("%playername%", playerName);
 		message = message.replace("%worldname%", worldName);
-		message = message.replace("%timeremaining%", remainingTime.toString());
-		message = message.replace("%warmuptime%", warmupTime.toString());
+		message = message.replace("%timeremaining%", cooldownString);
+		message = message.replace("%warmuptime%", warmupString);
 		message = message.replace("%quantity%", quantity.toString());
 		message = message.replace("%destination%", destinationName);
 		message = message.replace("%targetplayer%", targetPlayerName);
@@ -216,146 +242,13 @@ class MessageManager {
 
 		// no stripping of color codes necessary, but do variable substitutions anyhow
 		// in case all caps variables were used
-		message = message.replace("%TIMEREMAINING%", remainingTime.toString());
-		message = message.replace("%WARMUPTIME%", warmupTime.toString());
+		message = message.replace("%TIMEREMAINING%", cooldownString);
+		message = message.replace("%WARMUPTIME%", warmupString);
 		message = message.replace("%QUANTITY%", quantity.toString());
 
 		// send message to player
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
     }
-	
-
-	
-	
-	
-	
-	
-	
-
-//	/** Send message to player
-//	 * 
-//	 * @param player		Player to message
-//	 * @param messageId		Identifier of message to send from messages.yml
-//	 */
-//    void sendPlayerMessage(CommandSender sender, String messageId) {
-//		this.sendPlayerMessage(sender, messageId, "", 1);
-//	}
-//
-//    
-//    void sendPlayerMessage(CommandSender sender, String messageId, Integer quantity) {
-//		this.sendPlayerMessage(sender, messageId, "", quantity);
-//	}
-//
-//    void sendPlayerMessage(CommandSender sender, String messageId, String destinationName) {
-//		this.sendPlayerMessage(sender, messageId, destinationName, 1);
-//	}
-//
-//    
-//    /** Send message to player
-//	 * 
-//	 * @param player		Player to message
-//	 * @param messageId		Identifier of message to send from messages.yml
-//	 * @param parameter1	Additional data
-//	 */
-//	void sendPlayerMessage(CommandSender sender, String messageId, String destinationName, Integer quantity) {
-//		
-//		// if message is set to enabled in messages file
-//		if (messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
-//
-//			// set some string defaults in case sender is not a player
-//			String playerName = sender.getName();
-//			String playerNickname = playerName;
-//			String playerDisplayName = playerName;
-//			String worldName = "unknown";
-//			Long remainingTime = 0L;
-//
-//			// if sender is a player...
-//			if (sender instanceof Player) {
-//				
-//				Player player = (Player) sender;
-//
-//				// get message cooldown time remaining
-//				Long lastDisplayed = getMessageCooldown(player,messageId);
-//
-//				// get message repeat delay
-//				int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
-//
-//				// if message has repeat delay value and was displayed to player more recently, do nothing and return
-//				if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
-//					return;
-//				}
-//		        
-//				// if repeat delay value is greater than zero, add entry to messageCooldownMap
-//		        if (messageRepeatDelay > 0) {
-//		        	putMessageCooldown(player,messageId);
-//		        }
-//				
-//				// assign player dependent variables
-//	        	playerName = player.getName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-//	        	playerNickname = player.getPlayerListName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-//	        	playerDisplayName = player.getDisplayName();
-//	        	worldName = player.getWorld().getName();
-//		        remainingTime = plugin.cooldownManager.getTimeRemaining(player);
-//			}
-//			
-//			// get message from file
-//			String message = messages.getConfig().getString("messages." + messageId + ".string");
-//	
-//			// get item name and strip color codes
-//	        String itemName = getItemName().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-//
-//	        // get warmup value from config file
-//	        Integer warmupTime = plugin.getConfig().getInt("teleport-warmup");
-//	        
-//			// if Multiverse is installed, use Multiverse world alias for world name
-//			if (plugin.mvEnabled && plugin.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
-//				
-//				// if Multiverse alias is not blank, set world name to alias
-//				if (!plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias().isEmpty()) {
-//					worldName = plugin.mvCore.getMVWorldManager().getMVWorld(worldName).getAlias();
-//				}
-//			}
-//	        
-//			// if quantity is greater than one, use plural item name
-//			if (quantity > 1) {
-//				// get plural item name and strip color codes
-//				itemName = getItemNamePlural().replaceAll("&[0-9A-Za-zK-Ok-oRr]", "");
-//			}
-//			
-//			// do variable substitutions
-//	        message = message.replaceAll("%itemname%", itemName);
-//	        message = message.replaceAll("%playername%", playerName);
-//	        message = message.replaceAll("%playerdisplayname%", playerDisplayName);
-//	        message = message.replaceAll("%playernickname%", playerNickname);
-//	        message = message.replaceAll("%worldname%", worldName);
-//	        message = message.replaceAll("%destination%", destinationName);
-//	        message = message.replaceAll("%timeremaining%", remainingTime.toString());
-//	        message = message.replaceAll("%warmuptime%", warmupTime.toString());
-//	        message = message.replaceAll("%quantity%", quantity.toString());
-//	        
-//			// do variable substitutions, stripping color codes from all caps variables
-//			message = message.replace("%ITEMNAME%", 
-//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',itemName)));
-//			message = message.replace("%PLAYERNAME%", 
-//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerName)));
-//			message = message.replace("%PLAYERNICKNAME%", 
-//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',playerNickname)));
-//			message = message.replace("%WORLDNAME%", 
-//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',worldName)));
-//			message = message.replace("%DESTINATION%", 
-//					ChatColor.stripColor(ChatColor.translateAlternateColorCodes('&',destinationName)));
-//
-//			// no stripping of color codes necessary, but do variable substitutions anyhow
-//			// in case all caps variables were used
-//			message = message.replace("%PLAYERDISPLAYNAME%", playerDisplayName);
-//			message = message.replace("%TIMEREMAINING%", remainingTime.toString());
-//			message = message.replace("%WARMUPTIME%", warmupTime.toString());
-//			message = message.replace("%QUANTITY%", quantity.toString());
-//
-//			// send message to player
-//			sender.sendMessage(ChatColor.translateAlternateColorCodes('&',message));
-//		}
-//    }
 	
 	
     /**
@@ -363,7 +256,7 @@ class MessageManager {
      * @param sender
      * @param soundId
      */
-	void playerSound(CommandSender sender, String soundId) {
+	void playerSound(final CommandSender sender, final String soundId) {
 	
 		if (sender instanceof Player) {
 			playerSound((Player)sender,soundId);
@@ -376,27 +269,27 @@ class MessageManager {
 	 * @param player
 	 * @param soundId
 	 */
-	void playerSound(Player player, String soundId) {
+	void playerSound(final Player player, final String soundId) {
 		
 		// if sound effects are disabled in config, do nothing and return
 		if (!plugin.getConfig().getBoolean("sound-effects")) {
 			return;
 		}
 		
-		// if sound is set to enabled in messages file
-		if (plugin.getConfig().getBoolean("sounds." + soundId + ".enabled")) {
+		// if sound is set to enabled in sounds file
+		if (sounds.getConfig().getBoolean("sounds." + soundId + ".enabled")) {
 			
 			// get player only setting from config file
-			boolean playerOnly = plugin.getConfig().getBoolean("sounds." + soundId + ".player-only");
+			boolean playerOnly = sounds.getConfig().getBoolean("sounds." + soundId + ".player-only");
 	
 			// get sound name from config file
-			String soundName = plugin.getConfig().getString("sounds." + soundId + ".sound");
+			String soundName = sounds.getConfig().getString("sounds." + soundId + ".sound");
 	
 			// get sound volume from config file
-			float volume = (float) plugin.getConfig().getDouble("sounds." + soundId + ".volume");
+			float volume = (float) sounds.getConfig().getDouble("sounds." + soundId + ".volume");
 			
 			// get sound pitch from config file
-			float pitch = (float) plugin.getConfig().getDouble("sounds." + soundId + ".pitch");
+			float pitch = (float) sounds.getConfig().getDouble("sounds." + soundId + ".pitch");
 	
 			try {
 				// if sound is set player only, use player.playSound()
@@ -409,7 +302,7 @@ class MessageManager {
 				}
 			} catch (IllegalArgumentException e) {
 				plugin.getLogger().warning("An error occured while trying to play the sound '" + soundName 
-						+ "'. You probably need to update the sound name in your config.yml file.");
+						+ "'. You probably need to update the sound name in your sounds.yml file.");
 			}
 		}
 	}
@@ -420,7 +313,7 @@ class MessageManager {
 	 * @param player
 	 * @param messageId
 	 */
-	private void putMessageCooldown(Player player, String messageId) {
+	private void putMessageCooldown(final Player player, final String messageId) {
 		
 		ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<String, Long>();
 		tempMap.put(messageId, System.currentTimeMillis());
@@ -434,7 +327,7 @@ class MessageManager {
 	 * @param messageId
 	 * @return cooldown expire time
 	 */
-	private long getMessageCooldown(Player player, String messageId) {
+	private long getMessageCooldown(final Player player, final String messageId) {
 		
 		// check if player is in message cooldown hashmap
 		if (messageCooldownMap.containsKey(player.getUniqueId())) {
@@ -454,7 +347,7 @@ class MessageManager {
 	 * Remove player from message cooldown map
 	 * @param player
 	 */
-	void removePlayerCooldown(Player player) {
+	void removePlayerCooldown(final Player player) {
 		messageCooldownMap.remove(player.getUniqueId());
 	}
 
@@ -584,7 +477,7 @@ class MessageManager {
 	 * @param language
 	 * @return
 	 */
-	private String languageFileExists(String language) {
+	private String languageFileExists(final String language) {
 		
 		// check if localization file for configured language exists, if not then fallback to en-US
 		File languageFile = new File(plugin.getDataFolder() 
@@ -597,6 +490,65 @@ class MessageManager {
 		plugin.getLogger().info("Language file " + language + ".yml does not exist. Defaulting to en-US.");
 		return "en-US";
 	}
-    
+ 
+	
+	/**
+	 * Format the time string with hours, minutes, seconds
+	 * @return
+	 */
+	String getTimeString(long duration) {
+		
+		StringBuilder timeString = new StringBuilder();
+		
+		int hours =   (int)duration / 3600;
+		int minutes = (int)(duration % 3600) / 60;
+		int seconds = (int)duration % 60;
+		
+		String hour_string = this.messages.getConfig().getString("hour");
+		String hour_plural_string = this.messages.getConfig().getString("hour_plural");
+		String minute_string = this.messages.getConfig().getString("minute");
+		String minute_plural_string = this.messages.getConfig().getString("minute_plural");
+		String second_string = this.messages.getConfig().getString("second");
+		String second_plural_string = this.messages.getConfig().getString("second_plural");
+		
+		if (hours > 1) {
+			timeString.append(hours);
+			timeString.append(' ');
+			timeString.append(hour_plural_string);
+			timeString.append(' ');
+		}
+		else if (hours == 1) {
+			timeString.append(hours);
+			timeString.append(' ');
+			timeString.append(hour_string);
+			timeString.append(' ');
+		}
+		
+		if (minutes > 1) {
+			timeString.append(minutes);
+			timeString.append(' ');
+			timeString.append(minute_plural_string);
+			timeString.append(' ');
+		}
+		else if (minutes == 1) {
+			timeString.append(minutes);
+			timeString.append(' ');
+			timeString.append(minute_string);
+			timeString.append(' ');
+		}
+		
+		if (seconds > 1) {
+			timeString.append(seconds);
+			timeString.append(' ');
+			timeString.append(second_plural_string);
+		}
+		else if (seconds == 1) {
+			timeString.append(seconds);
+			timeString.append(' ');
+			timeString.append(second_string);
+		}
+		
+		return timeString.toString().trim();
+	}
+	
 }
-

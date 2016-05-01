@@ -8,7 +8,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 class DelayedTeleportTask extends BukkitRunnable {
 
-	PluginMain plugin;
+	private final PluginMain plugin;
 	Player player;
 	Location destination;
 	String destinationName;
@@ -18,7 +18,8 @@ class DelayedTeleportTask extends BukkitRunnable {
 	/**
 	 * Class constructor method
 	 */
-	DelayedTeleportTask(final Player player, final Location destination, final String destinationName, final ItemStack playerItem) {
+	DelayedTeleportTask(final Player player, final Location destination,
+			final String destinationName, final ItemStack playerItem) {
 		
 		this.plugin = PluginMain.instance;
 		this.player = player;

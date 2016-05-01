@@ -8,10 +8,20 @@ item-lore:
   - '&eto Home'
 
 # Spawn Display Name
-spawn-display-name: 'Spawn'
+spawn-display-name: 'spawn'
 
 # Home Display Name
-home-display-name: 'Home'
+home-display-name: 'home'
+
+
+# Time strings
+hour: 'hour'
+hour_plural: 'hours'
+minute: 'minute'
+minute_plural: 'minutes'
+second: 'second'
+second_plural: 'seconds'
+
 
 # Custom Messages
 #
@@ -20,10 +30,10 @@ home-display-name: 'Home'
 # %playername%          Player's name
 # %destination%			Destination name
 # %worldname%           World name that player is in
-# %timeremaining%		seconds remaining in cooldown (valid in cooldown message only)
+# %timeremaining%		time remaining in cooldown (valid in cooldown message only)
 # %warmuptime%			seconds until teleport (valid in warmup message only)
 # %quantity%			number of items (valid in give command message only)
-#%targetplayer%			target player's name
+# %targetplayer%		target player's name
 #
 # %ITEMNAME%            Item name, with no color codes
 # %PLAYERNAME%          Player's name, with no color codes
@@ -104,20 +114,20 @@ messages:
   teleport-cooldown:
     enabled: true
     repeat-delay: 1
-    string: '&3You need to wait &b%timeremaining%&3 seconds to use another %ITEMNAME%.'
+    string: '&3You need to wait &b%timeremaining%&3 to use another %ITEMNAME%.'
   teleport-fail-no-bedspawn:
     enabled: true
     string: '&3Bed spawn is missing or obstructed!'
   teleport-min-distance:
     enabled: true
     repeat-delay: 1
-    string: '&3You are too close to spawn to use a %ITEMNAME%.'
+    string: '&3You are too close to %DESTINATION% to use a %ITEMNAME%.'
   teleport-success:
     enabled: true
     string: '&3Returned to %DESTINATION%.'
   teleport-warmup:
     enabled: true
-    string: '&3Teleporting to %DESTINATION% in &b%WARMUPTIME%&3 seconds...'
+    string: '&3Teleporting to %DESTINATION% in &b%WARMUPTIME%...'
   usage-shift-click:
     enabled: true
     repeat-delay: 1

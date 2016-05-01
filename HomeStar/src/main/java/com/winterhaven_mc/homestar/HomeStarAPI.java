@@ -85,7 +85,7 @@ public interface HomeStarAPI {
 	 * @param player
 	 * @return long
 	 */
-	long cooldownTimeRemaining(Player player);
+	long cooldownTimeRemaining(final Player player);
 	
 	/**
 	 * Get list of worlds in which the SpawnStar plugin is enabled
