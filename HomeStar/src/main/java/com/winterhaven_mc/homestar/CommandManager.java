@@ -30,7 +30,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 	ArrayList<String> attributes = new ArrayList<String>();
 
-	private final PluginMain plugin; // reference to main class
+	// reference to main class
+	private final PluginMain plugin;
+
+	// list of enabled world names
 	private ArrayList<String> enabledWorlds;
 
 	/**
@@ -38,8 +41,9 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * 
 	 * @param plugin reference to main class
 	 */
-	CommandManager(PluginMain plugin) {
+	CommandManager(final PluginMain plugin) {
 		
+		// set reference to main class
 		this.plugin = plugin;
 		
 		// register this class as command executor
@@ -57,7 +61,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * Tab completer for HomeStar
 	 */
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+	public List<String> onTabComplete(final CommandSender sender, final Command command, 
+			final String alias, final String[] args) {
 		
 		List<String> returnList = new ArrayList<String>();
 		
@@ -108,7 +113,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * 
 	 */
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+	public boolean onCommand(final CommandSender sender, final Command cmd, 
+			final String label, final String[] args) {
 		
 		String subcmd = "";
 		
@@ -158,7 +164,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender
 	 * @return boolean
 	 */
-	boolean statusCommand (CommandSender sender, String args[]) {
+	boolean statusCommand (final CommandSender sender, final String args[]) {
 		
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("homestar.status")) {
@@ -210,7 +216,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	boolean reloadCommand(CommandSender sender, String args[]) {
+	boolean reloadCommand(final CommandSender sender, final String args[]) {
 		
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("homestar.reload")) {
@@ -265,7 +271,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	boolean giveCommand(CommandSender sender, String args[]) {
+	boolean giveCommand(final CommandSender sender, final String args[]) {
 		
 		// usage: /give <targetplayer> [qty]
 			
@@ -376,7 +382,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	boolean destroyCommand(CommandSender sender, String args[]) {
+	boolean destroyCommand(final CommandSender sender, final String args[]) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -392,7 +398,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		Player player = (Player) sender;
-		ItemStack playerItem = player.getInventory().getItemInMainHand();
+		ItemStack playerItem = player.getInventory().getItemInHand();
 			
 		// check that player is holding a homestar stack
 		if (!plugin.utilities.isHomeStar(playerItem)) {
@@ -402,7 +408,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		int quantity = playerItem.getAmount();
 		playerItem.setAmount(0);
-		player.getInventory().setItemInMainHand(playerItem);
+		player.getInventory().setItemInHand(playerItem);
 		plugin.messageManager.sendPlayerMessage(sender, "command-success-destroy", quantity);
 		plugin.messageManager.playerSound(player,"command-success-destroy");
 		return true;
@@ -414,8 +420,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender
 	 * @param command
 	 */
-	void displayUsage(CommandSender sender, String command) {
+	void displayUsage(final CommandSender sender, final String passedCommand) {
 	
+		String command = passedCommand;
+		
 		if (command.isEmpty() || command.equalsIgnoreCase("help")) {
 			command = "all";
 		}
@@ -453,7 +461,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return
 	 */
-	boolean helpCommand(CommandSender sender, String args[]) {
+	boolean helpCommand(final CommandSender sender, final String args[]) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("homestar.help")) {
@@ -523,7 +531,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
 
 	@SuppressWarnings("deprecation")
-	Player matchPlayer(CommandSender sender, String targetPlayerName) {
+	Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
 		
 		Player targetPlayer = null;
 
@@ -563,6 +571,5 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 			return null;
 		}
 	}
-
 	
 }

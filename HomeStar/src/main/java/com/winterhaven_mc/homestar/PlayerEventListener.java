@@ -35,7 +35,7 @@ class PlayerEventListener implements Listener {
 	 * 
 	 * @param	plugin		A reference to this plugin's main class
 	 */
-	PlayerEventListener(PluginMain plugin) {
+	PlayerEventListener(final PluginMain plugin) {
 		
 		// reference to main
 		this.plugin = plugin;
@@ -51,7 +51,7 @@ class PlayerEventListener implements Listener {
 	 */
 	@SuppressWarnings("deprecation")
 	@EventHandler
-	void onPlayerUse(PlayerInteractEvent event) {
+	void onPlayerUse(final PlayerInteractEvent event) {
 
 		// get player
 		final Player player = event.getPlayer();
@@ -124,30 +124,28 @@ class PlayerEventListener implements Listener {
 			return;
 		}
 		
+		// get player world
 		World playerWorld = player.getWorld();
 		
-		Location destination = null;
-		
-		if (player.getBedSpawnLocation() != null) {
-			destination = plugin.utilities.getSafeBedSpawn(player.getBedSpawnLocation());
-		}
-		else {
-			if (plugin.debug) {
-				plugin.getLogger().info("Player bedspawn is null.");
-			}
-		}
-		
+		// get home display name from language file
 		String destinationName = plugin.messageManager.getHomeDisplayName();
 		
+		// if player has bukkit bedspawn, try to get safe bedspawn location
+		Location location = player.getBedSpawnLocation();
 		
-		// if bedspawn location is null, test if bedspawn-fallback configured
-		if (destination == null) {
+		// if center-on-block is configured true, get block centered location
+		if (plugin.getConfig().getBoolean("center-on-block")) {
+			location = plugin.utilities.getBlockCenteredLocation(location);
+		}
+		
+		// if bedspawn location is null, check if bedspawn-fallback is configured true
+		if (location == null) {
 			
 			// send missing or obstructed message
 			plugin.messageManager.sendPlayerMessage(player, "teleport-fail-no-bedspawn");
 			
 			// if bedspawn-fallback is configured false, play teleport fail sound and return
-			if (! plugin.getConfig().getBoolean("bedspawn-fallback")) {
+			if (!plugin.getConfig().getBoolean("bedspawn-fallback")) {
 				plugin.messageManager.playerSound(player, "teleport-fail");
 				return;
 			}
@@ -159,26 +157,20 @@ class PlayerEventListener implements Listener {
 				
 				// if multiverse is enabled, get spawn location from it so we have pitch and yaw
 				if (plugin.mvEnabled) {
-					destination = plugin.mvCore.getMVWorldManager().getMVWorld(playerWorld).getSpawnLocation();
+					location = plugin.mvCore.getMVWorldManager().getMVWorld(playerWorld).getSpawnLocation();
 				}
 				// else get bukkit spawn location and player's pitch and yaw
 				else {
-					destination = playerWorld.getSpawnLocation();
-					destination.setPitch(player.getLocation().getPitch());
-					destination.setYaw(player.getLocation().getYaw());
+					location = playerWorld.getSpawnLocation();
+					location.setPitch(player.getLocation().getPitch());
+					location.setYaw(player.getLocation().getYaw());
 				}
 			}		
 		}
-		// else set destination to bedspawn location
-		else {
-		
-			// set destination to bed spawn location
-			destination = player.getBedSpawnLocation();
-		}
 		
 		// if player is less than config min-distance from destination, send player min-distance message and return
-		if (player.getWorld() == destination.getWorld() && destination.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
-			plugin.messageManager.sendPlayerMessage(player, "teleport-min-distance");
+		if (player.getWorld() == location.getWorld() && location.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
+			plugin.messageManager.sendPlayerMessage(player, "teleport-min-distance", destinationName);
 			return;
 		}
 		
@@ -186,7 +178,7 @@ class PlayerEventListener implements Listener {
 		if (plugin.getConfig().getString("remove-from-inventory").equalsIgnoreCase("on-use")) {
 			ItemStack removeItem = playerItem;
 			removeItem.setAmount(playerItem.getAmount() - 1);
-			player.setItemInHand(removeItem);
+			player.getInventory().setItemInHand(removeItem);
 		}
 		
 		// if warmup setting is greater than zero, send warmup message
@@ -198,7 +190,11 @@ class PlayerEventListener implements Listener {
 		}
 		
 		// initiate delayed teleport for player to destination
-		BukkitTask teleportTask = new DelayedTeleportTask(player, destination, destinationName, playerItem.clone()).runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20);
+		BukkitTask teleportTask = 
+				new DelayedTeleportTask(player,
+						location,
+						destinationName,
+						playerItem.clone()).runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20);
 		
 		// insert player and taskId into warmup hashmap
 		plugin.warmupManager.putPlayer(player, teleportTask.getTaskId());
@@ -221,7 +217,7 @@ class PlayerEventListener implements Listener {
 	
 	
 	@EventHandler
-	void onPlayerDeath(PlayerDeathEvent event) {
+	void onPlayerDeath(final PlayerDeathEvent event) {
 		
 		Player player = (Player)event.getEntity();
 		
@@ -232,7 +228,7 @@ class PlayerEventListener implements Listener {
 
 	
 	@EventHandler
-	void onPlayerQuit(PlayerQuitEvent event) {
+	void onPlayerQuit(final PlayerQuitEvent event) {
 		
 		Player player = event.getPlayer();
 		
@@ -250,7 +246,7 @@ class PlayerEventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onCraftPrepare(PrepareItemCraftEvent event) {
+	void onCraftPrepare(final PrepareItemCraftEvent event) {
 
 		// if allow-in-recipes is true in configuration, do nothing and return
 		if (plugin.getConfig().getBoolean("allow-in-recipes")) {
@@ -272,7 +268,7 @@ class PlayerEventListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler
-	void onEntityDamage(EntityDamageEvent event) {
+	void onEntityDamage(final EntityDamageEvent event) {
 		
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -299,7 +295,7 @@ class PlayerEventListener implements Listener {
 	
 	
 	@EventHandler
-	void onPlayerMovement(PlayerMoveEvent event) {
+	void onPlayerMovement(final PlayerMoveEvent event) {
 				
 		// if cancel-on-movement configuration is false, do nothing and return
 		if (!plugin.getConfig().getBoolean("cancel-on-movement")) {
@@ -326,7 +322,7 @@ class PlayerEventListener implements Listener {
 	 * @param player
 	 * @return
 	 */
-	private boolean playerWorldEnabled(Player player) {
+	private boolean playerWorldEnabled(final Player player) {
 		
 		// if player world is in list of enabled worlds, return true
 		if (plugin.commandManager.getEnabledWorlds().contains(player.getWorld().getName())) {

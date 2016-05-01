@@ -15,8 +15,11 @@ import org.bukkit.scheduler.BukkitRunnable;
  */
 class CooldownManager {
 	
-	private final PluginMain plugin;		// reference to main class
-	private ConcurrentHashMap<UUID, Long> cooldown;	// private hashmap to store player uuids and cooldown expire times
+	// reference to main class
+	private final PluginMain plugin;
+	
+	// hashmap to store player uuids and cooldown expire times
+	private ConcurrentHashMap<UUID, Long> cooldown;
 
 	
 	/**
@@ -24,7 +27,7 @@ class CooldownManager {
 	 * 
 	 * @param	plugin		A reference to this plugin's main class
 	 */
-CooldownManager(PluginMain plugin) {
+	CooldownManager(final PluginMain plugin) {
 		this.plugin = plugin;
 		cooldown = new ConcurrentHashMap<UUID, Long>();
 	}
@@ -37,16 +40,17 @@ CooldownManager(PluginMain plugin) {
 	 */
 	void setPlayerCooldown(final Player player) {
 
-		int cooldown_seconds = plugin.getConfig().getInt("teleport-cooldown");
+		// get cooldown time in seconds from config
+		int cooldownSeconds = plugin.getConfig().getInt("teleport-cooldown");
 
-		Long expiretime = System.currentTimeMillis() + (cooldown_seconds * 1000);
+		Long expiretime = System.currentTimeMillis() + (cooldownSeconds * 1000);
 		cooldown.put(player.getUniqueId(), expiretime);
 		new BukkitRunnable(){
 
 			public void run() {
 				cooldown.remove(player.getUniqueId());
 			}
-		}.runTaskLater(plugin, (cooldown_seconds * 20));
+		}.runTaskLater(plugin, (cooldownSeconds * 20));
 	}
 	
 	
@@ -55,13 +59,13 @@ CooldownManager(PluginMain plugin) {
 	 * @param player
 	 * @return long remainingtime
 	 */
-	long getTimeRemaining(Player player) {
-		long remainingtime = 0;
+	long getTimeRemaining(final Player player) {
+		long remainingTime = 0;
 		if (cooldown.containsKey(player.getUniqueId())) {
-			remainingtime = (cooldown.get(player.getUniqueId()) - System.currentTimeMillis()) / 1000;
+			remainingTime = (cooldown.get(player.getUniqueId()) - System.currentTimeMillis()) / 1000;
 		}
-		return remainingtime;
+		return remainingTime;
 	}
-
+	
 }
 

@@ -14,7 +14,10 @@ import org.bukkit.entity.Player;
  */
 class WarmupManager {
 	
-	final PluginMain plugin;		// reference to main class
+	// reference to main class
+	private final PluginMain plugin;
+	
+	// HashMap containing player UUID as key and warmup time as value
 	private ConcurrentHashMap<UUID,Integer> warmupMap;
 
 	
@@ -23,7 +26,7 @@ class WarmupManager {
 	 * 
 	 * @param	plugin		A reference to this plugin's main class
 	 */
-	WarmupManager(PluginMain plugin) {
+	WarmupManager(final PluginMain plugin) {
 		this.plugin = plugin;
 		warmupMap = new ConcurrentHashMap<UUID,Integer>();
 	}
@@ -40,7 +43,7 @@ class WarmupManager {
 	
 	
 	/**
-	 * Remove player uuid from warmup hashmap.
+	 * Remove player uuid from warmup hashmap
 	 * @param player
 	 */
 	void removePlayer(final Player player) {		
@@ -49,7 +52,7 @@ class WarmupManager {
 	
 	
 	/**
-	 * Test if player uuid is in warmup hashmap.
+	 * Test if player uuid is in warmup hashmap
 	 * @param player
 	 * @return
 	 */
@@ -63,6 +66,10 @@ class WarmupManager {
 	}
 	
 	
+	/**
+	 * Cancel pending player teleport
+	 * @param player
+	 */
 	void cancelTeleport(final Player player) {
 		
 		// if player is in warmup hashmap, cancel delayed teleport task and remove player from warmup hashmap

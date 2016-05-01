@@ -1,14 +1,12 @@
 package com.winterhaven_mc.homestar;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,7 +23,6 @@ public class HomeStarUtilities implements HomeStarAPI {
 
 	private final PluginMain plugin;
 	private final String itemTag = hiddenString("HomeStarV1");
-	private	HashSet<Material> safeMaterials = new HashSet<Material>();
 
 	
 	/**
@@ -34,7 +31,6 @@ public class HomeStarUtilities implements HomeStarAPI {
 	 */
 	HomeStarUtilities(PluginMain plugin) {
 		this.plugin = plugin;
-		safeMaterials = getSafeMaterials();
 	}
 	
 	/**
@@ -250,110 +246,19 @@ public class HomeStarUtilities implements HomeStarAPI {
 	}
 	
 	
-	/**
-	 * Check if bedspawn location is missing or obstructed
-	 * @param bedSpawnLocation
-	 * @return safe location or null if none found
-	 */
-	Location getSafeBedSpawn(Location bedSpawnLocation) {
+	Location getBlockCenteredLocation(final Location location) {
 		
-		if (bedSpawnLocation == null) {
+		// if location is null, return null
+		if (location == null) {
 			return null;
 		}
 		
-		bedSpawnLocation = getRoundedDestination(bedSpawnLocation);
-		
-		Block bedSpawnBlock = null;
-		
-		if (bedSpawnLocation.getBlock() != null) {
-			bedSpawnBlock = bedSpawnLocation.getBlock();
-		}
-		else {
-			return null;
-		}
-		
-		// test if actual bedspawn location is safe
-		if (safeMaterials.contains(bedSpawnBlock.getType())
-				&& safeMaterials.contains(bedSpawnBlock.getRelative(0,1,0).getType())) {
-			return bedSpawnLocation;
-		}
-
-//			// test if location one block to north is safe
-//			if (bedSpawnBlock.getRelative(1,0,0).getType() == null
-//					|| bedSpawnBlock.getRelative(1,1,0).getType() == null
-//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(1,0,0).getType())
-//					&& safeMaterials.contains(bedSpawnBlock.getRelative(1,1,0).getType()))) {
-//				return bedSpawnLocation.add(1,0,0);
-//			}
-//			
-//			// test if location one block to south is safe
-//			if (bedSpawnBlock.getRelative(-1,0,0).getType() == null
-//					|| bedSpawnBlock.getRelative(-1,1,0).getType() == null
-//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(-1,0,0).getType())
-//					&& safeMaterials.contains(bedSpawnBlock.getRelative(-1,1,0).getType()))) {
-//				return bedSpawnLocation.add(-1,0,0);
-//			}
-//
-//			// test if location one block to east is safe
-//			if (bedSpawnBlock.getRelative(0,0,1).getType() == null
-//					|| bedSpawnBlock.getRelative(0,1,1).getType() == null
-//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(0,0,1).getType())
-//					&& safeMaterials.contains(bedSpawnBlock.getRelative(0,1,1).getType()))) {
-//				return bedSpawnLocation.add(0,0,1);
-//			}
-//			
-//			// test if location one block to west is safe
-//			if (bedSpawnBlock.getRelative(0,0,-1).getType() == null
-//					|| bedSpawnBlock.getRelative(0,1,-1).getType() == null
-//					|| (safeMaterials.contains(bedSpawnBlock.getRelative(0,0,-1).getType())
-//					&& safeMaterials.contains(bedSpawnBlock.getRelative(0,1,-1).getType()))) {
-//				return bedSpawnLocation.add(0,0,-1);
-//			}
-//		}
-		return null;
+		final World world = location.getWorld();
+		int x = location.getBlockX();
+		int y = (int)Math.round(location.getY());
+		int z = location.getBlockZ();
+		return new Location(world, x + 0.5, y, z + 0.5, location.getYaw(), location.getPitch());
 	}
 
-	
-	// Not needed if using getSafeDestination(loc)
-	Location getRoundedDestination(final Location loc)
-	{
-		final World world = loc.getWorld();
-		int x = loc.getBlockX();
-		int y = (int)Math.round(loc.getY());
-		int z = loc.getBlockZ();
-		return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
-	}
-
-	
-	HashSet<Material> getSafeMaterials() {
-		
-		HashSet<Material> safeMaterials = new HashSet<Material>();
-		
-		safeMaterials.add(Material.AIR);
-		safeMaterials.add(Material.CARPET);
-		safeMaterials.add(Material.CROPS);
-		safeMaterials.add(Material.DEAD_BUSH);
-		safeMaterials.add(Material.DOUBLE_PLANT);
-		safeMaterials.add(Material.LADDER);
-		safeMaterials.add(Material.LEAVES);
-		safeMaterials.add(Material.LEAVES_2);
-		safeMaterials.add(Material.LEVER);
-		safeMaterials.add(Material.LONG_GRASS);
-		safeMaterials.add(Material.MELON_STEM);
-		safeMaterials.add(Material.PUMPKIN_STEM);
-		safeMaterials.add(Material.RED_ROSE);
-		safeMaterials.add(Material.SIGN_POST);
-		safeMaterials.add(Material.SUGAR_CANE_BLOCK);
-		safeMaterials.add(Material.TORCH);
-		safeMaterials.add(Material.TRIPWIRE);
-		safeMaterials.add(Material.TRIPWIRE_HOOK);
-		safeMaterials.add(Material.VINE);
-		safeMaterials.add(Material.WALL_SIGN);
-		safeMaterials.add(Material.WEB);
-		safeMaterials.add(Material.WHEAT);
-		safeMaterials.add(Material.YELLOW_FLOWER);
-		
-		return safeMaterials;
-	}
 }
 
