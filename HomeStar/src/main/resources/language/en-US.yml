@@ -8,10 +8,10 @@ item-lore:
   - '&eto Home'
 
 # Spawn Display Name
-spawn-display-name: 'Spawn'
+spawn-display-name: 'spawn'
 
 # Home Display Name
-home-display-name: 'Home'
+home-display-name: 'home'
 
 
 # Time strings
@@ -21,7 +21,6 @@ minute: 'minute'
 minute_plural: 'minutes'
 second: 'second'
 second_plural: 'seconds'
-unlimited: 'unlimited time'
 
 
 # Custom Messages

@@ -15,8 +15,6 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.github.zafarkhaja.semver.Version;
-
 
 /**
  * Implements message manager for <code>HomeStar</code>.
@@ -63,22 +61,17 @@ class MessageManager {
 		// initalize messageCooldownMap
 		messageCooldownMap = new ConcurrentHashMap<UUID,ConcurrentHashMap<String,Long>>();
 		
-		// create version object for comparison
-		Version v1_9 = Version.valueOf("1.9");
-		
-		// create version object for the current server version
-		Version serverVersion = Version.valueOf(plugin.getServer().getBukkitVersion());
-
 		// default sound file name
 		String soundFileName = "sounds.yml";
 		
-		// if server version is pre-1.9, use sounds-older.yml filename
-		if (serverVersion.lessThan(v1_9)) {
-			soundFileName = "sounds-older.yml";
-		}
-		
 		// instantiate custom sound manager
 		sounds = new ConfigAccessor(plugin, soundFileName);
+		
+		// install sound file if not present
+		sounds.saveDefaultConfig();
+		
+		// install alternate sound file if not present
+		plugin.saveResource("pre-1.9_sounds.yml", false);
 		
     }
 
@@ -188,7 +181,7 @@ class MessageManager {
 			playerName = player.getName();
 			worldName = player.getWorld().getName();
 
-			cooldownString = getTimeRemainingString(plugin.cooldownManager.getTimeRemaining(player));
+			cooldownString = getTimeString(plugin.cooldownManager.getTimeRemaining(player));
 			
 		}
 
@@ -199,7 +192,7 @@ class MessageManager {
 		String itemName = getItemName();
 
 		// get warmup value from config file
-		warmupString = getTimeRemainingString(plugin.getConfig().getInt("teleport-warmup"));
+		warmupString = getTimeString(plugin.getConfig().getInt("teleport-warmup"));
 
 		// if Multiverse is installed, use Multiverse world alias for world name
 		if (plugin.mvEnabled && plugin.mvCore.getMVWorldManager().getMVWorld(worldName) != null) {
@@ -491,16 +484,16 @@ class MessageManager {
  
 	
 	/**
-	 * Format the time remaining string with hours, minutes, seconds
+	 * Format the time string with hours, minutes, seconds
 	 * @return
 	 */
-	String getTimeRemainingString(long timeRemaining) {
+	String getTimeString(long duration) {
 		
 		StringBuilder timeString = new StringBuilder();
 		
-		int hours = (int)timeRemaining / 3600;
-		int minutes = (int)timeRemaining / 60;
-		int seconds = (int)timeRemaining % 60;
+		int hours = (int)duration / 3600;
+		int minutes = (int)duration / 60;
+		int seconds = (int)duration % 60;
 		
 		String hour_string = this.messages.getConfig().getString("hour");
 		String hour_plural_string = this.messages.getConfig().getString("hour_plural");
