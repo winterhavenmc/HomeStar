@@ -81,7 +81,7 @@ class DelayedTeleportTask extends BukkitRunnable {
 			// play pre-teleport sound if sound effects are enabled
 			plugin.messageManager.playerSound(player, "teleport-success-departure");
 
-			// teleport player to bed spawn location
+			// teleport player to destination
 			player.teleport(destination);
 
 			// send player respawn message
