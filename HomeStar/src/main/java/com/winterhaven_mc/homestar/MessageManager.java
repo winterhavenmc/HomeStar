@@ -73,6 +73,9 @@ class MessageManager {
 		// default sound file name
 		String soundFileName = "sounds.yml";
 		
+		// old sound file name
+		String oldsoundFileName = "pre-1.9_sounds.yml";
+		
 		// instantiate custom sound manager
 		sounds = new ConfigAccessor(plugin, soundFileName);
 		
@@ -80,8 +83,12 @@ class MessageManager {
 		sounds.saveDefaultConfig();
 		
 		// install alternate sound file if not present
-		plugin.saveResource("pre-1.9_sounds.yml", false);
-		
+		File oldSounds = new File(plugin.getDataFolder() + File.separator + oldsoundFileName);
+		if (!oldSounds.exists()) {
+			plugin.saveResource(oldsoundFileName, false);
+		}
+		// release file object
+		oldSounds = null;
     }
 
 	/**
