@@ -1,19 +1,23 @@
-package com.winterhaven_mc.homestar;
+package com.winterhaven_mc.homestar.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import com.winterhaven_mc.homestar.PluginMain;
+import com.winterhaven_mc.homestar.SimpleAPI;
 
 
 /**
@@ -23,25 +27,24 @@ import org.bukkit.inventory.ItemStack;
  * @version		1.0
  *  
  */
-public class CommandManager implements CommandExecutor, TabCompleter {
+public final class CommandManager implements CommandExecutor, TabCompleter {
 	
 	private final static ChatColor helpColor = ChatColor.YELLOW;
 	private final static ChatColor usageColor = ChatColor.GOLD;
 
-	ArrayList<String> attributes = new ArrayList<String>();
-
 	// reference to main class
 	private final PluginMain plugin;
 
-	// list of enabled world names
-	private ArrayList<String> enabledWorlds;
+	private final static List<String> subcommands = 
+			Collections.unmodifiableList(new ArrayList<String>(
+					Arrays.asList("give", "destroy", "status", "reload", "help")));
 
 	/**
-	 * constructor method for {@code CommandManager} class
+	 * Class constructor method for CommandManager
 	 * 
 	 * @param plugin reference to main class
 	 */
-	CommandManager(final PluginMain plugin) {
+	public CommandManager(final PluginMain plugin) {
 		
 		// set reference to main class
 		this.plugin = plugin;
@@ -51,9 +54,6 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// register this class as tab completer
 		plugin.getCommand("homestar").setTabCompleter(this);
-		
-		// set enabled worlds array list
-		updateEnabledWorlds();
 	}
 
 	
@@ -61,18 +61,18 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * Tab completer for HomeStar
 	 */
 	@Override
-	public List<String> onTabComplete(final CommandSender sender, final Command command, 
+	public final List<String> onTabComplete(final CommandSender sender, final Command command, 
 			final String alias, final String[] args) {
 		
-		List<String> returnList = new ArrayList<String>();
+		final List<String> returnList = new ArrayList<String>();
 		
 		// return list of valid matching subcommands
 		if (args.length == 1) {
 			
-			for (SubCommand subcmd : SubCommand.values()) {
-				if (sender.hasPermission("homestar." + subcmd.toString()) 
-						&& subcmd.toString().startsWith(args[0].toLowerCase())) {
-					returnList.add(subcmd.toString());
+			for (String subcommand : subcommands) {
+				if (sender.hasPermission("homestar." + subcommand) 
+						&& subcommand.startsWith(args[0].toLowerCase())) {
+					returnList.add(subcommand);
 				}
 			}
 		}
@@ -80,10 +80,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		// return list of online players, or commands if subcommand is 'help'
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("help")) {
-				for (SubCommand subcmd : SubCommand.values()) {
-					if (sender.hasPermission("homestar." + subcmd.toString()) 
-							&& subcmd.toString().startsWith(args[1].toLowerCase())) {
-						returnList.add(subcmd.toString());
+				for (String subcommand : subcommands) {
+					if (sender.hasPermission("homestar." + subcommand) 
+							&& subcommand.startsWith(args[0].toLowerCase())) {
+						returnList.add(subcommand);
 					}
 				}
 			}
@@ -113,7 +113,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * 
 	 */
 	@Override
-	public boolean onCommand(final CommandSender sender, final Command cmd, 
+	public final boolean onCommand(final CommandSender sender, final Command cmd, 
 			final String label, final String[] args) {
 		
 		String subcmd = "";
@@ -164,7 +164,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender
 	 * @return boolean
 	 */
-	boolean statusCommand (final CommandSender sender, final String args[]) {
+	final boolean statusCommand (final CommandSender sender, final String args[]) {
 		
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("homestar.status")) {
@@ -205,7 +205,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		sender.sendMessage(ChatColor.GREEN + "Lightning: " 
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("lightning"));
 		sender.sendMessage(ChatColor.GREEN + "Enabled Words: " 
-				+ ChatColor.RESET + getEnabledWorlds().toString());
+				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 		return true;
 	}
 	
@@ -216,7 +216,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	boolean reloadCommand(final CommandSender sender, final String args[]) {
+	final boolean reloadCommand(final CommandSender sender, final String args[]) {
 		
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("homestar.reload")) {
@@ -251,7 +251,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.reloadConfig();
 
 		// update enabledWorlds list
-		updateEnabledWorlds();
+		plugin.worldManager.reload();
 		
 		// reload messages
 		plugin.messageManager.reload();
@@ -271,7 +271,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	boolean giveCommand(final CommandSender sender, final String args[]) {
+	final boolean giveCommand(final CommandSender sender, final String args[]) {
 		
 		// usage: /give <targetplayer> [qty]
 			
@@ -337,7 +337,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// add specified quantity of homestar(s) to player inventory
-		HashMap<Integer,ItemStack> noFit = targetPlayer.getInventory().addItem(plugin.utilities.createItem(quantity));
+		HashMap<Integer,ItemStack> noFit = targetPlayer.getInventory().addItem(SimpleAPI.createItem(quantity));
 
 		// count items that didn't fit in inventory
 		int noFitCount = 0;
@@ -382,7 +382,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	boolean destroyCommand(final CommandSender sender, final String args[]) {
+	final boolean destroyCommand(final CommandSender sender, final String args[]) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -401,7 +401,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 		ItemStack playerItem = player.getInventory().getItemInHand();
 			
 		// check that player is holding a homestar stack
-		if (!plugin.utilities.isHomeStar(playerItem)) {
+		if (!SimpleAPI.isHomeStar(playerItem)) {
 			plugin.messageManager.sendPlayerMessage(sender, "command-fail-destroy-no-match");
 			plugin.messageManager.playerSound(sender, "command-fail");
 			return true;
@@ -420,7 +420,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender
 	 * @param command
 	 */
-	void displayUsage(final CommandSender sender, final String passedCommand) {
+	final void displayUsage(final CommandSender sender, final String passedCommand) {
 	
 		String command = passedCommand;
 		
@@ -461,7 +461,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return
 	 */
-	boolean helpCommand(final CommandSender sender, final String args[]) {
+	final boolean helpCommand(final CommandSender sender, final String args[]) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("homestar.help")) {
@@ -499,39 +499,8 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 
-	/**
-	 * update enabledWorlds ArrayList field from config file settings
-	 */
-	void updateEnabledWorlds() {
-		
-		// copy list of enabled worlds from config into enabledWorlds ArrayList field
-		this.enabledWorlds = new ArrayList<String>(plugin.getConfig().getStringList("enabled-worlds"));
-		
-		// if enabledWorlds ArrayList is empty, add all worlds to ArrayList
-		if (this.enabledWorlds.isEmpty()) {
-			for (World world : plugin.getServer().getWorlds()) {
-				enabledWorlds.add(world.getName());
-			}
-		}
-		
-		// remove each disabled world from enabled worlds field
-		for (String disabledWorld : plugin.getConfig().getStringList("disabled-worlds")) {
-			this.enabledWorlds.remove(disabledWorld);
-		}
-	}
-	
-	
-	/**
-	 * get list of enabled worlds
-	 * @return ArrayList of String enabledWorlds
-	 */
-	ArrayList<String> getEnabledWorlds() {
-		return this.enabledWorlds;
-	}
-
-
 	@SuppressWarnings("deprecation")
-	Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
+	final Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
 		
 		Player targetPlayer = null;
 

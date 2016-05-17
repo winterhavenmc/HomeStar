@@ -2,7 +2,12 @@ package com.winterhaven_mc.homestar;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.onarandombox.MultiverseCore.MultiverseCore;
+import com.winterhaven_mc.homestar.commands.CommandManager;
+import com.winterhaven_mc.homestar.listeners.PlayerEventListener;
+import com.winterhaven_mc.homestar.teleport.TeleportManager;
+import com.winterhaven_mc.homestar.util.MessageManager;
+import com.winterhaven_mc.homestar.util.WorldManager;
+
 
 /**
  * Bukkit plugin to create items that return player to
@@ -15,19 +20,14 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 public final class PluginMain extends JavaPlugin {
 	
 	// static reference to main class
-	static PluginMain instance;
+	public static PluginMain instance;
 
-	Boolean debug = getConfig().getBoolean("debug");
+	public Boolean debug = getConfig().getBoolean("debug");
 	
-	CooldownManager cooldownManager;
-	WarmupManager warmupManager;
-	MessageManager messageManager;
-	CommandManager commandManager;
-	PlayerEventListener playerEventListener;
-	public HomeStarUtilities utilities;
-
-	MultiverseCore mvCore;
-	Boolean mvEnabled = false;
+	public CommandManager commandManager;
+	public MessageManager messageManager;
+	public TeleportManager teleportManager;
+	public WorldManager worldManager;
 
 	@Override
 	public void onEnable() {
@@ -38,32 +38,20 @@ public final class PluginMain extends JavaPlugin {
 		// install default config.yml if not present  
 		saveDefaultConfig();
 		
+		// instantiate world manager
+		worldManager = new WorldManager(this);
+		
 		// instantiate message manager
 		messageManager = new MessageManager(this);
 
 		// instantiate command manager
 		commandManager = new CommandManager(this);
 
-		// instantiate cooldown manager
-		cooldownManager = new CooldownManager(this);
+		// instantiate teleport manager
+		teleportManager = new TeleportManager(this);
 		
-		// instantiate warmup manager
-		warmupManager = new WarmupManager(this);
-		
-		// instantiate player listener
-		playerEventListener = new PlayerEventListener(this);
-	
-		// instantiate utilities
-		utilities = new HomeStarUtilities(this);
-		
-		// get reference to Multiverse-Core if installed
-		mvCore = (MultiverseCore) this.getServer().getPluginManager().getPlugin("Multiverse-Core");
-		if (mvCore != null && mvCore.isEnabled()) {
-			this.getLogger().info("Multiverse-Core detected.");
-			this.mvEnabled = true;
-		}
-
+		// instantiate player event listener
+		new PlayerEventListener(this);
 	}
 
 }
-

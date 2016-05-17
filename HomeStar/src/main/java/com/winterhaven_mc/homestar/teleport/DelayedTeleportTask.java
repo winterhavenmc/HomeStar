@@ -1,4 +1,4 @@
-package com.winterhaven_mc.homestar;
+package com.winterhaven_mc.homestar.teleport;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -6,15 +6,29 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-class DelayedTeleportTask extends BukkitRunnable {
+import com.winterhaven_mc.homestar.PluginMain;
 
+final class DelayedTeleportTask extends BukkitRunnable {
+
+	// reference to main class
 	private final PluginMain plugin;
-	Player player;
-	Location destination;
-	String destinationName;
-	BukkitTask particleTask;
-	ItemStack playerItem;
+	
+	// player being teleported
+	private final Player player;
+	
+	// teleport destination
+	private final Location destination;
+	
+	// teleport destination display name
+	private final String destinationName;
+	
+	// particle task
+	private BukkitTask particleTask;
+	
+	// HomeStar item used by player
+	private final ItemStack playerItem;
 
+	
 	/**
 	 * Class constructor method
 	 */
@@ -32,32 +46,25 @@ class DelayedTeleportTask extends BukkitRunnable {
 
 			// start particle task, with 2 tick delay so it doesn't self cancel on first run
 			particleTask = new ParticleTask(player).runTaskTimer(plugin, 2L, 10);
-		
 		}
 	}
 
 	@Override
-	public void run() {
+	public final void run() {
 
 		// cancel particles task
 		particleTask.cancel();
 		
 		// if player is in warmup hashmap
-		if (plugin.warmupManager.isWarmingUp(player)) {
+		if (plugin.teleportManager.isWarmingUp(player)) {
 
 			// remove player from warmup hashmap
-			plugin.warmupManager.removePlayer(player);
+			plugin.teleportManager.removeWarmup(player);
 		
-			// if multiverse is not enabled, copy pitch and yaw from player
-			if (!plugin.mvEnabled) {
-				destination.setPitch(player.getLocation().getPitch());
-				destination.setYaw(player.getLocation().getYaw());
-			}
-			
 			// if remove-from-inventory is configured on-success, take one spawn star item from inventory now
 			if (plugin.getConfig().getString("remove-from-inventory").equalsIgnoreCase("on-success")) {
 				
-				// try to remove one spawn star item from player inventory
+				// try to remove one HomeStar item from player inventory
 				boolean notRemoved = true;
 				for (ItemStack itemStack : player.getInventory()) {
 					if (playerItem.isSimilar(itemStack)) {
@@ -69,11 +76,11 @@ class DelayedTeleportTask extends BukkitRunnable {
 					}
 				}
 				
-				// if one LodeStar item could not be removed from inventory, send message, set cooldown and return
+				// if one HomeStar item could not be removed from inventory, send message, set cooldown and return
 				if (notRemoved) {
 					plugin.messageManager.sendPlayerMessage(player, "teleport-cancelled-no-item");
 					plugin.messageManager.playerSound(player, "teleport-cancelled-no-item");
-					plugin.cooldownManager.setPlayerCooldown(player);
+					plugin.teleportManager.startCooldown(player);
 					return;
 				}
 			}
@@ -96,7 +103,7 @@ class DelayedTeleportTask extends BukkitRunnable {
 			}
 			
 			// set player cooldown
-			plugin.cooldownManager.setPlayerCooldown(player);
+			plugin.teleportManager.startCooldown(player);
 		}
 	}
 	
