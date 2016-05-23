@@ -35,8 +35,8 @@ public final class SimpleAPI {
 	
 	/**
 	 * Create a HomeStar item stack of given quantity, with custom display name and lore
-	 * @param quantity
-	 * @return
+	 * @param quantity number of HomeStar items in newly created stack
+	 * @return ItemStack of HomeStar items
 	 */
 	public final static ItemStack createItem(int quantity) {
 
@@ -59,8 +59,8 @@ public final class SimpleAPI {
 	
 	/**
 	 * Check if itemStack is a HomeStar item
-	 * @param itemStack
-	 * @return boolean
+	 * @param itemStack the ItemStack to check
+	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
 	 */
 	public final static boolean isHomeStar(ItemStack itemStack) {
 		

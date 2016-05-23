@@ -267,7 +267,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	final boolean giveCommand(final CommandSender sender, final String args[]) {
+	private boolean giveCommand(final CommandSender sender, final String args[]) {
 		
 		// usage: /give <targetplayer> [qty]
 			
@@ -378,7 +378,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	final boolean destroyCommand(final CommandSender sender, final String args[]) {
+	private boolean destroyCommand(final CommandSender sender, final String args[]) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -416,7 +416,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender
 	 * @param passedCommand
 	 */
-	final void displayUsage(final CommandSender sender, final String passedCommand) {
+	private void displayUsage(final CommandSender sender, final String passedCommand) {
 	
 		String command = passedCommand;
 		
@@ -457,7 +457,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return
 	 */
-	final boolean helpCommand(final CommandSender sender, final String args[]) {
+	private boolean helpCommand(final CommandSender sender, final String args[]) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("homestar.help")) {
@@ -496,7 +496,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 
 	@SuppressWarnings("deprecation")
-	final Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
+	private Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
 		
 		Player targetPlayer = null;
 
