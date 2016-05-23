@@ -1,5 +1,13 @@
 package com.winterhaven_mc.homestar.util;
 
+import com.winterhaven_mc.homestar.PluginMain;
+import com.winterhaven_mc.util.ConfigAccessor;
+import com.winterhaven_mc.util.StringUtil;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -9,15 +17,6 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.util.ConfigAccessor;
-import com.winterhaven_mc.util.StringUtil;
 
 
 /**
@@ -47,7 +46,7 @@ public final class MessageManager {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to main class
 	 */
 	public MessageManager(final PluginMain plugin) {
 
@@ -262,8 +261,8 @@ public final class MessageManager {
 
 	/**
 	 * Play sound effect for action
-	 * @param sender
-	 * @param soundId
+	 * @param sender the command sender (player) to play sound
+	 * @param soundId the sound identifier string
 	 */
 	public final void playerSound(final CommandSender sender, final String soundId) {
 
@@ -275,8 +274,8 @@ public final class MessageManager {
 
 	/**
 	 * Play sound effect for action
-	 * @param player
-	 * @param soundId
+	 * @param player the player to play sound
+	 * @param soundId the sound identifier string
 	 */
 	final void playerSound(final Player player, final String soundId) {
 
@@ -319,10 +318,10 @@ public final class MessageManager {
 
 	/**
 	 * Add entry to message cooldown map
-	 * @param player
-	 * @param messageId
+	 * @param player the player to insert in the message cooldown map
+	 * @param messageId the message identifier to insert in the cooldown map
 	 */
-	private final void putMessageCooldown(final Player player, final String messageId) {
+	private void putMessageCooldown(final Player player, final String messageId) {
 
 		final ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<String, Long>();
 		tempMap.put(messageId, System.currentTimeMillis());
@@ -332,11 +331,11 @@ public final class MessageManager {
 
 	/**
 	 * get entry from message cooldown map
-	 * @param player
-	 * @param messageId
+	 * @param player the player for whom to retrieve cooldown time
+	 * @param messageId the message identifier for which retrieve cooldown time
 	 * @return cooldown expire time
 	 */
-	private final long getMessageCooldown(final Player player, final String messageId) {
+	private long getMessageCooldown(final Player player, final String messageId) {
 
 		// check if player is in message cooldown hashmap
 		if (messageCooldownMap.containsKey(player.getUniqueId())) {
@@ -354,7 +353,7 @@ public final class MessageManager {
 
 	/**
 	 * Remove player from message cooldown map
-	 * @param player
+	 * @param player the player to be removed from the message cooldown map
 	 */
 	public final void removePlayerCooldown(final Player player) {
 		messageCooldownMap.remove(player.getUniqueId());
@@ -363,7 +362,7 @@ public final class MessageManager {
 
 	/**
 	 * Get current language
-	 * @return
+	 * @return the currently selected language
 	 */
 	public final String getLanguage() {
 		return this.language;
@@ -372,7 +371,7 @@ public final class MessageManager {
 
 	/**
 	 * Get item name from language file
-	 * @return
+	 * @return the formatted display name of the HomeStar item
 	 */
 	public final String getItemName() {
 		String itemName = messages.getConfig().getString("item-name");
@@ -382,7 +381,7 @@ public final class MessageManager {
 
 	/**
 	 * Get configured plural item name from language file
-	 * @return
+	 * @return the formatted plural display name of the HomeStar item
 	 */
 	public final String getItemNamePlural() {
 		final String itemNamePlural = messages.getConfig().getString("item-name-plural");
@@ -392,7 +391,7 @@ public final class MessageManager {
 
 	/**
 	 * Get configured item lore from language file
-	 * @return
+	 * @return List of Strings containing the lines of item lore
 	 */
 	public final List<String> getItemLore() {
 		final List<String> itemLore = messages.getConfig().getStringList("item-lore");
@@ -402,7 +401,7 @@ public final class MessageManager {
 
 	/**
 	 * Get spawn display name from language file
-	 * @return
+	 * @return the formatted display name for the world spawn
 	 */
 	public final String getSpawnDisplayName() {
 		return messages.getConfig().getString("spawn-display-name");
@@ -411,7 +410,7 @@ public final class MessageManager {
 
 	/**
 	 * Get home display name from language file
-	 * @return
+	 * @return the formatted display name for a bedspawn
 	 */
 	public final String getHomeDisplayName() {
 		return messages.getConfig().getString("home-display-name");
@@ -444,7 +443,7 @@ public final class MessageManager {
 	/**
 	 * Install localization files from <em>language</em> directory in jar 
 	 */
-	private final void installLocalizationFiles() {
+	private void installLocalizationFiles() {
 
 		List<String> filelist = new ArrayList<String>();
 
@@ -487,7 +486,7 @@ public final class MessageManager {
 	 * @param language
 	 * @return
 	 */
-	private final String languageFileExists(final String language) {
+	private String languageFileExists(final String language) {
 
 		// check if localization file for configured language exists, if not then fallback to en-US
 		File languageFile = new File(plugin.getDataFolder() 
@@ -506,7 +505,7 @@ public final class MessageManager {
 	 * Format the time string with hours, minutes, seconds
 	 * @return
 	 */
-	private final String getTimeString(long duration) {
+	private String getTimeString(long duration) {
 
 		StringBuilder timeString = new StringBuilder();
 
