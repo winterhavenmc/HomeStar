@@ -1,8 +1,5 @@
 package com.winterhaven_mc.homestar;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,8 +8,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
+ * A simple static API for HomeStar
  * @author      Tim Savage
  * @version		1.0
  *  

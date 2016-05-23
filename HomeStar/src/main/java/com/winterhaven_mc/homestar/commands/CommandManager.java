@@ -1,12 +1,7 @@
 package com.winterhaven_mc.homestar.commands;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
+import com.winterhaven_mc.homestar.PluginMain;
+import com.winterhaven_mc.homestar.SimpleAPI;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -16,8 +11,8 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.homestar.SimpleAPI;
+import java.util.*;
+
 
 
 /**
@@ -164,7 +159,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender
 	 * @return boolean
 	 */
-	final boolean statusCommand (final CommandSender sender, final String args[]) {
+	private boolean statusCommand(final CommandSender sender, final String args[]) {
 		
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("homestar.status")) {
@@ -175,7 +170,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// output config settings
 		String versionString = this.plugin.getDescription().getVersion();
-		sender.sendMessage(ChatColor.DARK_AQUA + "[HomeStar] " + ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
+		sender.sendMessage(ChatColor.DARK_AQUA + "[HomeStar] "
+				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
 		if (plugin.debug) {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
@@ -216,7 +212,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args
 	 * @return boolean
 	 */
-	final boolean reloadCommand(final CommandSender sender, final String args[]) {
+	private boolean reloadCommand(final CommandSender sender, final String args[]) {
 		
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("homestar.reload")) {
@@ -418,7 +414,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Display command usage
 	 * @param sender
-	 * @param command
+	 * @param passedCommand
 	 */
 	final void displayUsage(final CommandSender sender, final String passedCommand) {
 	
