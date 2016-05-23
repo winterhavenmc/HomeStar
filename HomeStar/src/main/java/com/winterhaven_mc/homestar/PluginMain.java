@@ -11,8 +11,8 @@ import com.winterhaven_mc.util.WorldManager;
 
 /**
  * Bukkit plugin to create items that return player to
- * world spawn when clicked.<br>
- * An alternative to the /spawn command.
+ * bed spawn when clicked.<br>
+ * An alternative to the /home command.
  * 
  * @author      Tim Savage
  * @version		1.0
