@@ -1,9 +1,7 @@
 package com.winterhaven_mc.homestar.teleport;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
-
+import com.winterhaven_mc.homestar.PluginMain;
+import com.winterhaven_mc.homestar.SimpleAPI;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -11,8 +9,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.homestar.SimpleAPI;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public final class TeleportManager {
 
@@ -28,7 +27,7 @@ public final class TeleportManager {
 	
 	/**
 	 * Class constructor
-	 * @param plugin
+	 * @param plugin reference to main class
 	 */
 	public TeleportManager(final PluginMain plugin) {
 		
@@ -41,8 +40,12 @@ public final class TeleportManager {
 		// initialize warmup map
 		warmupMap = new ConcurrentHashMap<UUID,Integer>();
 	}
-	
 
+
+	/**
+	 * Start the player teleport
+	 * @param player the player being teleported
+     */
 	public final void initiateTeleport(final Player player) {
 		
 		final ItemStack playerItem = player.getItemInHand();
@@ -149,17 +152,17 @@ public final class TeleportManager {
 	
 	/**
 	 * Insert player uuid and taskId into warmup hashmap.
-	 * @param player
-	 * @param taskId
+	 * @param player the player whose uuid will be used as the key in the warmup map
+	 * @param taskId the warmup task Id to be placed in the warmup map
 	 */
-	private final void putWarmup(final Player player, final Integer taskId) {
+	private void putWarmup(final Player player, final Integer taskId) {
 		warmupMap.put(player.getUniqueId(), taskId);
 	}
 	
 	
 	/**
 	 * Remove player uuid from warmup hashmap
-	 * @param player
+	 * @param player the player whose uuid will be removed from the warmup map
 	 */
 	final void removeWarmup(final Player player) {
 		warmupMap.remove(player.getUniqueId());
@@ -168,8 +171,8 @@ public final class TeleportManager {
 	
 	/**
 	 * Test if player uuid is in warmup hashmap
-	 * @param player
-	 * @return
+	 * @param player the player whose uuid is to be checked for existence in the warmup map
+	 * @return {@code true} if player uuid is in the warmup map, {@code false} if it is not
 	 */
 	public final boolean isWarmingUp(final Player player) {
 		return warmupMap.containsKey(player.getUniqueId());
@@ -178,7 +181,7 @@ public final class TeleportManager {
 	
 	/**
 	 * Cancel pending player teleport
-	 * @param player
+	 * @param player the player whose teleport will be cancelled
 	 */
 	public final void cancelTeleport(final Player player) {
 		
@@ -202,7 +205,7 @@ public final class TeleportManager {
 	/**
 	 * Insert player uuid into cooldown hashmap with expireTime as value.<br>
 	 * Schedule task to remove player uuid from cooldown hashmap when time expires.
-	 * @param player
+	 * @param player the player whose uuid will be added to the cooldown map
 	 */
 	final void startCooldown(final Player player) {
 
@@ -226,7 +229,7 @@ public final class TeleportManager {
 	
 	/**
 	 * Get time remaining for player cooldown
-	 * @param player
+	 * @param player the player whose cooldown time remaining to retrieve
 	 * @return long remainingTime
 	 */
 	public final long getCooldownTimeRemaining(final Player player) {
