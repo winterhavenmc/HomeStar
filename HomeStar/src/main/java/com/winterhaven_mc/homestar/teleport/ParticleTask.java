@@ -1,8 +1,10 @@
-package com.winterhaven_mc.homestar;
+package com.winterhaven_mc.homestar.teleport;
 
 import org.bukkit.Effect;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import com.winterhaven_mc.homestar.PluginMain;
 
 /**
  * A self-cancelling, repeating task that generates ender signal particles
@@ -11,26 +13,24 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author savage
  *
  */
-class ParticleTask extends BukkitRunnable {
+final class ParticleTask extends BukkitRunnable {
 
 	private final PluginMain plugin = PluginMain.instance;
-	Player player;
+	private final Player player;
 
 	/**
 	 * Class constructor method
 	 */
 	ParticleTask(final Player player) {
-		
 		this.player = player;
-		
 	}
 	
 		
 	@Override
-	public void run() {
+	public final void run() {
 
 		// if player is in the warmup hashmap, display the particle effect at their location
-		if (plugin.warmupManager.isWarmingUp(player)) {
+		if (plugin.teleportManager.isWarmingUp(player)) {
 			player.getWorld().playEffect(player.getLocation().add(0.0d, 1.0d, 0.0d), Effect.ENDER_SIGNAL, 0, 10);
 		}
 		// otherwise cancel this repeating task if the player is not in the warmup hashmap
