@@ -1,6 +1,7 @@
 package com.winterhaven_mc.homestar.messages;
 
 import com.winterhaven_mc.homestar.PluginMain;
+import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.SoundManager;
 import com.winterhaven_mc.util.StringUtil;
 import org.bukkit.ChatColor;
@@ -28,14 +29,14 @@ public final class MessageManager {
 	// hashmap for per player message cooldown
 	private final ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
 
-	// configuration file manager for messages
-	private YamlConfiguration messages;
-
 	// message file helper
-	private MessageFileHelper messageFileHelper;
+	private LanguageManager languageManager;
 
 	// sound manager
 	private SoundManager soundManager;
+
+	// configuration file manager for messages
+	private YamlConfiguration messages;
 
 
 	/**
@@ -48,10 +49,10 @@ public final class MessageManager {
 		this.plugin = plugin;
 
 		// instantiate messageFileHelper
-		this.messageFileHelper = new MessageFileHelper(plugin);
+		this.languageManager = new LanguageManager(plugin);
 
 		// load messages from file
-		this.messages = messageFileHelper.loadMessages();
+		this.messages = languageManager.loadMessages();
 
 		// initialize messageCooldownMap
 		this.messageCooldownMap = new ConcurrentHashMap<>();
@@ -333,7 +334,7 @@ public final class MessageManager {
 	public final void reload() {
 
 		// reload messages
-		this.messages = messageFileHelper.loadMessages();
+		this.messages = languageManager.loadMessages();
 
 		// reload sounds
 		soundManager.reload();
