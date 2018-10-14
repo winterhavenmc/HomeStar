@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.winterhaven_mc.homestar.commands.CommandManager;
 import com.winterhaven_mc.homestar.listeners.PlayerEventListener;
 import com.winterhaven_mc.homestar.teleport.TeleportManager;
-import com.winterhaven_mc.homestar.util.MessageManager;
+import com.winterhaven_mc.homestar.messages.MessageManager;
 import com.winterhaven_mc.util.WorldManager;
 
 

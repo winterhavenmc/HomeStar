@@ -1,4 +1,4 @@
-package com.winterhaven_mc.homestar.util;
+package com.winterhaven_mc.homestar.messages;
 
 import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.util.ConfigAccessor;
@@ -71,28 +71,16 @@ public final class MessageManager {
 		this.messages = new ConfigAccessor(plugin, "language" + File.separator + this.language + ".yml");
 
 		// initialize messageCooldownMap
-		this.messageCooldownMap = new ConcurrentHashMap<UUID,ConcurrentHashMap<String,Long>>();
+		this.messageCooldownMap = new ConcurrentHashMap<>();
 
 		// default sound file name
 		final String soundFileName = "sounds.yml";
-
-		// old (pre-1.9) sound file name
-		final String oldsoundFileName = "pre-1.9_sounds.yml";
 
 		// instantiate custom sound manager
 		this.sounds = new ConfigAccessor(plugin, soundFileName);
 
 		// install sound file if not present
 		this.sounds.saveDefaultConfig();
-
-		// install alternate sound file if not present
-		File oldSounds = new File(plugin.getDataFolder() + File.separator + oldsoundFileName);
-		if (!oldSounds.exists()) {
-			plugin.saveResource(oldsoundFileName, false);
-		}
-		
-		// release file object
-		oldSounds = null;
 	}
 
 
@@ -136,6 +124,7 @@ public final class MessageManager {
 	 * @param sender			player recieving message
 	 * @param messageId			message identifier in messages file
 	 */
+	@SuppressWarnings("unused")
 	final void sendPlayerMessage(final CommandSender sender, final String messageId, final Player targetPlayer) {
 		this.sendPlayerMessage(sender, messageId, 1, "", targetPlayer);
 	}
@@ -147,8 +136,9 @@ public final class MessageManager {
 	 * @param sender			player recieving message
 	 * @param messageId			message identifier in messages file
 	 */
-	final void sendPlayerMessage(final CommandSender sender, final String messageId, 
-			final Integer quantity, final Player targetPlayer) {
+	@SuppressWarnings("unused")
+	final void sendPlayerMessage(final CommandSender sender, final String messageId,
+								 final Integer quantity, final Player targetPlayer) {
 		this.sendPlayerMessage(sender, messageId, quantity, "", targetPlayer);
 	}
 
@@ -160,11 +150,12 @@ public final class MessageManager {
 	 * @param quantity			number of items
 	 * @param targetPlayer		player targeted
 	 */	
+	@SuppressWarnings("WeakerAccess")
 	final void sendPlayerMessage(final CommandSender sender,
-			final String messageId,
-			final Integer quantity,
-			final String destinationName,
-			final Player targetPlayer) {
+								 final String messageId,
+								 final Integer quantity,
+								 final String destinationName,
+								 final Player targetPlayer) {
 
 		// if message is not enabled in messages file, do nothing and return
 		if (!messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
@@ -176,7 +167,7 @@ public final class MessageManager {
 		String targetPlayerName = "player";
 		String worldName = "unknown";
 		String cooldownString = "";
-		String warmupString = "";
+		String warmupString;
 
 		if (targetPlayer != null) {
 			targetPlayerName = targetPlayer.getName();
@@ -188,7 +179,7 @@ public final class MessageManager {
 			Player player = (Player) sender;
 
 			// get message cooldown time remaining
-			Long lastDisplayed = getMessageCooldown(player,messageId);
+			long lastDisplayed = getMessageCooldown(player,messageId);
 
 			// get message repeat delay
 			int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
@@ -277,6 +268,7 @@ public final class MessageManager {
 	 * @param player the player to play sound
 	 * @param soundId the sound identifier string
 	 */
+	@SuppressWarnings("WeakerAccess")
 	final void playerSound(final Player player, final String soundId) {
 
 		// if sound effects are disabled in config, do nothing and return
@@ -323,7 +315,7 @@ public final class MessageManager {
 	 */
 	private void putMessageCooldown(final Player player, final String messageId) {
 
-		final ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<String, Long>();
+		final ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<>();
 		tempMap.put(messageId, System.currentTimeMillis());
 		this.messageCooldownMap.put(player.getUniqueId(), tempMap);
 	}
@@ -364,6 +356,7 @@ public final class MessageManager {
 	 * Get current language
 	 * @return the currently selected language
 	 */
+	@SuppressWarnings("unused")
 	public final String getLanguage() {
 		return this.language;
 	}
@@ -374,8 +367,7 @@ public final class MessageManager {
 	 * @return the formatted display name of the HomeStar item
 	 */
 	public final String getItemName() {
-		String itemName = messages.getConfig().getString("item-name");
-		return itemName;
+		return messages.getConfig().getString("item-name");
 	}
 
 
@@ -383,9 +375,9 @@ public final class MessageManager {
 	 * Get configured plural item name from language file
 	 * @return the formatted plural display name of the HomeStar item
 	 */
+	@SuppressWarnings("WeakerAccess")
 	public final String getItemNamePlural() {
-		final String itemNamePlural = messages.getConfig().getString("item-name-plural");
-		return itemNamePlural;
+		return messages.getConfig().getString("item-name-plural");
 	}
 
 
@@ -394,8 +386,7 @@ public final class MessageManager {
 	 * @return List of Strings containing the lines of item lore
 	 */
 	public final List<String> getItemLore() {
-		final List<String> itemLore = messages.getConfig().getStringList("item-lore");
-		return itemLore;
+		return messages.getConfig().getStringList("item-lore");
 	}
 
 
@@ -445,7 +436,7 @@ public final class MessageManager {
 	 */
 	private void installLocalizationFiles() {
 
-		List<String> filelist = new ArrayList<String>();
+		List<String> filelist = new ArrayList<>();
 
 		// get the absolute path to this plugin as URL
 		final URL pluginURL = plugin.getServer().getPluginManager().getPlugin(plugin.getName()).getClass()
@@ -483,8 +474,8 @@ public final class MessageManager {
 
 	/**
 	 * Return language identifier if file exists, else return default en-US
-	 * @param language
-	 * @return
+	 * @param language IETF language identifier
+	 * @return valid language identifier
 	 */
 	private String languageFileExists(final String language) {
 
@@ -503,7 +494,7 @@ public final class MessageManager {
 
 	/**
 	 * Format the time string with hours, minutes, seconds
-	 * @return
+	 * @return time string
 	 */
 	private String getTimeString(long duration) {
 
