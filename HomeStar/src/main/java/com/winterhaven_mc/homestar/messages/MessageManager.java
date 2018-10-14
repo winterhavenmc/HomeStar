@@ -1,26 +1,20 @@
 package com.winterhaven_mc.homestar.messages;
 
 import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.util.ConfigAccessor;
+import com.winterhaven_mc.util.SoundManager;
 import com.winterhaven_mc.util.StringUtil;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 
 /**
- * Implements message manager for <code>HomeStar</code>.
+ * Implements message manager for HomeStar
  * 
  * @author      Tim Savage
  * @version		1.0
@@ -35,15 +29,15 @@ public final class MessageManager {
 	private final ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
 
 	// configuration file manager for messages
-	private ConfigAccessor messages;
+	private YamlConfiguration messages;
 
-	// configuration file manager for sounds
-	private ConfigAccessor sounds;
+	// message file helper
+	private MessageFileHelper messageFileHelper;
 
-	// selected language
-	private String language;
+	// sound manager
+	private SoundManager soundManager;
 
-	
+
 	/**
 	 * Class constructor
 	 * @param plugin reference to main class
@@ -53,34 +47,17 @@ public final class MessageManager {
 		// set reference to main class
 		this.plugin = plugin;
 
-		// install localization files
-		this.installLocalizationFiles();
+		// instantiate messageFileHelper
+		this.messageFileHelper = new MessageFileHelper(plugin);
 
-		// get configured language
-		this.language = plugin.getConfig().getString("language");
-
-		// check if localization file for configured language exists, if not then fallback to en-US
-		if (!new File(plugin.getDataFolder() 
-				+ File.separator + "language" 
-				+ File.separator + this.language + ".yml").exists()) {
-			plugin.getLogger().info("Language file for " + this.language + " not found. Defaulting to en-US.");
-			this.language = "en-US";
-		}
-
-		// instantiate custom configuration manager for configured language file
-		this.messages = new ConfigAccessor(plugin, "language" + File.separator + this.language + ".yml");
+		// load messages from file
+		this.messages = messageFileHelper.loadMessages();
 
 		// initialize messageCooldownMap
 		this.messageCooldownMap = new ConcurrentHashMap<>();
 
-		// default sound file name
-		final String soundFileName = "sounds.yml";
-
-		// instantiate custom sound manager
-		this.sounds = new ConfigAccessor(plugin, soundFileName);
-
-		// install sound file if not present
-		this.sounds.saveDefaultConfig();
+		// instantiate sound manager
+		this.soundManager = new SoundManager(plugin);
 	}
 
 
@@ -158,7 +135,7 @@ public final class MessageManager {
 								 final Player targetPlayer) {
 
 		// if message is not enabled in messages file, do nothing and return
-		if (!messages.getConfig().getBoolean("messages." + messageId + ".enabled")) {
+		if (!messages.getBoolean("messages." + messageId + ".enabled")) {
 			return;
 		}
 
@@ -182,7 +159,7 @@ public final class MessageManager {
 			long lastDisplayed = getMessageCooldown(player,messageId);
 
 			// get message repeat delay
-			int messageRepeatDelay = messages.getConfig().getInt("messages." + messageId + ".repeat-delay");
+			int messageRepeatDelay = messages.getInt("messages." + messageId + ".repeat-delay");
 
 			// if message has repeat delay value and was displayed to player more recently, do nothing and return
 			if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
@@ -201,7 +178,7 @@ public final class MessageManager {
 		}
 
 		// get message from file
-		String message = messages.getConfig().getString("messages." + messageId + ".string");
+		String message = messages.getString("messages." + messageId + ".string");
 
 		// get item name and strip color codes
 		String itemName = getItemName();
@@ -251,60 +228,12 @@ public final class MessageManager {
 
 
 	/**
-	 * Play sound effect for action
-	 * @param sender the command sender (player) to play sound
-	 * @param soundId the sound identifier string
+	 * Play sound
+	 * @param sender command sender (player) to play sound
+	 * @param soundId unique identifier that refers to sound in sounds.yml
 	 */
-	public final void playerSound(final CommandSender sender, final String soundId) {
-
-		if (sender instanceof Player) {
-			playerSound((Player)sender,soundId);
-		}
-	}
-
-
-	/**
-	 * Play sound effect for action
-	 * @param player the player to play sound
-	 * @param soundId the sound identifier string
-	 */
-	@SuppressWarnings("WeakerAccess")
-	final void playerSound(final Player player, final String soundId) {
-
-		// if sound effects are disabled in config, do nothing and return
-		if (!plugin.getConfig().getBoolean("sound-effects")) {
-			return;
-		}
-
-		// if sound is set to enabled in sounds file
-		if (sounds.getConfig().getBoolean("sounds." + soundId + ".enabled")) {
-
-			// get player only setting from config file
-			boolean playerOnly = sounds.getConfig().getBoolean("sounds." + soundId + ".player-only");
-
-			// get sound name from config file
-			String soundName = sounds.getConfig().getString("sounds." + soundId + ".sound");
-
-			// get sound volume from config file
-			float volume = (float) sounds.getConfig().getDouble("sounds." + soundId + ".volume");
-
-			// get sound pitch from config file
-			float pitch = (float) sounds.getConfig().getDouble("sounds." + soundId + ".pitch");
-
-			try {
-				// if sound is set player only, use player.playSound()
-				if (playerOnly) {
-					player.playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
-				}
-				// else use world.playSound() so other players in vicinity can hear
-				else {
-					player.getWorld().playSound(player.getLocation(), Sound.valueOf(soundName), volume, pitch);
-				}
-			} catch (IllegalArgumentException e) {
-				plugin.getLogger().warning("An error occured while trying to play the sound '" + soundName 
-						+ "'. You probably need to update the sound name in your sounds.yml file.");
-			}
-		}
+	public final void sendPlayerSound(final CommandSender sender, final SoundId soundId) {
+		this.soundManager.playerSound(sender,soundId.toString());
 	}
 
 
@@ -353,21 +282,11 @@ public final class MessageManager {
 
 
 	/**
-	 * Get current language
-	 * @return the currently selected language
-	 */
-	@SuppressWarnings("unused")
-	public final String getLanguage() {
-		return this.language;
-	}
-
-
-	/**
 	 * Get item name from language file
 	 * @return the formatted display name of the HomeStar item
 	 */
 	public final String getItemName() {
-		return messages.getConfig().getString("item-name");
+		return messages.getString("item-name");
 	}
 
 
@@ -377,7 +296,7 @@ public final class MessageManager {
 	 */
 	@SuppressWarnings("WeakerAccess")
 	public final String getItemNamePlural() {
-		return messages.getConfig().getString("item-name-plural");
+		return messages.getString("item-name-plural");
 	}
 
 
@@ -386,7 +305,7 @@ public final class MessageManager {
 	 * @return List of Strings containing the lines of item lore
 	 */
 	public final List<String> getItemLore() {
-		return messages.getConfig().getStringList("item-lore");
+		return messages.getStringList("item-lore");
 	}
 
 
@@ -395,7 +314,7 @@ public final class MessageManager {
 	 * @return the formatted display name for the world spawn
 	 */
 	public final String getSpawnDisplayName() {
-		return messages.getConfig().getString("spawn-display-name");
+		return messages.getString("spawn-display-name");
 	}
 
 
@@ -404,7 +323,7 @@ public final class MessageManager {
 	 * @return the formatted display name for a bedspawn
 	 */
 	public final String getHomeDisplayName() {
-		return messages.getConfig().getString("home-display-name");
+		return messages.getString("home-display-name");
 	}
 
 
@@ -413,82 +332,11 @@ public final class MessageManager {
 	 */
 	public final void reload() {
 
-		// reinstall message files if necessary
-		installLocalizationFiles();
+		// reload messages
+		this.messages = messageFileHelper.loadMessages();
 
-		// get currently configured language
-		String newLanguage = languageFileExists(plugin.getConfig().getString("language"));
-
-		// if configured language has changed, instantiate new messages object
-		if (!newLanguage.equals(this.language)) {
-			this.messages = new ConfigAccessor(plugin, "language" + File.separator + newLanguage + ".yml");
-			this.language = newLanguage;
-			plugin.getLogger().info("New language " + this.language + " enabled.");
-		}
-
-		// reload language file
-		messages.reloadConfig();
-	}
-
-
-	/**
-	 * Install localization files from <em>language</em> directory in jar 
-	 */
-	private void installLocalizationFiles() {
-
-		List<String> filelist = new ArrayList<>();
-
-		// get the absolute path to this plugin as URL
-		final URL pluginURL = plugin.getServer().getPluginManager().getPlugin(plugin.getName()).getClass()
-				.getProtectionDomain().getCodeSource().getLocation();
-
-		// read files contained in jar, adding language/*.yml files to list
-		ZipInputStream zip;
-		try {
-			zip = new ZipInputStream(pluginURL.openStream());
-			while (true) {
-				ZipEntry e = zip.getNextEntry();
-				if (e == null) {
-					break;
-				}
-				String name = e.getName();
-				if (name.startsWith("language" + '/') && name.endsWith(".yml")) {
-					filelist.add(name);
-				}
-			}
-		} catch (IOException e1) {
-			plugin.getLogger().warning("Could not read language files from jar.");
-		}
-
-		// iterate over list of language files and install from jar if not already present
-		for (String filename : filelist) {
-			// this check prevents a warning message when files are already installed
-			if (new File(plugin.getDataFolder() + File.separator + filename).exists()) {
-				continue;
-			}
-			plugin.saveResource(filename, false);
-			plugin.getLogger().info("Installed localization file:  " + filename);
-		}
-	}
-
-
-	/**
-	 * Return language identifier if file exists, else return default en-US
-	 * @param language IETF language identifier
-	 * @return valid language identifier
-	 */
-	private String languageFileExists(final String language) {
-
-		// check if localization file for configured language exists, if not then fallback to en-US
-		File languageFile = new File(plugin.getDataFolder() 
-				+ File.separator + "language" 
-				+ File.separator + language + ".yml");
-
-		if (languageFile.exists()) {
-			return language;
-		}
-		plugin.getLogger().info("Language file " + language + ".yml does not exist. Defaulting to en-US.");
-		return "en-US";
+		// reload sounds
+		soundManager.reload();
 	}
 
 
@@ -504,12 +352,12 @@ public final class MessageManager {
 		int minutes = (int)(duration % 3600) / 60;
 		int seconds = (int)duration % 60;
 
-		String hour_string = this.messages.getConfig().getString("hour");
-		String hour_plural_string = this.messages.getConfig().getString("hour_plural");
-		String minute_string = this.messages.getConfig().getString("minute");
-		String minute_plural_string = this.messages.getConfig().getString("minute_plural");
-		String second_string = this.messages.getConfig().getString("second");
-		String second_plural_string = this.messages.getConfig().getString("second_plural");
+		String hour_string = this.messages.getString("hour");
+		String hour_plural_string = this.messages.getString("hour_plural");
+		String minute_string = this.messages.getString("minute");
+		String minute_plural_string = this.messages.getString("minute_plural");
+		String second_string = this.messages.getString("second");
+		String second_plural_string = this.messages.getString("second_plural");
 
 		if (hours > 1) {
 			timeString.append(hours);

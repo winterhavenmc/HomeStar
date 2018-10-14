@@ -2,6 +2,7 @@ package com.winterhaven_mc.homestar.teleport;
 
 import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.SimpleAPI;
+import com.winterhaven_mc.homestar.messages.SoundId;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -35,10 +36,10 @@ public final class TeleportManager {
 		this.plugin = plugin;
 		
 		// initialize cooldown map
-		cooldownMap = new ConcurrentHashMap<UUID, Long>();
+		cooldownMap = new ConcurrentHashMap<>();
 		
 		// initialize warmup map
-		warmupMap = new ConcurrentHashMap<UUID,Integer>();
+		warmupMap = new ConcurrentHashMap<>();
 	}
 
 
@@ -48,7 +49,7 @@ public final class TeleportManager {
      */
 	public final void initiateTeleport(final Player player) {
 		
-		final ItemStack playerItem = player.getItemInHand();
+		final ItemStack playerItem = player.getInventory().getItemInMainHand();
 		
 		// if player cooldown has not expired, send player cooldown message and return
 		if (plugin.teleportManager.getCooldownTimeRemaining(player) > 0) {
@@ -83,7 +84,7 @@ public final class TeleportManager {
 			
 			// if bedspawn-fallback is configured false, play teleport fail sound and return
 			if (!plugin.getConfig().getBoolean("bedspawn-fallback")) {
-				plugin.messageManager.playerSound(player, "teleport-fail");
+				plugin.messageManager.sendPlayerSound(player, SoundId.TELEPORT_CANCELLED);
 				return;
 			}
 			// else set destination to spawn location
@@ -106,9 +107,8 @@ public final class TeleportManager {
 		
 		// if remove-from-inventory is configured on-use, take one spawn star item from inventory now
 		if (plugin.getConfig().getString("remove-from-inventory").equalsIgnoreCase("on-use")) {
-			ItemStack removeItem = playerItem;
-			removeItem.setAmount(playerItem.getAmount() - 1);
-			player.getInventory().setItemInHand(removeItem);
+			playerItem.setAmount(playerItem.getAmount() - 1);
+			player.getInventory().setItemInMainHand(playerItem);
 		}
 		
 		// if warmup setting is greater than zero, send warmup message
@@ -121,7 +121,7 @@ public final class TeleportManager {
 			plugin.messageManager.sendPlayerMessage(player, "teleport-warmup",destinationName);
 			
 			// if enabled, play sound effect
-			plugin.messageManager.playerSound(player, "teleport-warmup");
+			plugin.messageManager.sendPlayerSound(player,SoundId.TELEPORT_WARMUP);
 		}
 		
 		// initiate delayed teleport for player to destination
