@@ -24,6 +24,7 @@ public final class PluginMain extends JavaPlugin {
 
 	public Boolean debug = getConfig().getBoolean("debug");
 	
+	@SuppressWarnings("WeakerAccess")
 	public CommandManager commandManager;
 	public MessageManager messageManager;
 	public TeleportManager teleportManager;
