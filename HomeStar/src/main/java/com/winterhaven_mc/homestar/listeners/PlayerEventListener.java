@@ -115,13 +115,13 @@ public final class PlayerEventListener implements Listener {
 	
 	/**
 	 * Player death event handler
-	 * @param event
+	 * @param event PlayerDeathEvent
 	 */
 	@EventHandler
 	final void onPlayerDeath(final PlayerDeathEvent event) {
 		
 		// get event player
-		Player player = (Player)event.getEntity();
+		Player player = event.getEntity();
 		
 		// cancel any pending teleport for player
 		plugin.teleportManager.cancelTeleport(player);
@@ -130,7 +130,7 @@ public final class PlayerEventListener implements Listener {
 	
 	/**
 	 * Player quit event handler
-	 * @param event
+	 * @param event PlayerQuitEvent
 	 */
 	@EventHandler
 	final void onPlayerQuit(final PlayerQuitEvent event) {
@@ -148,7 +148,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * Prepare Item Craft event handler<br>
 	 * Prevents HomeStar items from being used in crafting recipes if configured
-	 * @param event
+	 * @param event PrepareItemCraftEvent
 	 */
 	@EventHandler
 	final void onCraftPrepare(final PrepareItemCraftEvent event) {
@@ -170,7 +170,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * EntityDamageByEntity event handler<br>
 	 * Cancels pending teleport if player takes damage during warmup
-	 * @param event
+	 * @param event EntityDamageEvent
 	 */
 	@EventHandler
 	final void onEntityDamage(final EntityDamageEvent event) {
@@ -191,8 +191,8 @@ public final class PlayerEventListener implements Listener {
 				// if player is in warmup hashmap, cancel teleport and send player message
 				if (plugin.teleportManager.isWarmingUp((Player) entity)) {
 					plugin.teleportManager.cancelTeleport((Player) entity);
-					plugin.messageManager.sendPlayerMessage((Player) entity, "teleport-cancelled-damage");
-					plugin.messageManager.playerSound((Player) entity, "teleport-cancelled");
+					plugin.messageManager.sendPlayerMessage(entity, "teleport-cancelled-damage");
+					plugin.messageManager.playerSound(entity, "teleport-cancelled");
 				}				
 			}
 		}
@@ -202,7 +202,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * PlayerMoveEvent handler<br>
 	 * Cancels teleport if player moves during warmup
-	 * @param event
+	 * @param event PlayerMoveEvent
 	 */
 	@EventHandler
 	final void onPlayerMovement(final PlayerMoveEvent event) {
