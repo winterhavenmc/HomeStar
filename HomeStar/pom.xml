@@ -40,9 +40,10 @@
 							<minimizeJar>true</minimizeJar>
 							<artifactSet>
 								<includes>
-									<include>com.winterhaven-mc:world-manager-lib</include>
-									<include>com.winterhaven_mc:sound-manager-lib</include>
 									<include>com.winterhaven-mc:string-util-lib</include>
+									<include>com.winterhaven-mc:world-manager-lib</include>
+									<include>com.winterhaven-mc:language-manager-lib</include>
+									<include>com.winterhaven-mc:sound-manager-lib</include>
 								</includes>
 							</artifactSet>
 						</configuration>
@@ -75,7 +76,7 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.0.1</version>
+			<version>1.0.2</version>
 		</dependency>
 
 		<!-- LanguageManagerLib -->
@@ -89,7 +90,7 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-manager-lib</artifactId>
-			<version>1.0.4</version>
+			<version>1.0.5</version>
 		</dependency>
 
 		<!-- StringUtilLib -->
