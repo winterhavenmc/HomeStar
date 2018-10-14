@@ -10,13 +10,20 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.1</version>
 				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
+					<source>1.8</source>
+					<target>1.8</target>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -43,25 +50,8 @@
 				</executions>
 			</plugin>
 		</plugins>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*</include>
-				</includes>
-				<excludes>
-					<exclude>plugin.yml</exclude>
-				</excludes>
-			</resource>
-			<resource>
-				<directory>src/main/resources</directory>
-				<filtering>true</filtering>
-				<includes>
-					<include>plugin.yml</include>
-				</includes>
-			</resource>
-		</resources>
 	</build>
+
 	<repositories>
 		<repository>
 			<id>spigot-repo</id>
@@ -72,31 +62,33 @@
 			<url>http://repo.onarandombox.com/content/groups/public/</url>
 		</repository>
 	</repositories>
+
 	<dependencies>
+		<!-- Bukkit -->
 		<dependency>
 			<groupId>org.bukkit</groupId>
 			<artifactId>bukkit</artifactId>
-			<version>1.8.8-R0.1-SNAPSHOT</version>
+			<version>1.13.1-R0.1-SNAPSHOT</version>
 		</dependency>
-		<dependency>
-			<groupId>com.onarandombox.multiversecore</groupId>
-			<artifactId>Multiverse-Core</artifactId>
-			<version>2.5</version>
-		</dependency>
+
+		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
+
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>config-accessor-lib</artifactId>
 			<version>1.0.0</version>
 		</dependency>
+
+		<!-- StringUtilLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>string-util-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.2</version>
 		</dependency>
 	</dependencies>
 </project>

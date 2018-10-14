@@ -31,7 +31,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	private final PluginMain plugin;
 
 	private final static List<String> subcommands = 
-			Collections.unmodifiableList(new ArrayList<String>(
+			Collections.unmodifiableList(new ArrayList<>(
 					Arrays.asList("give", "destroy", "status", "reload", "help")));
 
 	/**
@@ -59,7 +59,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	public final List<String> onTabComplete(final CommandSender sender, final Command command, 
 			final String alias, final String[] args) {
 		
-		final List<String> returnList = new ArrayList<String>();
+		final List<String> returnList = new ArrayList<>();
 		
 		// return list of valid matching subcommands
 		if (args.length == 1) {
@@ -111,12 +111,13 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	public final boolean onCommand(final CommandSender sender, final Command cmd, 
 			final String label, final String[] args) {
 		
-		String subcmd = "";
-		
+		String subcommand;
+
 		// get subcommand
 		if (args.length > 0) {
-			subcmd = args[0];
+			subcommand = args[0];
 		}
+
 		// if no arguments, display usage for all commands
 		else {
 			displayUsage(sender,"all");
@@ -124,27 +125,27 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		
 		// status command
-		if (subcmd.equalsIgnoreCase("status")) {
+		if (subcommand.equalsIgnoreCase("status")) {
 			return statusCommand(sender,args);
 		}
 
 		// reload command
-		if (subcmd.equalsIgnoreCase("reload")) {
+		if (subcommand.equalsIgnoreCase("reload")) {
 			return reloadCommand(sender,args);
 		}
 
 		// give command
-		if (subcmd.equalsIgnoreCase("give")) {
+		if (subcommand.equalsIgnoreCase("give")) {
 			return giveCommand(sender,args);
 		}
 		
 		// destroy command
-		if (subcmd.equalsIgnoreCase("destroy")) {
+		if (subcommand.equalsIgnoreCase("destroy")) {
 			return destroyCommand(sender,args);
 		}
 		
 		// help command
-		if (subcmd.equalsIgnoreCase("help")) {
+		if (subcommand.equalsIgnoreCase("help")) {
 			return helpCommand(sender,args);
 		}
 		
@@ -156,9 +157,10 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Display plugin settings
-	 * @param sender
-	 * @return boolean
+	 * @param sender the command sender
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
+	@SuppressWarnings("unused")
 	private boolean statusCommand(final CommandSender sender, final String args[]) {
 		
 		// if command sender does not have permission to view status, output error message and return true
@@ -208,9 +210,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		
 	/**
 	 * Reload plugin settings
-	 * @param sender
-	 * @param args
-	 * @return boolean
+	 * @param sender the command sender
+	 * @param args command arguments
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean reloadCommand(final CommandSender sender, final String args[]) {
 		
@@ -224,17 +226,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		String subcmd = args[0];
 		
 		// argument limits
-		int minArgs = 1;
 		int maxArgs = 1;
 		
-		// check min arguments
-		if (args.length < minArgs) {
-			plugin.messageManager.sendPlayerMessage(sender,"command-fail-args-count-under");
-			plugin.messageManager.playerSound(sender, "command-fail");
-			displayUsage(sender, subcmd);
-			return true;
-		}
-
 		// check max arguments
 		if (args.length > maxArgs) {
 			plugin.messageManager.sendPlayerMessage(sender,"command-fail-args-count-over");
@@ -263,9 +256,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Give target player a homestar item
-	 * @param sender
-	 * @param args
-	 * @return boolean
+	 * @param sender command sender
+	 * @param args command arguments
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean giveCommand(final CommandSender sender, final String args[]) {
 		
@@ -300,12 +293,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		
-		String targetPlayerName = "";
+		String targetPlayerName = args[1];
 		int quantity = 1;
 
-		if (args.length > 1) {
-			targetPlayerName = args[1];
-		}
 		if (args.length > 2) {
 			try {
 				quantity = Integer.parseInt(args[2]);
@@ -363,8 +353,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			}
 			
 			// send message to target player
-			CommandSender targetSender = (CommandSender) targetPlayer;
-			plugin.messageManager.sendPlayerMessage(targetSender, "command-success-give-target",quantity);
+			plugin.messageManager.sendPlayerMessage(targetPlayer, "command-success-give-target",quantity);
 		}
 		// play sound to target player
 		plugin.messageManager.playerSound(targetPlayer, "command-success-give-target");
@@ -374,10 +363,11 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Destroy command
-	 * @param sender
-	 * @param args
-	 * @return boolean
+	 * @param sender command sender
+	 * @param args command arguments
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
+	@SuppressWarnings("unused")
 	private boolean destroyCommand(final CommandSender sender, final String args[]) {
 		
 		// sender must be in game player
@@ -394,7 +384,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		Player player = (Player) sender;
-		ItemStack playerItem = player.getInventory().getItemInHand();
+		ItemStack playerItem = player.getInventory().getItemInMainHand();
 			
 		// check that player is holding a homestar stack
 		if (!SimpleAPI.isHomeStar(playerItem)) {
@@ -404,7 +394,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		int quantity = playerItem.getAmount();
 		playerItem.setAmount(0);
-		player.getInventory().setItemInHand(playerItem);
+		player.getInventory().setItemInMainHand(playerItem);
 		plugin.messageManager.sendPlayerMessage(sender, "command-success-destroy", quantity);
 		plugin.messageManager.playerSound(player,"command-success-destroy");
 		return true;
@@ -413,8 +403,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	
 	/**
 	 * Display command usage
-	 * @param sender
-	 * @param passedCommand
+	 * @param sender command sender
+	 * @param passedCommand command to display usage
 	 */
 	private void displayUsage(final CommandSender sender, final String passedCommand) {
 	
@@ -453,9 +443,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 	/**
 	 * Display help message for commands
-	 * @param sender
-	 * @param args
-	 * @return
+	 * @param sender command sender
+	 * @param args command arguments
+	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean helpCommand(final CommandSender sender, final String args[]) {
 
@@ -498,7 +488,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	@SuppressWarnings("deprecation")
 	private Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
 		
-		Player targetPlayer = null;
+		Player targetPlayer;
 
 		// check exact match first
 		targetPlayer = plugin.getServer().getPlayer(targetPlayerName);
@@ -519,7 +509,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		
 		// check if name matches known offline player
-		HashSet<OfflinePlayer> matchedPlayers = new HashSet<OfflinePlayer>();
+		HashSet<OfflinePlayer> matchedPlayers = new HashSet<>();
 		for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
 			if (targetPlayerName.equalsIgnoreCase(offlinePlayer.getName())) {
 				matchedPlayers.add(offlinePlayer);
