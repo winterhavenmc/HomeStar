@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
+import java.util.EnumMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -27,7 +28,7 @@ public final class MessageManager {
 	private final PluginMain plugin;
 
 	// hashmap for per player message cooldown
-	private final ConcurrentHashMap<UUID, ConcurrentHashMap<String, Long>> messageCooldownMap;
+	private final ConcurrentHashMap<UUID, EnumMap<MessageId,Long>> messageCooldownMap;
 
 	// message file helper
 	private LanguageManager languageManager;
@@ -48,14 +49,14 @@ public final class MessageManager {
 		// set reference to main class
 		this.plugin = plugin;
 
-		// instantiate messageFileHelper
+		// initialize messageCooldownMap
+		this.messageCooldownMap = new ConcurrentHashMap<>();
+
+		// instantiate languageManager
 		this.languageManager = new LanguageManager(plugin);
 
 		// load messages from file
 		this.messages = languageManager.loadMessages();
-
-		// initialize messageCooldownMap
-		this.messageCooldownMap = new ConcurrentHashMap<>();
 
 		// instantiate sound manager
 		this.soundManager = new SoundManager(plugin);
@@ -68,7 +69,7 @@ public final class MessageManager {
 	 * @param sender			player receiving message
 	 * @param messageId			message identifier in messages file
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId) {
+	public final void sendPlayerMessage(final CommandSender sender, final MessageId messageId) {
 		this.sendPlayerMessage(sender, messageId, 1, "", null);
 	}
 
@@ -79,7 +80,8 @@ public final class MessageManager {
 	 * @param sender			player receiving message
 	 * @param messageId			message identifier in messages file
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final String destinationName) {
+	@SuppressWarnings("unused")
+	public final void sendPlayerMessage(final CommandSender sender, final MessageId messageId, final String destinationName) {
 		this.sendPlayerMessage(sender, messageId, 1, destinationName, null);
 	}
 
@@ -91,7 +93,8 @@ public final class MessageManager {
 	 * @param messageId			message identifier in messages file
 	 * @param quantity			number of items
 	 */
-	public final void sendPlayerMessage(final CommandSender sender, final String messageId, final Integer quantity) {
+	@SuppressWarnings("unused")
+	public final void sendPlayerMessage(final CommandSender sender, final MessageId messageId, final Integer quantity) {
 		this.sendPlayerMessage(sender, messageId, quantity, "", null);
 	}
 
@@ -103,7 +106,7 @@ public final class MessageManager {
 	 * @param messageId			message identifier in messages file
 	 */
 	@SuppressWarnings("unused")
-	final void sendPlayerMessage(final CommandSender sender, final String messageId, final Player targetPlayer) {
+	final void sendPlayerMessage(final CommandSender sender, final MessageId messageId, final Player targetPlayer) {
 		this.sendPlayerMessage(sender, messageId, 1, "", targetPlayer);
 	}
 
@@ -115,7 +118,7 @@ public final class MessageManager {
 	 * @param messageId			message identifier in messages file
 	 */
 	@SuppressWarnings("unused")
-	final void sendPlayerMessage(final CommandSender sender, final String messageId,
+	final void sendPlayerMessage(final CommandSender sender, final MessageId messageId,
 								 final Integer quantity, final Player targetPlayer) {
 		this.sendPlayerMessage(sender, messageId, quantity, "", targetPlayer);
 	}
@@ -130,7 +133,7 @@ public final class MessageManager {
 	 */	
 	@SuppressWarnings("WeakerAccess")
 	final void sendPlayerMessage(final CommandSender sender,
-								 final String messageId,
+								 final MessageId messageId,
 								 final Integer quantity,
 								 final String destinationName,
 								 final Player targetPlayer) {
@@ -243,9 +246,9 @@ public final class MessageManager {
 	 * @param player the player to insert in the message cooldown map
 	 * @param messageId the message identifier to insert in the cooldown map
 	 */
-	private void putMessageCooldown(final Player player, final String messageId) {
+	private void putMessageCooldown(final Player player, final MessageId messageId) {
 
-		final ConcurrentHashMap<String, Long> tempMap = new ConcurrentHashMap<>();
+		EnumMap<MessageId,Long> tempMap = new EnumMap<>(MessageId.class);
 		tempMap.put(messageId, System.currentTimeMillis());
 		this.messageCooldownMap.put(player.getUniqueId(), tempMap);
 	}
@@ -257,7 +260,7 @@ public final class MessageManager {
 	 * @param messageId the message identifier for which retrieve cooldown time
 	 * @return cooldown expire time
 	 */
-	private long getMessageCooldown(final Player player, final String messageId) {
+	private long getMessageCooldown(final Player player, final MessageId messageId) {
 
 		// check if player is in message cooldown hashmap
 		if (messageCooldownMap.containsKey(player.getUniqueId())) {

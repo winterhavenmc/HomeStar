@@ -2,6 +2,7 @@ package com.winterhaven_mc.homestar.commands;
 
 import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.SimpleAPI;
+import com.winterhaven_mc.homestar.messages.MessageId;
 import com.winterhaven_mc.homestar.messages.SoundId;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -149,7 +150,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			return helpCommand(sender,args);
 		}
 		
-		plugin.messageManager.sendPlayerMessage(sender, "command-fail-invalid-command");
+		plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND);
 		plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 		displayUsage(sender,"help");
 		return true;
@@ -165,7 +166,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("homestar.status")) {
-			plugin.messageManager.sendPlayerMessage(sender, "permission-denied-status");
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.PERMISSION_DENIED_STATUS);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -215,44 +216,44 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean reloadCommand(final CommandSender sender, final String args[]) {
-		
+
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("homestar.reload")) {
-			plugin.messageManager.sendPlayerMessage(sender,"permission-denied-reload");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.PERMISSION_DENIED_RELOAD);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		String subcmd = args[0];
-		
+
 		// argument limits
 		int maxArgs = 1;
-		
+
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender,"command-fail-args-count-over");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcmd);
 			return true;
 		}
-		
+
 		// reload main configuration
 		plugin.reloadConfig();
 
 		// update enabledWorlds list
 		plugin.worldManager.reload();
-		
+
 		// reload messages
 		plugin.messageManager.reload();
 
 		// set debug field
 		plugin.debug = plugin.getConfig().getBoolean("debug");
-		
+
 		// send reloaded message
-		plugin.messageManager.sendPlayerMessage(sender,"command-success-reload");
+		plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_SUCCESS_RELOAD);
 		return true;
 	}
-	
+
 
 	/**
 	 * Give target player a homestar item
@@ -261,12 +262,12 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
 	private boolean giveCommand(final CommandSender sender, final String args[]) {
-		
+
 		// usage: /give <targetplayer> [qty]
-			
+
 		// if command sender does not have permission to give HomeStars, output error message and return true
 		if (!sender.hasPermission("homestar.give")) {
-			plugin.messageManager.sendPlayerMessage(sender, "permission-denied-give");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.PERMISSION_DENIED_GIVE);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -276,10 +277,10 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		// argument limits
 		int minArgs = 2;
 		int maxArgs = 3;
-		
+
 		// check min arguments
 		if (args.length < minArgs) {
-			plugin.messageManager.sendPlayerMessage(sender,"command-fail-args-count-under");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcmd);
 			return true;
@@ -287,12 +288,12 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// check max arguments
 		if (args.length > maxArgs) {
-			plugin.messageManager.sendPlayerMessage(sender,"command-fail-args-count-over");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender, subcmd);
 			return true;
 		}
-		
+
 		String targetPlayerName = args[1];
 		int quantity = 1;
 
@@ -300,12 +301,12 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			try {
 				quantity = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				plugin.messageManager.sendPlayerMessage(sender, "command-fail-quantity-invalid");
+				plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_QUANTITY_INVALID);
 				plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
 		}
-			
+
 		// validate quantity (min = 1, max = configured maximum, or runtime Integer.MAX_VALUE)
 		quantity = Math.max(1, quantity);
 		int maxQuantity = plugin.getConfig().getInt("max-give-amount");
@@ -333,7 +334,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if remaining items equals quantity given, send player-inventory-full message and return
 		if (noFitCount == quantity) {
-			plugin.messageManager.sendPlayerMessage(sender, "command-fail-give-inventory-full", quantity);
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_GIVE_INVENTORY_FULL);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -343,17 +344,17 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// don't display messages if giving item to self
 		if (!sender.getName().equals(targetPlayer.getName())) {
-			
+
 			// send message and play sound to giver
-			plugin.messageManager.sendPlayerMessage(sender, "command-success-give",quantity);
-			
+			plugin.messageManager.sendPlayerMessage(sender, MessageId.COMMAND_SUCCESS_GIVE, quantity);
+
 			// if giver is in game, play sound
 			if (sender instanceof Player) {
-				plugin.messageManager.sendPlayerSound(sender,SoundId.COMMAND_SUCCESS_GIVE_SENDER);
+				plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_SUCCESS_GIVE_SENDER);
 			}
-			
+
 			// send message to target player
-			plugin.messageManager.sendPlayerMessage(targetPlayer,"command-success-give-target",quantity);
+			plugin.messageManager.sendPlayerMessage(targetPlayer, MessageId.COMMAND_SUCCESS_GIVE_TARGET, quantity);
 		}
 		// play sound to target player
 		plugin.messageManager.sendPlayerSound(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
@@ -372,13 +373,13 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			plugin.messageManager.sendPlayerMessage(sender,"command-fail-destroy-console");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_DESTROY_CONSOLE);
 			return true;
 		}
 		
 		// if command sender does not have permission to destroy HomeStars, output error message and return true
 		if (!sender.hasPermission("homestar.destroy")) {
-			plugin.messageManager.sendPlayerMessage(sender, "permission-denied-destroy");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.PERMISSION_DENIED_DESTROY);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -388,14 +389,14 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			
 		// check that player is holding a homestar stack
 		if (!SimpleAPI.isHomeStar(playerItem)) {
-			plugin.messageManager.sendPlayerMessage(sender, "command-fail-destroy-no-match");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_DESTROY_NO_MATCH);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 		int quantity = playerItem.getAmount();
 		playerItem.setAmount(0);
 		player.getInventory().setItemInMainHand(playerItem);
-		plugin.messageManager.sendPlayerMessage(sender, "command-success-destroy", quantity);
+		plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_SUCCESS_DESTROY, quantity);
 		plugin.messageManager.sendPlayerSound(player,SoundId.COMMAND_SUCCESS_DESTROY);
 		return true;
 	}
@@ -451,7 +452,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("homestar.help")) {
-			plugin.messageManager.sendPlayerMessage(sender, "permission-denied-help");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.PERMISSION_DENIED_HELP);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -516,12 +517,12 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			}
 		}
 		if (matchedPlayers.isEmpty()) {
-			plugin.messageManager.sendPlayerMessage(sender, "command-fail-player-not-found");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return null;
 		}
 		else {
-			plugin.messageManager.sendPlayerMessage(sender, "command-fail-player-not-online");
+			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE);
 			plugin.messageManager.sendPlayerSound(sender, SoundId.COMMAND_FAIL);
 			return null;
 		}

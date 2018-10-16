@@ -45,90 +45,99 @@ second_plural: 'seconds'
 # displaying a message again (only used on appropriate messages)
 
 messages:
-  command-fail-args-count-over:
+  COMMAND_FAIL_ARGS_COUNT_OVER:
     enabled: true
     string: '&3[HomeStar] &cToo many arguments!'
-  command-fail-args-count-under:
+  COMMAND_FAIL_ARGS_COUNT_UNDER:
     enabled: true
     string: '&3[HomeStar] &cToo few arguments!'
-  command-fail-destroy-console:
+  COMMAND_FAIL_INVALID_COMMAND:
+    enabled: true
+    string: '&3[HomeStar] &cInvalid command!'
+  COMMAND_FAIL_DESTROY_CONSOLE:
     enabled: true
     string: '&3[HomeStar] &cYou must be in game to destroy HomeStar items!'
-  command-fail-destroy-no-match:
+  COMMAND_FAIL_DESTROY_NO_MATCH:
     enabled: true
     string: '&3[HomeStar] &cThe item you are holding is not a HomeStar item!'
-  command-fail-give-inventory-full:
+  COMMAND_FAIL_GIVE_INVENTORY_FULL:
     enabled: true
     string: '&3Could not give %ITEMNAME% to %TARGETPLAYER% because their inventory is full.'
-  command-fail-player-not-found:
+  COMMAND_FAIL_PLAYER_NOT_FOUND:
     enabled: true
     string: '&3That player could not be found.'
-  command-fail-player-not-online:
+  COMMAND_FAIL_PLAYER_NOT_ONLINE:
     enabled: true
     string: '&3That player is not online.'
-  command-fail-quantity-invalid:
+  COMMAND_FAIL_QUANTITY_INVALID:
     enabled: true
     string: '&3[HomeStar] &cInvalid quantity!'
-  command-success-destroy:
+
+  COMMAND_SUCCESS_DESTROY:
     enabled: true
     string: '&3[HomeStar] &c%ITEMNAME% destroyed!'
-  command-success-give:
+  COMMAND_SUCCESS_GIVE:
     enabled: true
     string: '&3You gave %QUANTITY% %ITEMNAME% to %TARGETPLAYER%.'
-  command-success-reload:
+  COMMAND_SUCCESS_GIVE_TARGET:
+    enabled: true
+    string: '&3%TARGETPLAYER% gave you %QUANTITY% %ITEMNAME%.'
+  COMMAND_SUCCESS_RELOAD:
     enabled: true
     string: '&3[HomeStar] &bconfiguration reloaded.'
-  permission-denied-destroy:
+
+  PERMISSION_DENIED_DESTROY:
     enabled: true
     string: '&cYou do not have permission to destroy HomeStar items!'
-  permission-denied-give:
+  PERMISSION_DENIED_GIVE:
     enabled: true
     string: '&cYou do not have permission to give HomeStar items!'
-  permission-denied-reload:
+  PERMISSION_DENIED_RELOAD:
     enabled: true
     string: '&cYou do not have permission to reload the configuration!'
-  permission-denied-status:
+  PERMISSION_DENIED_STATUS:
     enabled: true
     string: '&cYou do not have permission to view HomeStar settings!'
-  permission-denied-use:
+  PERMISSION_DENIED_USE:
     enabled: true
     repeat-delay: 1
     string: '&cYou do not have permission to use &b%ITEMNAME%&3 in %WORLDNAME%.'
-  permission-denied-help:
+  PERMISSION_DENIED_HELP:
     enabled: true
     string: '&cYou do not have permission to view HomeStar help!'
     
 
-  teleport-cancelled-damage:
+  TELEPORT_CANCELLED_DAMAGE:
     enabled: true
     string: '&cTeleport cancelled by damage!'
-  teleport-cancelled-interaction:
+  TELEPORT_CANCELLED_INTERACTION:
     enabled: true
     string: '&cTeleport cancelled by interaction!'
-  teleport-cancelled-movement:
+  TELEPORT_CANCELLED_MOVEMENT:
     enabled: true
     string: '&cTeleport cancelled by movement!'
-  teleport-cancelled-no-item:
+  TELEPORT_CANCELLED_NO_ITEM:
     enabled: true
     string: '&cYou no longer have a HomeStar item!'
-  teleport-cooldown:
+  TELEPORT_COOLDOWN:
     enabled: true
     repeat-delay: 1
     string: '&3You need to wait &b%timeremaining%&3 to use another %ITEMNAME%.'
-  teleport-fail-no-bedspawn:
+  TELEPORT_FAIL_NO_BEDSPAWN:
     enabled: true
     string: '&3Bed spawn is missing or obstructed!'
-  teleport-min-distance:
+  TELEPORT_MIN_DISTANCE:
     enabled: true
     repeat-delay: 1
     string: '&3You are too close to %DESTINATION% to use a %ITEMNAME%.'
-  teleport-success:
+  TELEPORT_SUCCESS:
     enabled: true
     string: '&3Returned to %DESTINATION%.'
-  teleport-warmup:
+  TELEPORT_WARMUP:
     enabled: true
     string: '&3Teleporting to %DESTINATION% in &b%WARMUPTIME%...'
-  usage-shift-click:
+
+  USAGE_SHIFT_CLICK:
     enabled: true
     repeat-delay: 1
     string: '&3You must shift-click to use a %ITEMNAME%.'
