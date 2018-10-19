@@ -139,7 +139,7 @@ public final class MessageManager {
 								 final Player targetPlayer) {
 
 		// if message is not enabled in messages file, do nothing and return
-		if (!messages.getBoolean("messages." + messageId + ".enabled")) {
+		if (!isEnabled(messageId)) {
 			return;
 		}
 
@@ -163,7 +163,7 @@ public final class MessageManager {
 			long lastDisplayed = getMessageCooldown(player,messageId);
 
 			// get message repeat delay
-			int messageRepeatDelay = messages.getInt("messages." + messageId + ".repeat-delay");
+			int messageRepeatDelay = getRepeatDelay(messageId);
 
 			// if message has repeat delay value and was displayed to player more recently, do nothing and return
 			if (lastDisplayed > System.currentTimeMillis() - messageRepeatDelay * 1000) {
@@ -182,7 +182,7 @@ public final class MessageManager {
 		}
 
 		// get message from file
-		String message = messages.getString("messages." + messageId + ".string");
+		String message = getMessage(messageId);
 
 		// get item name and strip color codes
 		String itemName = getItemName();
@@ -401,6 +401,36 @@ public final class MessageManager {
 		}
 
 		return timeString.toString().trim();
+	}
+
+
+	/**
+	 * Check if message is enabled
+	 * @param messageId message identifier to check
+	 * @return true if message is enabled, false if not
+	 */
+	private boolean isEnabled(MessageId messageId) {
+		return !messages.getBoolean("messages." + messageId.toString() + ".enabled");
+	}
+
+
+	/**
+	 * get message repeat delay from language file
+	 * @param messageId message identifier to retrieve message delay
+	 * @return int message repeat delay in seconds
+	 */
+	private int getRepeatDelay(MessageId messageId) {
+		return messages.getInt("messages." + messageId.toString() + ".repeat-delay");
+	}
+
+
+	/**
+	 * get message text from language file
+	 * @param messageId message identifier to retrieve message text
+	 * @return String message text
+	 */
+	private String getMessage(MessageId messageId) {
+		return messages.getString("messages." + messageId.toString() + ".string");
 	}
 
 }
