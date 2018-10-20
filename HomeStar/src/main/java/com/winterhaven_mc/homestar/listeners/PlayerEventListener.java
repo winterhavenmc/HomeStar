@@ -1,7 +1,7 @@
 package com.winterhaven_mc.homestar.listeners;
 
 import com.winterhaven_mc.homestar.messages.MessageId;
-import com.winterhaven_mc.homestar.messages.SoundId;
+import com.winterhaven_mc.homestar.sounds.SoundId;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -68,7 +68,7 @@ public final class PlayerEventListener implements Listener {
 					plugin.messageManager.sendPlayerMessage(player,MessageId.TELEPORT_CANCELLED_INTERACTION);
 
 					// play sound effects if enabled
-					plugin.messageManager.sendPlayerSound(player, SoundId.TELEPORT_CANCELLED);
+					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 					return;
 				}
 			}
@@ -100,7 +100,7 @@ public final class PlayerEventListener implements Listener {
 		// if player does not have homestar.use permission, send message and return
 		if (!player.hasPermission("homestar.use")) {
 			plugin.messageManager.sendPlayerMessage(player,MessageId.PERMISSION_DENIED_USE);
-			plugin.messageManager.sendPlayerSound(player,SoundId.TELEPORT_DENIED_PERMISSION);
+			plugin.soundConfig.playSound(player,SoundId.TELEPORT_DENIED_PERMISSION);
 			return;
 		}
 
@@ -194,7 +194,7 @@ public final class PlayerEventListener implements Listener {
 				if (plugin.teleportManager.isWarmingUp((Player) entity)) {
 					plugin.teleportManager.cancelTeleport((Player) entity);
 					plugin.messageManager.sendPlayerMessage(entity,MessageId.TELEPORT_CANCELLED_DAMAGE);
-					plugin.messageManager.sendPlayerSound(entity,SoundId.TELEPORT_CANCELLED);
+					plugin.soundConfig.playSound(entity,SoundId.TELEPORT_CANCELLED);
 				}				
 			}
 		}
@@ -223,7 +223,7 @@ public final class PlayerEventListener implements Listener {
 			if (event.getFrom().distance(event.getTo()) > 0) {
 				plugin.teleportManager.cancelTeleport(player);
 				plugin.messageManager.sendPlayerMessage(player,MessageId.TELEPORT_CANCELLED_MOVEMENT);
-				plugin.messageManager.sendPlayerSound(player,SoundId.TELEPORT_CANCELLED);
+				plugin.soundConfig.playSound(player,SoundId.TELEPORT_CANCELLED);
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package com.winterhaven_mc.homestar.messages;
+package com.winterhaven_mc.homestar.sounds;
 
 public enum SoundId {
 

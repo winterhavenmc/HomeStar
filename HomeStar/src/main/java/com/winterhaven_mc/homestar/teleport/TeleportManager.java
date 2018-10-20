@@ -3,7 +3,7 @@ package com.winterhaven_mc.homestar.teleport;
 import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.SimpleAPI;
 import com.winterhaven_mc.homestar.messages.MessageId;
-import com.winterhaven_mc.homestar.messages.SoundId;
+import com.winterhaven_mc.homestar.sounds.SoundId;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -86,7 +86,7 @@ public final class TeleportManager {
 
 			// if bedspawn-fallback is configured false, play teleport fail sound and return
 			if (!plugin.getConfig().getBoolean("bedspawn-fallback")) {
-				plugin.messageManager.sendPlayerSound(player, SoundId.TELEPORT_CANCELLED);
+				plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 				return;
 			}
 			// else set destination to spawn location
@@ -123,7 +123,7 @@ public final class TeleportManager {
 			plugin.messageManager.sendPlayerMessage(player, MessageId.TELEPORT_WARMUP, destinationName);
 
 			// if enabled, play sound effect
-			plugin.messageManager.sendPlayerSound(player,SoundId.TELEPORT_WARMUP);
+			plugin.soundConfig.playSound(player,SoundId.TELEPORT_WARMUP);
 		}
 
 		// initiate delayed teleport for player to destination
