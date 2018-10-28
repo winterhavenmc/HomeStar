@@ -22,7 +22,7 @@ import java.util.List;
 public final class SimpleAPI {
 
 	private final static PluginMain plugin = PluginMain.instance;
-	private final static String itemTag = hiddenString("HomeStarV1");
+	private final static String itemTag = plugin.messageManager.createHiddenString("HomeStarV1");
 
 	
 	/**
@@ -205,15 +205,6 @@ public final class SimpleAPI {
 		
 		// save new item metadata
 		itemStack.setItemMeta(itemMeta);
-	}
-
-
-	@SuppressWarnings("SameParameterValue")
-	private static String hiddenString(String s) {
-		StringBuilder hidden = new StringBuilder();
-		for (char c : s.toCharArray())
-			hidden.append(ChatColor.COLOR_CHAR + "").append(c);
-		return hidden.toString();
 	}
 
 }
