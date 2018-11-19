@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 
 public final class TeleportManager {
@@ -21,10 +22,10 @@ public final class TeleportManager {
 	// reference to main class
 	private final PluginMain plugin;
 
-	// hashmap to store player uuids and cooldown expire times
+	// hashmap containing player UUID as key and cooldown expire time in milliseconds as value
 	private final Map<UUID,Long> cooldownMap;
 
-	// HashMap containing player UUID as key and warmup time as value
+	// HashMap containing player UUID as key and warmup task id as value
 	private final Map<UUID,Integer> warmupMap;
 
 
@@ -115,11 +116,6 @@ public final class TeleportManager {
 
 		// if warmup setting is greater than zero, send warmup message
 		if (plugin.getConfig().getInt("teleport-warmup") > 0) {
-			if (plugin.debug) {
-				plugin.getLogger().info("Player: " + player.getName());
-				plugin.getLogger().info("MessageId: " + "teleport-warmup");
-				plugin.getLogger().info("Destination: " + destinationName);
-			}
 			plugin.messageManager.sendPlayerMessage(player, MessageId.TELEPORT_WARMUP, destinationName);
 
 			// if enabled, play sound effect
@@ -215,7 +211,7 @@ public final class TeleportManager {
 		final int cooldownSeconds = plugin.getConfig().getInt("teleport-cooldown");
 
 		// set expireTime to current time + configured cooldown period, in milliseconds
-		final Long expireTime = System.currentTimeMillis() + (cooldownSeconds * 1000);
+		final Long expireTime = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(cooldownSeconds);
 
 		// put in cooldown map with player UUID as key and expireTime as value
 		cooldownMap.put(player.getUniqueId(), expireTime);
@@ -239,9 +235,9 @@ public final class TeleportManager {
 		// initialize remainingTime
 		long remainingTime = 0;
 
-		// if player is in cooldown map, set remainTime to map value
+		// if player is in cooldown map, set remainingTime to map value
 		if (cooldownMap.containsKey(player.getUniqueId())) {
-			remainingTime = (cooldownMap.get(player.getUniqueId()) - System.currentTimeMillis()) / 1000;
+			remainingTime = (cooldownMap.get(player.getUniqueId()) - System.currentTimeMillis());
 		}
 		return remainingTime;
 	}
