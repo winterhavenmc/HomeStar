@@ -56,7 +56,7 @@ public final class TeleportManager {
 
 		// if player cooldown has not expired, send player cooldown message and return
 		if (plugin.teleportManager.getCooldownTimeRemaining(player) > 0) {
-			plugin.messageManager.sendPlayerMessage(player, MessageId.TELEPORT_COOLDOWN);
+			plugin.messageManager.sendMessage(player, MessageId.TELEPORT_COOLDOWN);
 			return;
 		}
 
@@ -83,7 +83,7 @@ public final class TeleportManager {
 		if (destination == null) {
 
 			// send missing or obstructed message
-			plugin.messageManager.sendPlayerMessage(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN);
+			plugin.messageManager.sendMessage(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN);
 
 			// if bedspawn-fallback is configured false, play teleport fail sound and return
 			if (!plugin.getConfig().getBoolean("bedspawn-fallback")) {
@@ -104,7 +104,7 @@ public final class TeleportManager {
 		// if player is less than config min-distance from destination, send player min-distance message and return
 		if (player.getWorld().equals(destination.getWorld()) 
 				&& destination.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
-			plugin.messageManager.sendPlayerMessage(player, MessageId.TELEPORT_MIN_DISTANCE, destinationName);
+			plugin.messageManager.sendMessage(player, MessageId.TELEPORT_MIN_DISTANCE, destinationName);
 			return;
 		}
 
@@ -116,7 +116,7 @@ public final class TeleportManager {
 
 		// if warmup setting is greater than zero, send warmup message
 		if (plugin.getConfig().getInt("teleport-warmup") > 0) {
-			plugin.messageManager.sendPlayerMessage(player, MessageId.TELEPORT_WARMUP, destinationName);
+			plugin.messageManager.sendMessage(player, MessageId.TELEPORT_WARMUP, destinationName);
 
 			// if enabled, play sound effect
 			plugin.soundConfig.playSound(player,SoundId.TELEPORT_WARMUP);
