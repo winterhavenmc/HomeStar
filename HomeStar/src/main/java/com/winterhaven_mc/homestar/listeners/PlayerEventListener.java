@@ -141,9 +141,6 @@ public final class PlayerEventListener implements Listener {
 
 		// cancel any pending teleport for player
 		plugin.teleportManager.cancelTeleport(player);
-
-		// remove player from message cooldown map
-		plugin.messageManager.removePlayerCooldown(player);
 	}
 
 
