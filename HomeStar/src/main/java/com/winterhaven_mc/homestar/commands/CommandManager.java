@@ -35,6 +35,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			Collections.unmodifiableList(new ArrayList<>(
 					Arrays.asList("give", "destroy", "status", "reload", "help")));
 
+
 	/**
 	 * Class constructor method for CommandManager
 	 * 
@@ -156,6 +157,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		return true;
 	}
 
+
 	/**
 	 * Display plugin settings
 	 * @param sender the command sender
@@ -175,36 +177,50 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		String versionString = this.plugin.getDescription().getVersion();
 		sender.sendMessage(ChatColor.DARK_AQUA + "[HomeStar] "
 				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + versionString);
+
 		if (plugin.debug) {
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
-		sender.sendMessage(ChatColor.GREEN + "Language: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Language: "
 				+ ChatColor.RESET + plugin.getConfig().getString("language"));
-		sender.sendMessage(ChatColor.GREEN + "Default material: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Default material: "
 				+ ChatColor.RESET + plugin.getConfig().getString("item-material"));
-		sender.sendMessage(ChatColor.GREEN + "Minimum distance: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Minimum distance: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("minimum-distance"));
-		sender.sendMessage(ChatColor.GREEN + "Warmup: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Warmup: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("teleport-warmup") + " seconds");
-		sender.sendMessage(ChatColor.GREEN + "Cooldown: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Cooldown: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("teleport-cooldown") + " seconds");
-		sender.sendMessage(ChatColor.GREEN + "Left-click allowed: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Left-click allowed: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("left-click"));
-		sender.sendMessage(ChatColor.GREEN + "Shift-click required: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Shift-click required: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("shift-click"));
-		sender.sendMessage(ChatColor.GREEN 
+
+		sender.sendMessage(ChatColor.GREEN
 				+ "Cancel on damage/movement/interaction: " + ChatColor.RESET + "[ "
 				+ plugin.getConfig().getBoolean("cancel-on-damage") + "/"
 				+ plugin.getConfig().getBoolean("cancel-on-movement") + "/"
 				+ plugin.getConfig().getBoolean("cancel-on-interaction") + " ]");
-		sender.sendMessage(ChatColor.GREEN + "Remove from inventory: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Remove from inventory: "
 				+ ChatColor.RESET + plugin.getConfig().getString("remove-from-inventory"));
-		sender.sendMessage(ChatColor.GREEN + "Allow in recipes: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Allow in recipes: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("allow-in-recipes"));
-		sender.sendMessage(ChatColor.GREEN + "Lightning: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Lightning: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("lightning"));
-		sender.sendMessage(ChatColor.GREEN + "Enabled Words: " 
+
+		sender.sendMessage(ChatColor.GREEN + "Enabled Words: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
+
 		return true;
 	}
 	
@@ -224,7 +240,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		String subcmd = args[0];
+		String subcommand = args[0];
 
 		// argument limits
 		int maxArgs = 1;
@@ -233,7 +249,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		if (args.length > maxArgs) {
 			plugin.messageManager.sendPlayerMessage(sender,MessageId.COMMAND_FAIL_ARGS_COUNT_OVER);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			displayUsage(sender, subcmd);
+			displayUsage(sender, subcommand);
 			return true;
 		}
 
