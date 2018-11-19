@@ -8,7 +8,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -124,26 +123,6 @@ public final class MessageManager extends AbstractMessageManager {
 	@SuppressWarnings("unused")
 	final void sendMessage(final CommandSender recipient,
 						   final MessageId messageId,
-						   final Player targetPlayer) {
-
-		Map<String,String> replacements = getDefaultReplacements(recipient);
-
-		replacements.put("%TARGET_PLAYER%",targetPlayer.getName());
-
-		//noinspection unchecked
-		sendMessage(recipient,messageId,replacements);
-	}
-
-	
-	/**
-	 * Send message to player
-	 * 
-	 * @param recipient			player recieving message
-	 * @param messageId			message identifier in messages file
-	 */
-	@SuppressWarnings("unused")
-	final void sendMessage(final CommandSender recipient,
-						   final MessageId messageId,
 						   final Integer quantity,
 						   final Player targetPlayer) {
 
@@ -154,52 +133,6 @@ public final class MessageManager extends AbstractMessageManager {
 
 		//noinspection unchecked
 		sendMessage(recipient,messageId,replacements);
-	}
-
-
-	/**
-	 * Get item name from language file
-	 * @return the formatted display name of the HomeStar item
-	 */
-	public final String getItemName() {
-		return messages.getString("item-name");
-	}
-
-
-	/**
-	 * Get configured plural item name from language file
-	 * @return the formatted plural display name of the HomeStar item
-	 */
-	@SuppressWarnings({"WeakerAccess", "unused"})
-	public final String getItemNamePlural() {
-		return messages.getString("item-name-plural");
-	}
-
-
-	/**
-	 * Get configured item lore from language file
-	 * @return List of Strings containing the lines of item lore
-	 */
-	public final List<String> getItemLore() {
-		return messages.getStringList("item-lore");
-	}
-
-
-	/**
-	 * Get spawn display name from language file
-	 * @return the formatted display name for the world spawn
-	 */
-	public final String getSpawnDisplayName() {
-		return messages.getString("spawn-display-name");
-	}
-
-
-	/**
-	 * Get home display name from language file
-	 * @return the formatted display name for a bedspawn
-	 */
-	public final String getHomeDisplayName() {
-		return messages.getString("home-display-name");
 	}
 
 }
