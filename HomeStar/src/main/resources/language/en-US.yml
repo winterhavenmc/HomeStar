@@ -1,50 +1,59 @@
-# Item Name
-item-name: '&aHomeStar'
-item-name-plural: '&aHomeStars'
+# Language configuration file for ${project.name} v${project.version}
 
-# Item Lore
-item-lore:
+###########
+# Item Info
+###########
+ITEM_INFO:
+  # Item Display Name
+  ITEM_NAME: '&aHomeStar'
+  ITEM_NAME_PLURAL: '&aHomeStars'
+
+  # Item Lore
+  ITEM_LORE:
   - '&eUse to Return'
   - '&eto Home'
 
-# Spawn Display Name
-spawn-display-name: 'spawn'
+  # Spawn Display Name
+  SPAWN_DISPLAY_NAME: 'spawn'
 
-# Home Display Name
-home-display-name: 'home'
-
+  # Home Display Name
+  HOME_DISPLAY_NAME: 'home'
 
 # Time strings
-hour: 'hour'
-hour_plural: 'hours'
-minute: 'minute'
-minute_plural: 'minutes'
-second: 'second'
-second_plural: 'seconds'
+TIME_STRINGS:
+  DAY: 'day'
+  DAY_PLURAL: 'days'
+  HOUR: 'hour'
+  HOUR_PLURAL: 'hours'
+  MINUTE: 'minute'
+  MINUTE_PLURAL: 'minutes'
+  SECOND: 'second'
+  SECOND_PLURAL: 'seconds'
+  UNLIMITED: 'unlimited time'
 
 
 # Custom Messages
 #
 # Variable substitutions:
-# %itemname%            Item name as defined in messages (this file)
-# %playername%          Player's name
-# %destination%			Destination name
-# %worldname%           World name that player is in
-# %timeremaining%		time remaining in cooldown (valid in cooldown message only)
-# %warmuptime%			seconds until teleport (valid in warmup message only)
-# %quantity%			number of items (valid in give command message only)
-# %targetplayer%		target player's name
+# %item_name%           Item name as defined in messages (this file)
+# %player_name%         Player's name
+# %destination_name%    Destination name
+# %world_name%          World name that player is in
+# %cooldown_time%       time remaining in cooldown (valid in cooldown message only)
+# %warmup_time%         seconds until teleport (valid in warmup message only)
+# %quantity%            number of items (valid in give command message only)
+# %target_player%       target player's name
 #
-# %ITEMNAME%            Item name, with no color codes
-# %PLAYERNAME%          Player's name, with no color codes
-# %DESTINATION%			Destination name with no color codes
-# %WORLDNAME%           World name that player is in, with no color codes
-# %TARGETPLAYER%        Target player's name, with no color codes
+# %ITEM_NAME%           Item name, with no color codes
+# %PLAYER_NAME%         Player's name, with no color codes
+# %DESTINATION_NAME%    Destination name with no color codes
+# %WORLD_NAME%          World name that player is in, with no color codes
+# %TARGET_PLAYER%       Target player's name, with no color codes
 
 # repeat-delay is the number of seconds to wait before
 # displaying a message again (only used on appropriate messages)
 
-messages:
+MESSAGES:
   COMMAND_FAIL_ARGS_COUNT_OVER:
     enabled: true
     string: '&3[HomeStar] &cToo many arguments!'
@@ -67,7 +76,7 @@ messages:
 
   COMMAND_FAIL_GIVE_INVENTORY_FULL:
     enabled: true
-    string: '&3Could not give %ITEMNAME% to %TARGETPLAYER% because their inventory is full.'
+    string: '&3Could not give %ITEM_NAME% to %TARGET_PLAYER% because their inventory is full.'
 
   COMMAND_FAIL_PLAYER_NOT_FOUND:
     enabled: true
@@ -83,15 +92,15 @@ messages:
 
   COMMAND_SUCCESS_DESTROY:
     enabled: true
-    string: '&3[HomeStar] &c%ITEMNAME% destroyed!'
+    string: '&3[HomeStar] &c%ITEM_NAME% destroyed!'
 
   COMMAND_SUCCESS_GIVE:
     enabled: true
-    string: '&3You gave %QUANTITY% %ITEMNAME% to %TARGETPLAYER%.'
+    string: '&3You gave %QUANTITY% %ITEM_NAME% to %TARGET_PLAYER%.'
 
   COMMAND_SUCCESS_GIVE_TARGET:
     enabled: true
-    string: '&3%TARGETPLAYER% gave you %QUANTITY% %ITEMNAME%.'
+    string: '&3%TARGET_PLAYER% gave you %QUANTITY% %ITEM_NAME%.'
 
   COMMAND_SUCCESS_RELOAD:
     enabled: true
@@ -116,7 +125,7 @@ messages:
   PERMISSION_DENIED_USE:
     enabled: true
     repeat-delay: 1
-    string: '&cYou do not have permission to use &b%ITEMNAME%&3 in %WORLDNAME%.'
+    string: '&cYou do not have permission to use &b%ITEM_NAME%&3 in %WORLD_NAME%.'
 
   PERMISSION_DENIED_HELP:
     enabled: true
@@ -142,7 +151,7 @@ messages:
   TELEPORT_COOLDOWN:
     enabled: true
     repeat-delay: 1
-    string: '&3You need to wait &b%timeremaining%&3 to use another %ITEMNAME%.'
+    string: '&3You need to wait &b%timeremaining%&3 to use another %ITEM_NAME%.'
 
   TELEPORT_FAIL_NO_BEDSPAWN:
     enabled: true
@@ -151,18 +160,18 @@ messages:
   TELEPORT_MIN_DISTANCE:
     enabled: true
     repeat-delay: 1
-    string: '&3You are too close to %DESTINATION% to use a %ITEMNAME%.'
+    string: '&3You are too close to %DESTINATION_NAME% to use a %ITEM_NAME%.'
 
   TELEPORT_SUCCESS:
     enabled: true
-    string: '&3Returned to %DESTINATION%.'
+    string: '&3Returned to %DESTINATION_NAME%.'
 
   TELEPORT_WARMUP:
     enabled: true
-    string: '&3Teleporting to %DESTINATION% in &b%WARMUPTIME%...'
+    string: '&3Teleporting to %DESTINATION_NAME% in &b%WARMUPTIME%...'
 
   USAGE_SHIFT_CLICK:
     enabled: true
     repeat-delay: 1
-    string: '&3You must shift-click to use a %ITEMNAME%.'
+    string: '&3You must shift-click to use a %ITEM_NAME%.'
  
