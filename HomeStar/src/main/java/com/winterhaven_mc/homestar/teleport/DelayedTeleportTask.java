@@ -1,5 +1,7 @@
 package com.winterhaven_mc.homestar.teleport;
 
+import com.winterhaven_mc.homestar.messages.MessageId;
+import com.winterhaven_mc.homestar.sounds.SoundId;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -78,24 +80,24 @@ final class DelayedTeleportTask extends BukkitRunnable {
 				
 				// if one HomeStar item could not be removed from inventory, send message, set cooldown and return
 				if (notRemoved) {
-					plugin.messageManager.sendPlayerMessage(player, "teleport-cancelled-no-item");
-					plugin.messageManager.playerSound(player, "teleport-cancelled-no-item");
+					plugin.messageManager.sendMessage(player,MessageId.TELEPORT_CANCELLED_NO_ITEM);
+					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED_NO_ITEM);
 					plugin.teleportManager.startCooldown(player);
 					return;
 				}
 			}
 
 			// play pre-teleport sound if sound effects are enabled
-			plugin.messageManager.playerSound(player, "teleport-success-departure");
+			plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_DEPARTURE);
 
 			// teleport player to destination
 			player.teleport(destination);
 
 			// send player respawn message
-			plugin.messageManager.sendPlayerMessage(player, "teleport-success", destinationName);
+			plugin.messageManager.sendMessage(player,MessageId.TELEPORT_SUCCESS,destinationName);
 
 			// play post-teleport sound if sound effects are enabled
-			plugin.messageManager.playerSound(player, "teleport-success-arrival");
+			plugin.soundConfig.playSound(player,SoundId.TELEPORT_SUCCESS_ARRIVAL);
 
 			// if lightning is enabled in config, strike lightning at spawn location
 			if (plugin.getConfig().getBoolean("lightning")) {
