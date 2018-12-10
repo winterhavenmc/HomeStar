@@ -128,7 +128,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// status command
 		if (subcommand.equalsIgnoreCase("status")) {
-			return statusCommand(sender,args);
+			return statusCommand(sender);
 		}
 
 		// reload command
@@ -143,7 +143,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		
 		// destroy command
 		if (subcommand.equalsIgnoreCase("destroy")) {
-			return destroyCommand(sender,args);
+			return destroyCommand(sender);
 		}
 		
 		// help command
@@ -163,8 +163,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param sender the command sender
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	@SuppressWarnings("unused")
-	private boolean statusCommand(final CommandSender sender, final String args[]) {
+	private boolean statusCommand(final CommandSender sender) {
 		
 		// if command sender does not have permission to view status, output error message and return true
 		if (!sender.hasPermission("homestar.status")) {
@@ -231,7 +230,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean reloadCommand(final CommandSender sender, final String args[]) {
+	private boolean reloadCommand(final CommandSender sender, final String[] args) {
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("homestar.reload")) {
@@ -280,7 +279,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean giveCommand(final CommandSender sender, final String args[]) {
+	private boolean giveCommand(final CommandSender sender, final String[] args) {
 
 		// usage: /give <targetplayer> [qty]
 
@@ -384,11 +383,9 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	/**
 	 * Destroy command
 	 * @param sender command sender
-	 * @param args command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	@SuppressWarnings("unused")
-	private boolean destroyCommand(final CommandSender sender, final String args[]) {
+	private boolean destroyCommand(final CommandSender sender) {
 		
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
@@ -467,7 +464,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param args command arguments
 	 * @return always returns {@code true}, to prevent display of bukkit usage message
 	 */
-	private boolean helpCommand(final CommandSender sender, final String args[]) {
+	private boolean helpCommand(final CommandSender sender, final String[] args) {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("homestar.help")) {
