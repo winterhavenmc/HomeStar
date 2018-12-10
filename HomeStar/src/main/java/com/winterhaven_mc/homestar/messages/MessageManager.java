@@ -21,6 +21,8 @@ import java.util.concurrent.TimeUnit;
  */
 public final class MessageManager extends AbstractMessageManager {
 
+	private PluginMain plugin;
+
 	/**
 	 * Constructor method for class
 	 *
@@ -31,6 +33,8 @@ public final class MessageManager extends AbstractMessageManager {
 		// call super class constructor
 		//noinspection unchecked
 		super(plugin, MessageId.class);
+
+		this.plugin = plugin;
 	}
 
 
@@ -56,6 +60,15 @@ public final class MessageManager extends AbstractMessageManager {
 		replacements.put("%item_name%",getItemName());
 		replacements.put("%destination_name%",getSpawnDisplayName());
 		replacements.put("%target_player%","target player");
+
+		// if recipient is player, get remaining cooldown time from teleport manager
+		if (recipient instanceof Player) {
+			replacements.put("%COOLDOWN_TIME%",
+					getTimeString(plugin.teleportManager.getCooldownTimeRemaining((Player)recipient)));
+		}
+		else {
+			replacements.put("%COOLDOWN_TIME%",getTimeString(0L));
+		}
 
 		return replacements;
 	}
@@ -87,7 +100,8 @@ public final class MessageManager extends AbstractMessageManager {
 
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
-		replacements.put("%DESTINATION_NAME%",destinationName);
+		replacements.put("%destination_name%",destinationName);
+		replacements.put("%DESTINATION_NAME%",ChatColor.stripColor(destinationName));
 
 		//noinspection unchecked
 		sendMessage(recipient,messageId,replacements);
@@ -107,6 +121,7 @@ public final class MessageManager extends AbstractMessageManager {
 
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
+		replacements.put("%quantity%",quantity.toString());
 		replacements.put("%QUANTITY%",quantity.toString());
 
 		//noinspection unchecked
@@ -128,8 +143,10 @@ public final class MessageManager extends AbstractMessageManager {
 
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
+		replacements.put("%quantity%",quantity.toString());
 		replacements.put("%QUANTITY%",quantity.toString());
-		replacements.put("%TARGET_PLAYER%",targetPlayer.getName());
+		replacements.put("%target_player%",targetPlayer.getName());
+		replacements.put("%TARGET_PLAYER%",ChatColor.stripColor(targetPlayer.getName()));
 
 		//noinspection unchecked
 		sendMessage(recipient,messageId,replacements);
