@@ -100,7 +100,8 @@ public final class MessageManager extends AbstractMessageManager {
 
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
-		replacements.put("%DESTINATION_NAME%",destinationName);
+		replacements.put("%destination_name%",destinationName);
+		replacements.put("%DESTINATION_NAME%",ChatColor.stripColor(destinationName));
 
 		//noinspection unchecked
 		sendMessage(recipient,messageId,replacements);
@@ -120,6 +121,7 @@ public final class MessageManager extends AbstractMessageManager {
 
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
+		replacements.put("%quantity%",quantity.toString());
 		replacements.put("%QUANTITY%",quantity.toString());
 
 		//noinspection unchecked
@@ -141,8 +143,10 @@ public final class MessageManager extends AbstractMessageManager {
 
 		Map<String,String> replacements = getDefaultReplacements(recipient);
 
+		replacements.put("%quantity%",quantity.toString());
 		replacements.put("%QUANTITY%",quantity.toString());
-		replacements.put("%TARGET_PLAYER%",targetPlayer.getName());
+		replacements.put("%target_player%",targetPlayer.getName());
+		replacements.put("%TARGET_PLAYER%",ChatColor.stripColor(targetPlayer.getName()));
 
 		//noinspection unchecked
 		sendMessage(recipient,messageId,replacements);
