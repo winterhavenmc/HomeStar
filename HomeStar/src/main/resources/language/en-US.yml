@@ -35,20 +35,19 @@ TIME_STRINGS:
 # Custom Messages
 #
 # Variable substitutions:
-# %item_name%           Item name as defined in messages (this file)
 # %player_name%         Player's name
 # %destination_name%    Destination name
 # %world_name%          World name that player is in
-# %cooldown_time%       time remaining in cooldown (valid in cooldown message only)
-# %warmup_time%         seconds until teleport (valid in warmup message only)
-# %quantity%            number of items (valid in give command message only)
 # %target_player%       target player's name
 #
-# %ITEM_NAME%           Item name, with no color codes
+# %ITEM_NAME%           Item name as defined in messages (this file)
 # %PLAYER_NAME%         Player's name, with no color codes
 # %DESTINATION_NAME%    Destination name with no color codes
 # %WORLD_NAME%          World name that player is in, with no color codes
 # %TARGET_PLAYER%       Target player's name, with no color codes
+# %COOLDOWN_TIME%       time remaining in cooldown (valid in cooldown message only)
+# %WARMUP_TIME%         seconds until teleport (valid in warmup message only)
+# %QUANTITY%            number of items (valid in give command message only)
 
 # repeat-delay is the number of seconds to wait before
 # displaying a message again (only used on appropriate messages)
@@ -151,7 +150,7 @@ MESSAGES:
   TELEPORT_COOLDOWN:
     enabled: true
     repeat-delay: 1
-    string: '&3You need to wait &b%timeremaining%&3 to use another %ITEM_NAME%.'
+    string: '&3You need to wait &b%COOLDOWN_TIME%&3 to use another %ITEM_NAME%.'
 
   TELEPORT_FAIL_NO_BEDSPAWN:
     enabled: true
@@ -168,7 +167,7 @@ MESSAGES:
 
   TELEPORT_WARMUP:
     enabled: true
-    string: '&3Teleporting to %DESTINATION_NAME% in &b%WARMUPTIME%...'
+    string: '&3Teleporting to %DESTINATION_NAME% in &b%WARMUP_TIME%...'
 
   USAGE_SHIFT_CLICK:
     enabled: true
