@@ -1,7 +1,9 @@
 package com.winterhaven_mc.homestar.listeners;
 
-import com.winterhaven_mc.homestar.messages.MessageId;
+import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.sounds.SoundId;
+import com.winterhaven_mc.homestar.messages.MessageId;
+
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,38 +16,37 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
-import com.winterhaven_mc.homestar.PluginMain;
+
 import static com.winterhaven_mc.homestar.SimpleAPI.isHomeStar;
 
 
 /**
  * Implements player event listener for HomeStar events
- * 
- * @author      Tim Savage
- * @version		1.0
- *  
+ *
+ * @author Tim Savage
+ * @version 1.0
  */
 public final class PlayerEventListener implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
-	
-	
+
+
 	/**
 	 * Class constructor for PlayerEventListener
-	 * 
+	 *
 	 * @param plugin reference to this plugin's main class
 	 */
 	public PlayerEventListener(final PluginMain plugin) {
-		
+
 		// reference to main
 		this.plugin = plugin;
-		
+
 		// register events in this class
-		plugin.getServer().getPluginManager().registerEvents(this, plugin);	
+		plugin.getServer().getPluginManager().registerEvents(this, plugin);
 	}
 
-	
+
 	/**
 	 * PlayerInteract event handler
 	 */
@@ -55,17 +56,17 @@ public final class PlayerEventListener implements Listener {
 
 		// get player
 		final Player player = event.getPlayer();
-		
+
 		// if cancel-on-interaction is configured true, check if player is in warmup hashmap
 		if (plugin.getConfig().getBoolean("cancel-on-interaction")) {
-			
+
 			// if player is in warmup hashmap, check if they are interacting with a block (not air)
 			if (plugin.teleportManager.isWarmingUp(player)) {
 
 				// if player is interacting with a block, cancel teleport, output message and return
-				if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {			
+				if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 					plugin.teleportManager.cancelTeleport(player);
-					plugin.messageManager.sendMessage(player,MessageId.TELEPORT_CANCELLED_INTERACTION);
+					plugin.messageManager.sendMessage(player, MessageId.TELEPORT_CANCELLED_INTERACTION);
 
 					// play sound effects if enabled
 					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
@@ -80,12 +81,12 @@ public final class PlayerEventListener implements Listener {
 		}
 
 		// if event action is not a right click, or not a left click if configured, do nothing and return
-		if (!(event.getAction().equals(Action.RIGHT_CLICK_AIR) 
+		if (!(event.getAction().equals(Action.RIGHT_CLICK_AIR)
 				|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK))
-				|| (plugin.getConfig().getBoolean("left-click") 
+				|| (plugin.getConfig().getBoolean("left-click")
 				&& !(event.getAction().equals(Action.LEFT_CLICK_AIR)
 				|| event.getAction().equals(Action.LEFT_CLICK_BLOCK)))) {
-				return;
+			return;
 		}
 
 		// cancel event
@@ -99,14 +100,14 @@ public final class PlayerEventListener implements Listener {
 
 		// if player does not have homestar.use permission, send message and return
 		if (!player.hasPermission("homestar.use")) {
-			plugin.messageManager.sendMessage(player,MessageId.PERMISSION_DENIED_USE);
-			plugin.soundConfig.playSound(player,SoundId.TELEPORT_DENIED_PERMISSION);
+			plugin.messageManager.sendMessage(player, MessageId.PERMISSION_DENIED_USE);
+			plugin.soundConfig.playSound(player, SoundId.TELEPORT_DENIED_PERMISSION);
 			return;
 		}
 
 		// if shift-click is configured true and player is not sneaking, send message and return
 		if (plugin.getConfig().getBoolean("shift-click") && !event.getPlayer().isSneaking()) {
-			plugin.messageManager.sendMessage(player,MessageId.USAGE_SHIFT_CLICK);
+			plugin.messageManager.sendMessage(player, MessageId.USAGE_SHIFT_CLICK);
 			return;
 		}
 
@@ -117,6 +118,7 @@ public final class PlayerEventListener implements Listener {
 
 	/**
 	 * Player death event handler
+	 *
 	 * @param event PlayerDeathEvent
 	 */
 	@EventHandler
@@ -132,6 +134,7 @@ public final class PlayerEventListener implements Listener {
 
 	/**
 	 * Player quit event handler
+	 *
 	 * @param event PlayerQuitEvent
 	 */
 	@EventHandler
@@ -147,6 +150,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * Prepare Item Craft event handler<br>
 	 * Prevents HomeStar items from being used in crafting recipes if configured
+	 *
 	 * @param event PrepareItemCraftEvent
 	 */
 	@EventHandler
@@ -158,7 +162,7 @@ public final class PlayerEventListener implements Listener {
 		}
 
 		// if crafting inventory contains HomeStar item, set result item to null
-		for(ItemStack itemStack : event.getInventory()) {
+		for (ItemStack itemStack : event.getInventory()) {
 			if (isHomeStar(itemStack)) {
 				event.getInventory().setResult(null);
 			}
@@ -169,6 +173,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * EntityDamageByEntity event handler<br>
 	 * Cancels pending teleport if player takes damage during warmup
+	 *
 	 * @param event EntityDamageEvent
 	 */
 	@EventHandler
@@ -190,9 +195,9 @@ public final class PlayerEventListener implements Listener {
 				// if player is in warmup hashmap, cancel teleport and send player message
 				if (plugin.teleportManager.isWarmingUp((Player) entity)) {
 					plugin.teleportManager.cancelTeleport((Player) entity);
-					plugin.messageManager.sendMessage(entity,MessageId.TELEPORT_CANCELLED_DAMAGE);
-					plugin.soundConfig.playSound(entity,SoundId.TELEPORT_CANCELLED);
-				}				
+					plugin.messageManager.sendMessage(entity, MessageId.TELEPORT_CANCELLED_DAMAGE);
+					plugin.soundConfig.playSound(entity, SoundId.TELEPORT_CANCELLED);
+				}
 			}
 		}
 	}
@@ -201,6 +206,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * PlayerMoveEvent handler<br>
 	 * Cancels teleport if player moves during warmup
+	 *
 	 * @param event PlayerMoveEvent
 	 */
 	@EventHandler
@@ -219,8 +225,8 @@ public final class PlayerEventListener implements Listener {
 			// check for player movement other than head turning
 			if (event.getFrom().distance(event.getTo()) > 0) {
 				plugin.teleportManager.cancelTeleport(player);
-				plugin.messageManager.sendMessage(player,MessageId.TELEPORT_CANCELLED_MOVEMENT);
-				plugin.soundConfig.playSound(player,SoundId.TELEPORT_CANCELLED);
+				plugin.messageManager.sendMessage(player, MessageId.TELEPORT_CANCELLED_MOVEMENT);
+				plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 			}
 		}
 	}

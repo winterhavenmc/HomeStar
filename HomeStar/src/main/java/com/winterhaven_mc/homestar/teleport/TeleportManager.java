@@ -2,8 +2,9 @@ package com.winterhaven_mc.homestar.teleport;
 
 import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.SimpleAPI;
-import com.winterhaven_mc.homestar.messages.MessageId;
 import com.winterhaven_mc.homestar.sounds.SoundId;
+import com.winterhaven_mc.homestar.messages.MessageId;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -23,14 +24,15 @@ public final class TeleportManager {
 	private final PluginMain plugin;
 
 	// hashmap containing player UUID as key and cooldown expire time in milliseconds as value
-	private final Map<UUID,Long> cooldownMap;
+	private final Map<UUID, Long> cooldownMap;
 
 	// HashMap containing player UUID as key and warmup task id as value
-	private final Map<UUID,Integer> warmupMap;
+	private final Map<UUID, Integer> warmupMap;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to main class
 	 */
 	public TeleportManager(final PluginMain plugin) {
@@ -48,8 +50,9 @@ public final class TeleportManager {
 
 	/**
 	 * Start the player teleport
+	 *
 	 * @param player the player being teleported
-     */
+	 */
 	public final void initiateTeleport(final Player player) {
 
 		final ItemStack playerItem = player.getInventory().getItemInMainHand();
@@ -98,11 +101,11 @@ public final class TeleportManager {
 
 				// if multiverse is enabled, get spawn location from it so we have pitch and yaw
 				destination = plugin.worldManager.getSpawnLocation(playerWorld);
-			}		
+			}
 		}
 
 		// if player is less than config min-distance from destination, send player min-distance message and return
-		if (player.getWorld().equals(destination.getWorld()) 
+		if (player.getWorld().equals(destination.getWorld())
 				&& destination.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
 			plugin.messageManager.sendMessage(player, MessageId.TELEPORT_MIN_DISTANCE, destinationName);
 			return;
@@ -119,11 +122,11 @@ public final class TeleportManager {
 			plugin.messageManager.sendMessage(player, MessageId.TELEPORT_WARMUP, destinationName);
 
 			// if enabled, play sound effect
-			plugin.soundConfig.playSound(player,SoundId.TELEPORT_WARMUP);
+			plugin.soundConfig.playSound(player, SoundId.TELEPORT_WARMUP);
 		}
 
 		// initiate delayed teleport for player to destination
-		BukkitTask teleportTask = 
+		BukkitTask teleportTask =
 				new DelayedTeleportTask(player,
 						destination,
 						destinationName,
@@ -150,6 +153,7 @@ public final class TeleportManager {
 
 	/**
 	 * Insert player uuid and taskId into warmup hashmap.
+	 *
 	 * @param player the player whose uuid will be used as the key in the warmup map
 	 * @param taskId the warmup task Id to be placed in the warmup map
 	 */
@@ -160,6 +164,7 @@ public final class TeleportManager {
 
 	/**
 	 * Remove player uuid from warmup hashmap
+	 *
 	 * @param player the player whose uuid will be removed from the warmup map
 	 */
 	final void removeWarmup(final Player player) {
@@ -169,6 +174,7 @@ public final class TeleportManager {
 
 	/**
 	 * Test if player uuid is in warmup hashmap
+	 *
 	 * @param player the player whose uuid is to be checked for existence in the warmup map
 	 * @return {@code true} if player uuid is in the warmup map, {@code false} if it is not
 	 */
@@ -179,6 +185,7 @@ public final class TeleportManager {
 
 	/**
 	 * Cancel pending player teleport
+	 *
 	 * @param player the player whose teleport will be cancelled
 	 */
 	public final void cancelTeleport(final Player player) {
@@ -203,6 +210,7 @@ public final class TeleportManager {
 	/**
 	 * Insert player uuid into cooldown hashmap with expireTime as value.<br>
 	 * Schedule task to remove player uuid from cooldown hashmap when time expires.
+	 *
 	 * @param player the player whose uuid will be added to the cooldown map
 	 */
 	final void startCooldown(final Player player) {
@@ -227,6 +235,7 @@ public final class TeleportManager {
 
 	/**
 	 * Get time remaining for player cooldown
+	 *
 	 * @param player the player whose cooldown time remaining to retrieve
 	 * @return long remainingTime
 	 */

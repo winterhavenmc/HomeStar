@@ -14,9 +14,9 @@ import java.util.List;
 
 /**
  * A simple static API for HomeStar
- * @author      Tim Savage
- * @version		1.0
- *  
+ *
+ * @author Tim Savage
+ * @version 1.0
  */
 @SuppressWarnings("unused")
 public final class SimpleAPI {
@@ -24,7 +24,7 @@ public final class SimpleAPI {
 	private final static PluginMain plugin = PluginMain.instance;
 	private final static String itemTag = plugin.messageManager.createHiddenString("HomeStarV1");
 
-	
+
 	/**
 	 * Private class constructor to prevent instantiation
 	 */
@@ -32,9 +32,10 @@ public final class SimpleAPI {
 		throw new AssertionError();
 	}
 
-	
+
 	/**
 	 * Create a HomeStar item stack of given quantity, with custom display name and lore
+	 *
 	 * @param quantity number of HomeStar items in newly created stack
 	 * @return ItemStack of HomeStar items
 	 */
@@ -48,43 +49,44 @@ public final class SimpleAPI {
 
 		// set quantity
 		newItem.setAmount(quantity);
-		
+
 		// set item display name and lore
 		setMetaData(newItem);
-		
+
 		// return new item
 		return newItem;
 	}
-	
-	
+
+
 	/**
 	 * Check if itemStack is a HomeStar item
+	 *
 	 * @param itemStack the ItemStack to check
 	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
 	 */
 	public static boolean isHomeStar(ItemStack itemStack) {
-		
+
 		// if item stack is empty (null or air) return false
 		if (itemStack == null || itemStack.getType().equals(Material.AIR)) {
 			return false;
 		}
-				
+
 		// if item stack does not have display name return false
-		if (! itemStack.getItemMeta().hasDisplayName()) {
+		if (!itemStack.getItemMeta().hasDisplayName()) {
 			return false;
 		}
-		
+
 		// get item display name
 		String itemDisplayName = itemStack.getItemMeta().getDisplayName();
-		
+
 		// check that lore contains hidden token
 		return !itemDisplayName.isEmpty() && itemDisplayName.startsWith(itemTag);
 	}
-	
+
 	public static Boolean isValidIngredient() {
 		return plugin.getConfig().getBoolean("allow-in-recipes");
 	}
-	
+
 	public static int getCooldownTime() {
 		return plugin.getConfig().getInt("cooldown-time");
 	}
@@ -112,23 +114,23 @@ public final class SimpleAPI {
 	public static Boolean isCancelledOnInteraction() {
 		return plugin.getConfig().getBoolean("cancel-on-interaction");
 	}
-	
+
 	public static Boolean isWarmingUp(Player player) {
 		return plugin.teleportManager.isWarmingUp(player);
 	}
-	
+
 	public static Boolean isCoolingDown(Player player) {
 		return plugin.teleportManager.getCooldownTimeRemaining(player) > 0;
 	}
-	
+
 	public static long cooldownTimeRemaining(Player player) {
 		return plugin.teleportManager.getCooldownTimeRemaining(player);
 	}
-	
+
 	public static List<String> getEnabledWorldNames() {
 		return plugin.worldManager.getEnabledWorldNames();
 	}
-	
+
 	public static void cancelTeleport(Player player) {
 		plugin.teleportManager.cancelTeleport(player);
 	}
@@ -136,6 +138,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Create an itemStack with default material and data from config
+	 *
 	 * @return ItemStack
 	 */
 	@SuppressWarnings("WeakerAccess")
@@ -150,25 +153,25 @@ public final class SimpleAPI {
 		}
 
 		// return item stack with configured material and data
-		return new ItemStack(configMaterial,1);
+		return new ItemStack(configMaterial, 1);
 	}
 
 
 	public static String getItemName() {
 		return plugin.messageManager.getItemName();
 	}
-	
-	
+
+
 	public static Location getBlockCenteredLocation(final Location location) {
-		
+
 		// if location is null, return null
 		if (location == null) {
 			return null;
 		}
-		
+
 		final World world = location.getWorld();
 		int x = location.getBlockX();
-		int y = (int)Math.round(location.getY());
+		int y = (int) Math.round(location.getY());
 		int z = location.getBlockZ();
 		return new Location(world, x + 0.5, y, z + 0.5, location.getYaw(), location.getPitch());
 	}
@@ -177,32 +180,34 @@ public final class SimpleAPI {
 	/**
 	 * Set ItemMetaData on ItemStack using custom display name and lore from language file.<br>
 	 * Display name additionally has hidden itemTag to make it identifiable as a HomeStar item.
+	 *
 	 * @param itemStack the ItemStack on which to set HomeStar MetaData
 	 */
 	private static void setMetaData(ItemStack itemStack) {
-		
+
 		// retrieve item name and lore from language file file
 		String displayName = plugin.messageManager.getItemName();
+		//noinspection unchecked
 		List<String> configLore = plugin.messageManager.getItemLore();
-	
+
 		// allow for '&' character for color codes in name and lore
 		displayName = ChatColor.translateAlternateColorCodes('&', displayName);
-	
+
 		ArrayList<String> coloredLore = new ArrayList<>();
-		
+
 		for (String line : configLore) {
 			coloredLore.add(ChatColor.translateAlternateColorCodes('&', line));
 		}
-		
+
 		// get item metadata object
 		final ItemMeta itemMeta = itemStack.getItemMeta();
-		
+
 		// set item metadata display name to value from config file
 		itemMeta.setDisplayName(itemTag + displayName);
-		
+
 		// set item metadata Lore to value from config file
 		itemMeta.setLore(coloredLore);
-		
+
 		// save new item metadata
 		itemStack.setItemMeta(itemMeta);
 	}
