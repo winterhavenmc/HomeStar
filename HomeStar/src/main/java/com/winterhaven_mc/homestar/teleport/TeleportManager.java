@@ -5,6 +5,7 @@ import com.winterhaven_mc.homestar.SimpleAPI;
 import com.winterhaven_mc.homestar.sounds.SoundId;
 import com.winterhaven_mc.homestar.messages.MessageId;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -138,15 +139,10 @@ public final class TeleportManager {
 		// if log-use is enabled in config, write log entry
 		if (plugin.getConfig().getBoolean("log-use")) {
 
-			// construct log message
-			String configItemName = plugin.messageManager.getItemName();
-			String log_message = player.getName() + " just used a " + configItemName + " in " + player.getWorld().getName() + ".";
-
-			// strip color codes from log message
-			log_message = log_message.replaceAll("&[0-9a-fA-Fk-oK-OrR]", "");
-
 			// write message to log
-			plugin.getLogger().info(log_message);
+			plugin.getLogger().info(player.getName() + ChatColor.RESET + " used a "
+					+ plugin.messageManager.getItemName() + ChatColor.RESET + " in "
+					+ plugin.messageManager.getWorldName(player) + ChatColor.RESET + ".");
 		}
 	}
 
