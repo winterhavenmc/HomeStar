@@ -453,7 +453,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		if ((command.equalsIgnoreCase("destroy")
 				|| command.equalsIgnoreCase("all"))
-				&& sender.hasPermission("deathspawn.delete")) {
+				&& sender.hasPermission("homestar.delete")) {
 			sender.sendMessage(usageColor + "/homestar destroy");
 		}
 		if ((command.equalsIgnoreCase("help")
