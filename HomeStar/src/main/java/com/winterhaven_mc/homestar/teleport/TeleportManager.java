@@ -14,6 +14,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -55,6 +56,9 @@ public final class TeleportManager {
 	 * @param player the player being teleported
 	 */
 	public final void initiateTeleport(final Player player) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
 
 		final ItemStack playerItem = player.getInventory().getItemInMainHand();
 
@@ -153,7 +157,11 @@ public final class TeleportManager {
 	 * @param player the player whose uuid will be used as the key in the warmup map
 	 * @param taskId the warmup task Id to be placed in the warmup map
 	 */
-	private void putWarmup(final Player player, final Integer taskId) {
+	private void putWarmup(final Player player, final int taskId) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
+
 		warmupMap.put(player.getUniqueId(), taskId);
 	}
 
@@ -164,6 +172,10 @@ public final class TeleportManager {
 	 * @param player the player whose uuid will be removed from the warmup map
 	 */
 	final void removeWarmup(final Player player) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
+
 		warmupMap.remove(player.getUniqueId());
 	}
 
@@ -175,6 +187,10 @@ public final class TeleportManager {
 	 * @return {@code true} if player uuid is in the warmup map, {@code false} if it is not
 	 */
 	public final boolean isWarmingUp(final Player player) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
+
 		return warmupMap.containsKey(player.getUniqueId());
 	}
 
@@ -185,6 +201,9 @@ public final class TeleportManager {
 	 * @param player the player whose teleport will be cancelled
 	 */
 	public final void cancelTeleport(final Player player) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
 
 		// if player is in warmup hashmap, cancel delayed teleport task and remove player from warmup hashmap
 		if (warmupMap.containsKey(player.getUniqueId())) {
@@ -211,6 +230,9 @@ public final class TeleportManager {
 	 */
 	final void startCooldown(final Player player) {
 
+		// check for null parameter
+		Objects.requireNonNull(player);
+
 		// get cooldown time in seconds from config
 		final int cooldownSeconds = plugin.getConfig().getInt("teleport-cooldown");
 
@@ -236,6 +258,9 @@ public final class TeleportManager {
 	 * @return long remainingTime
 	 */
 	public final long getCooldownTimeRemaining(final Player player) {
+
+		// check for null parameter
+		Objects.requireNonNull(player);
 
 		// initialize remainingTime
 		long remainingTime = 0;
