@@ -25,13 +25,15 @@ import java.util.*;
  */
 public final class CommandManager implements CommandExecutor, TabCompleter {
 
-	private final static ChatColor helpColor = ChatColor.YELLOW;
-	private final static ChatColor usageColor = ChatColor.GOLD;
-
 	// reference to main class
 	private final PluginMain plugin;
 
-	private final static List<String> subcommands =
+	// constants for text colors
+	private final static ChatColor helpColor = ChatColor.YELLOW;
+	private final static ChatColor usageColor = ChatColor.GOLD;
+
+	// list of possible subcommands
+	private final static List<String> SUBCOMMANDS =
 			Collections.unmodifiableList(new ArrayList<>(
 					Arrays.asList("give", "destroy", "status", "reload", "help")));
 
@@ -66,7 +68,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		// return list of valid matching subcommands
 		if (args.length == 1) {
 
-			for (String subcommand : subcommands) {
+			for (String subcommand : SUBCOMMANDS) {
 				if (sender.hasPermission("homestar." + subcommand)
 						&& subcommand.startsWith(args[0].toLowerCase())) {
 					returnList.add(subcommand);
@@ -77,7 +79,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		// return list of online players, or commands if subcommand is 'help'
 		if (args.length == 2) {
 			if (args[0].equalsIgnoreCase("help")) {
-				for (String subcommand : subcommands) {
+				for (String subcommand : SUBCOMMANDS) {
 					if (sender.hasPermission("homestar." + subcommand)
 							&& subcommand.startsWith(args[0].toLowerCase())) {
 						returnList.add(subcommand);
