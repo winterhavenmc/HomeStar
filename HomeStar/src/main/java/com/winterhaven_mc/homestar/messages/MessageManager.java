@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -39,6 +40,9 @@ public final class MessageManager extends AbstractMessageManager {
 
 	@Override
 	protected Map<String, String> getDefaultReplacements(CommandSender recipient) {
+
+		// check for null parameter
+		Objects.requireNonNull(recipient);
 
 		Map<String, String> replacements = new HashMap<>();
 
@@ -80,6 +84,10 @@ public final class MessageManager extends AbstractMessageManager {
 	 */
 	public final void sendMessage(final CommandSender recipient, final MessageId messageId) {
 
+		// check for null parameters
+		Objects.requireNonNull(recipient);
+		Objects.requireNonNull(messageId);
+
 		Map<String, String> replacements = getDefaultReplacements(recipient);
 
 		//noinspection unchecked
@@ -96,6 +104,11 @@ public final class MessageManager extends AbstractMessageManager {
 	public final void sendMessage(final CommandSender recipient,
 								  final MessageId messageId,
 								  final String destinationName) {
+
+		// check for null parameters
+		Objects.requireNonNull(recipient);
+		Objects.requireNonNull(messageId);
+		Objects.requireNonNull(destinationName);
 
 		Map<String, String> replacements = getDefaultReplacements(recipient);
 
@@ -116,12 +129,16 @@ public final class MessageManager extends AbstractMessageManager {
 	 */
 	public final void sendMessage(final CommandSender recipient,
 								  final MessageId messageId,
-								  final Integer quantity) {
+								  final int quantity) {
+
+		// check for null parameters
+		Objects.requireNonNull(recipient);
+		Objects.requireNonNull(messageId);
 
 		Map<String, String> replacements = getDefaultReplacements(recipient);
 
-		replacements.put("%quantity%", quantity.toString());
-		replacements.put("%QUANTITY%", quantity.toString());
+		replacements.put("%quantity%", String.valueOf(quantity));
+		replacements.put("%QUANTITY%", String.valueOf(quantity));
 
 		//noinspection unchecked
 		sendMessage(recipient, messageId, replacements);
@@ -137,13 +154,18 @@ public final class MessageManager extends AbstractMessageManager {
 	@SuppressWarnings("unused")
 	final void sendMessage(final CommandSender recipient,
 						   final MessageId messageId,
-						   final Integer quantity,
+						   final int quantity,
 						   final Player targetPlayer) {
+
+		// check for null parameters
+		Objects.requireNonNull(recipient);
+		Objects.requireNonNull(messageId);
+		Objects.requireNonNull(targetPlayer);
 
 		Map<String, String> replacements = getDefaultReplacements(recipient);
 
-		replacements.put("%quantity%", quantity.toString());
-		replacements.put("%QUANTITY%", quantity.toString());
+		replacements.put("%quantity%", String.valueOf(quantity));
+		replacements.put("%QUANTITY%", String.valueOf(quantity));
 		replacements.put("%target_player%", targetPlayer.getName());
 		replacements.put("%TARGET_PLAYER%", ChatColor.stripColor(targetPlayer.getName()));
 
