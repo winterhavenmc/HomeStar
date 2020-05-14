@@ -17,6 +17,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Objects;
+
 import static com.winterhaven_mc.homestar.SimpleAPI.isHomeStar;
 
 
@@ -223,7 +225,7 @@ public final class PlayerEventListener implements Listener {
 		if (plugin.teleportManager.isWarmingUp(player)) {
 
 			// check for player movement other than head turning
-			if (event.getFrom().distance(event.getTo()) > 0) {
+			if (event.getFrom().distance(Objects.requireNonNull(event.getTo())) > 0) {
 				plugin.teleportManager.cancelTeleport(player);
 				plugin.messageManager.sendMessage(player, MessageId.TELEPORT_CANCELLED_MOVEMENT);
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
