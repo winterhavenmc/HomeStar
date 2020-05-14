@@ -43,6 +43,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param plugin reference to main class
 	 */
+	@SuppressWarnings("ConstantConditions")
 	public CommandManager(final PluginMain plugin) {
 
 		// set reference to main class
@@ -87,7 +88,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 				}
 			}
 			else {
-				@SuppressWarnings("deprecation")
 				List<Player> matchedPlayers = plugin.getServer().matchPlayer(args[1]);
 				for (Player player : matchedPlayers) {
 					returnList.add(player.getName());
@@ -511,7 +511,6 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 
-	@SuppressWarnings("deprecation")
 	private Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
 
 		Player targetPlayer;
@@ -543,14 +542,12 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		if (matchedPlayers.isEmpty()) {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND);
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			return null;
 		}
 		else {
 			plugin.messageManager.sendMessage(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE);
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-			return null;
 		}
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+		return null;
 	}
 
 }
