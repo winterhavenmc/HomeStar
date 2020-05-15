@@ -98,6 +98,7 @@ public final class MessageManager extends AbstractMessageManager<MessageId> {
 	 *
 	 * @param recipient player receiving message
 	 * @param messageId message identifier in messages file
+	 * @param destinationName display name of teleport dsetination
 	 */
 	public final void sendMessage(final CommandSender recipient,
 								  final MessageId messageId,
