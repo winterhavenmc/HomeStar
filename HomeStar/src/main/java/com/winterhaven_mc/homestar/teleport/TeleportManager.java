@@ -116,8 +116,16 @@ public final class TeleportManager {
 			return;
 		}
 
+		// get remove-from-inventory config setting
+		String removeFromInventory = plugin.getConfig().getString("remove-from-inventory");
+
+		// check for null
+		if (removeFromInventory == null) {
+			removeFromInventory = "on-success";
+		}
+
 		// if remove-from-inventory is configured on-use, take one spawn star item from inventory now
-		if (plugin.getConfig().getString("remove-from-inventory").equalsIgnoreCase("on-use")) {
+		if (removeFromInventory.equalsIgnoreCase("on-use")) {
 			playerItem.setAmount(playerItem.getAmount() - 1);
 			player.getInventory().setItemInMainHand(playerItem);
 		}

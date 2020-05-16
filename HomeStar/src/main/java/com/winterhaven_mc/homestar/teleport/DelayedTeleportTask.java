@@ -67,8 +67,16 @@ final class DelayedTeleportTask extends BukkitRunnable {
 			// remove player from warmup hashmap
 			plugin.teleportManager.removeWarmup(player);
 
+			// get remove-from-inventory config setting
+			String removeFromInventory = plugin.getConfig().getString("remove-from-inventory");
+
+			// check for null
+			if (removeFromInventory == null) {
+				removeFromInventory = "on-success";
+			}
+
 			// if remove-from-inventory is configured on-success, take one spawn star item from inventory now
-			if (plugin.getConfig().getString("remove-from-inventory").equalsIgnoreCase("on-success")) {
+			if (removeFromInventory.equalsIgnoreCase("on-success")) {
 
 				// try to remove one HomeStar item from player inventory
 				boolean notRemoved = true;
