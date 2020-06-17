@@ -1,5 +1,6 @@
 package com.winterhaven_mc.homestar;
 
+import com.winterhaven_mc.util.LanguageManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -158,7 +159,7 @@ public final class SimpleAPI {
 
 
 	public static String getItemName() {
-		return plugin.messageManager.getItemName();
+		return LanguageManager.getInstance().getItemName();
 	}
 
 
@@ -186,8 +187,8 @@ public final class SimpleAPI {
 	private static void setMetaData(final ItemStack itemStack) {
 
 		// retrieve item name and lore from language file file
-		String displayName = plugin.messageManager.getItemName();
-		List<String> configLore = plugin.messageManager.getItemLore();
+		String displayName = LanguageManager.getInstance().getItemName();
+		List<String> configLore = LanguageManager.getInstance().getItemLore();
 
 		// allow for '&' character for color codes in name and lore
 		displayName = ChatColor.translateAlternateColorCodes('&', displayName);

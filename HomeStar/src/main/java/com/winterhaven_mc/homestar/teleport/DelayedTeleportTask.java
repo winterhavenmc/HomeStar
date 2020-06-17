@@ -1,6 +1,7 @@
 package com.winterhaven_mc.homestar.teleport;
 
 import com.winterhaven_mc.homestar.PluginMain;
+import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.sounds.SoundId;
 import com.winterhaven_mc.homestar.messages.MessageId;
 
@@ -11,6 +12,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Objects;
+
+import static com.winterhaven_mc.homestar.messages.MessageId.*;
+import static com.winterhaven_mc.homestar.messages.Macro.*;
 
 
 final class DelayedTeleportTask extends BukkitRunnable {
@@ -92,7 +96,7 @@ final class DelayedTeleportTask extends BukkitRunnable {
 
 				// if one HomeStar item could not be removed from inventory, send message, set cooldown and return
 				if (notRemoved) {
-					plugin.messageManager.sendMessage(player, MessageId.TELEPORT_CANCELLED_NO_ITEM);
+					Message.create(player, MessageId.TELEPORT_CANCELLED_NO_ITEM).send();
 					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED_NO_ITEM);
 					plugin.teleportManager.startCooldown(player);
 					return;
@@ -106,7 +110,7 @@ final class DelayedTeleportTask extends BukkitRunnable {
 			player.teleport(destination);
 
 			// send player respawn message
-			plugin.messageManager.sendMessage(player, MessageId.TELEPORT_SUCCESS, destinationName);
+			Message.create(player, TELEPORT_SUCCESS).setMacro(DESTINATION, destinationName).send();
 
 			// play post-teleport sound if sound effects are enabled
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);

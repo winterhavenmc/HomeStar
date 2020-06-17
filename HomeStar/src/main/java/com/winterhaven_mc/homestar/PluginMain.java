@@ -5,7 +5,6 @@ import com.winterhaven_mc.util.SoundConfiguration;
 import com.winterhaven_mc.util.YamlSoundConfiguration;
 import com.winterhaven_mc.homestar.commands.CommandManager;
 import com.winterhaven_mc.homestar.teleport.TeleportManager;
-import com.winterhaven_mc.homestar.messages.MessageManager;
 import com.winterhaven_mc.homestar.listeners.PlayerEventListener;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,9 +25,7 @@ public final class PluginMain extends JavaPlugin {
 
 	public Boolean debug = getConfig().getBoolean("debug");
 
-	@SuppressWarnings("WeakerAccess")
 	public CommandManager commandManager;
-	public MessageManager messageManager;
 	public SoundConfiguration soundConfig;
 	public TeleportManager teleportManager;
 	public WorldManager worldManager;
@@ -41,9 +38,6 @@ public final class PluginMain extends JavaPlugin {
 
 		// install default config.yml if not present  
 		saveDefaultConfig();
-
-		// instantiate message manager
-		messageManager = new MessageManager(this);
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
