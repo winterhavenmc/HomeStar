@@ -1,15 +1,12 @@
 package com.winterhaven_mc.homestar;
 
+import com.winterhaven_mc.homestar.util.HomeStar;
 import com.winterhaven_mc.util.LanguageManager;
-import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -21,8 +18,7 @@ import java.util.Objects;
 @SuppressWarnings("unused")
 public final class SimpleAPI {
 
-	private final static PluginMain plugin = PluginMain.instance;
-	private final static NamespacedKey itemKey = new NamespacedKey(plugin, "isItem");
+	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 
 	/**
@@ -38,24 +34,10 @@ public final class SimpleAPI {
 	 *
 	 * @param quantity number of HomeStar items in newly created stack
 	 * @return ItemStack of HomeStar items
+	 * @deprecated use HomeStar.create(quantity) method
 	 */
 	public static ItemStack createItem(final int quantity) {
-
-		// create item stack with configured material and data
-		final ItemStack newItem = getDefaultItem();
-
-		// validate min,max quantity
-		int newQuantity = Math.max(quantity, 1);
-		newQuantity = Math.min(newQuantity, newItem.getMaxStackSize());
-
-		// set quantity
-		newItem.setAmount(newQuantity);
-
-		// set item display name and lore
-		setMetaData(newItem);
-
-		// return new item
-		return newItem;
+		return HomeStar.create(quantity);
 	}
 
 
@@ -64,73 +46,134 @@ public final class SimpleAPI {
 	 *
 	 * @param itemStack the ItemStack to check
 	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
+	 * @deprecated use HomeStar.isItem(itemStack) method
 	 */
 	public static boolean isHomeStar(final ItemStack itemStack) {
-
-		// if item stack is empty (null or air) return false
-		if (itemStack == null || itemStack.getType().equals(Material.AIR)) {
-			return false;
-		}
-
-		// if item stack does not have metadata return false
-		if (!itemStack.hasItemMeta()) {
-			return false;
-		}
-
-		// if item stack does not have persistent data tag, return false
-		//noinspection ConstantConditions
-		return itemStack.getItemMeta().getPersistentDataContainer().has(itemKey, PersistentDataType.BYTE);
-
+		return HomeStar.isItem(itemStack);
 	}
 
-	public static Boolean isValidIngredient() {
+
+	/**
+	 * Get configuration setting
+	 *
+	 * @return boolean configuration setting
+	 * @deprecated configuration settings can be accessed through plugin manager
+	 */
+	public static boolean isValidIngredient() {
 		return plugin.getConfig().getBoolean("allow-in-recipes");
 	}
 
+
+	/**
+	 * Get configuration setting
+	 *
+	 * @return boolean configuration setting
+	 * @deprecated configuration settings can be accessed through plugin manager
+	 */
 	public static int getCooldownTime() {
 		return plugin.getConfig().getInt("cooldown-time");
 	}
 
+
+	/**
+	 * Get configuration setting
+	 *
+	 * @return boolean configuration setting
+	 * @deprecated configuration settings can be accessed through plugin manager
+	 */
 	public static int getWarmupTime() {
 		return plugin.getConfig().getInt("warmup-time");
 	}
 
 
+	/**
+	 * Get configuration setting
+	 *
+	 * @return boolean configuration setting
+	 * @deprecated configuration settings can be accessed through plugin manager
+	 */
 	public static int getMinSpawnDistance() {
 		return plugin.getConfig().getInt("minimum-distance");
 	}
 
 
+	/**
+	 * Get configuration setting
+	 *
+	 * @return boolean configuration setting
+	 * @deprecated configuration settings can be accessed through plugin manager
+	 */
 	public static Boolean isCancelledOnDamage() {
 		return plugin.getConfig().getBoolean("cancel-on-damage");
 	}
 
 
+	/**
+	 * Get configuration setting
+	 *
+	 * @return boolean configuration setting
+	 * @deprecated configuration settings can be accessed through plugin manager
+	 */
 	public static Boolean isCancelledOnMovement() {
 		return plugin.getConfig().getBoolean("cancel-on-movement");
 	}
 
 
+	/**
+	 * Get configuration setting
+	 *
+	 * @return boolean configuration setting
+	 * @deprecated configuration settings can be accessed through plugin manager
+	 */
 	public static Boolean isCancelledOnInteraction() {
 		return plugin.getConfig().getBoolean("cancel-on-interaction");
 	}
 
+
+	/**
+	 * Test if player is warming up for pending teleport
+	 * @param player the player to check if warming up
+	 * @return boolean {@code true} if player is currently warming up, {@code false} if not
+	 */
 	public static Boolean isWarmingUp(final Player player) {
 		return plugin.teleportManager.isWarmingUp(player);
 	}
 
-	public static Boolean isCoolingDown(final Player player) {
+
+	/**
+	 * Test if player is currently cooling down for item use
+	 * @param player the player to check if cooling down
+	 * @return boolean {@code true} if player is currently cooling down, {@code false} if not
+	 */
+	public static boolean isCoolingDown(final Player player) {
 		return plugin.teleportManager.getCooldownTimeRemaining(player) > 0;
 	}
 
+
+	/**
+	 * Get item use cooldown time remaining
+	 *
+	 * @param player the player to check cooldown time remaining
+	 * @return remaining time
+	 */
 	public static long cooldownTimeRemaining(final Player player) {
 		return plugin.teleportManager.getCooldownTimeRemaining(player);
 	}
 
+
+	/**
+	 * Get list of worlds in which plugin is enabled
+	 * @return List of world names
+	 */
 	public static List<String> getEnabledWorldNames() {
 		return plugin.worldManager.getEnabledWorldNames();
 	}
 
+
+	/**
+	 * Cancel player teleport
+	 * @param player the player to cancel teleporting
+	 */
 	public static void cancelTeleport(final Player player) {
 		plugin.teleportManager.cancelTeleport(player);
 	}
@@ -140,21 +183,10 @@ public final class SimpleAPI {
 	 * Create an itemStack with default material and data from config
 	 *
 	 * @return ItemStack
+	 * @deprecated use HomeStar.getDefaultItem()
 	 */
-	@SuppressWarnings("WeakerAccess")
 	public static ItemStack getDefaultItem() {
-
-		// try to match material
-		Material configMaterial = Material.matchMaterial(
-				Objects.requireNonNull(plugin.getConfig().getString("item-material")));
-
-		// if no match default to nether star
-		if (configMaterial == null) {
-			configMaterial = Material.NETHER_STAR;
-		}
-
-		// return item stack with configured material and data
-		return new ItemStack(configMaterial, 1);
+		return HomeStar.getDefaultItem();
 	}
 
 
@@ -163,57 +195,15 @@ public final class SimpleAPI {
 	}
 
 
-	public static Location getBlockCenteredLocation(final Location location) {
-
-		// if location is null, return null
-		if (location == null) {
-			return null;
-		}
-
-		final World world = location.getWorld();
-		int x = location.getBlockX();
-		int y = (int) Math.round(location.getY());
-		int z = location.getBlockZ();
-		return new Location(world, x + 0.5, y, z + 0.5, location.getYaw(), location.getPitch());
-	}
-
-
 	/**
 	 * Set ItemMetaData on ItemStack using custom display name and lore from language file.<br>
 	 * Display name additionally has hidden itemTag to make it identifiable as a HomeStar item.
 	 *
 	 * @param itemStack the ItemStack on which to set HomeStar MetaData
+	 * @deprecated use HomeStar.setMetaData()
 	 */
 	private static void setMetaData(final ItemStack itemStack) {
-
-		// retrieve item name and lore from language file file
-		String displayName = LanguageManager.getInstance().getItemName();
-		List<String> configLore = LanguageManager.getInstance().getItemLore();
-
-		// allow for '&' character for color codes in name and lore
-		displayName = ChatColor.translateAlternateColorCodes('&', displayName);
-
-		ArrayList<String> coloredLore = new ArrayList<>();
-
-		for (String line : configLore) {
-			coloredLore.add(ChatColor.translateAlternateColorCodes('&', line));
-		}
-
-		// get item metadata object
-		final ItemMeta itemMeta = itemStack.getItemMeta();
-
-		// set item metadata display name to value from config file
-		//noinspection ConstantConditions
-		itemMeta.setDisplayName(ChatColor.RESET + displayName);
-
-		// set item metadata Lore to value from config file
-		itemMeta.setLore(coloredLore);
-
-		// set persistent data in item metadata
-		itemMeta.getPersistentDataContainer().set(itemKey, PersistentDataType.BYTE, (byte) 1);
-
-		// save new item metadata
-		itemStack.setItemMeta(itemMeta);
+		HomeStar.setMetaData(itemStack);
 	}
 
 }
