@@ -1,7 +1,6 @@
 package com.winterhaven_mc.homestar.teleport;
 
 import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.homestar.SimpleAPI;
 import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.sounds.SoundId;
 
@@ -64,11 +63,14 @@ public final class TeleportManager {
 		// check for null parameter
 		Objects.requireNonNull(player);
 
+		// get item in player hand
 		final ItemStack playerItem = player.getInventory().getItemInMainHand();
 
 		// if player cooldown has not expired, send player cooldown message and return
-		if (plugin.teleportManager.getCooldownTimeRemaining(player) > 0) {
-			Message.create(player, TELEPORT_COOLDOWN).send();
+		if (getCooldownTimeRemaining(player) > 0) {
+			Message.create(player, TELEPORT_COOLDOWN)
+					.setMacro(DURATION, getCooldownTimeRemaining(player))
+					.send();
 			return;
 		}
 
@@ -88,7 +90,8 @@ public final class TeleportManager {
 
 		// if center-on-block is configured true, get block centered location
 		if (plugin.getConfig().getBoolean("center-on-block")) {
-			destination = SimpleAPI.getBlockCenteredLocation(destination);
+			//noinspection ConstantConditions
+			destination.add( 0.5, 0.0, 0.5);
 		}
 
 		// if bedspawn location is null, check if bedspawn-fallback is configured true
@@ -135,19 +138,20 @@ public final class TeleportManager {
 		}
 
 		// if warmup setting is greater than zero, send warmup message
-		if (plugin.getConfig().getInt("teleport-warmup") > 0) {
-			Message.create(player, TELEPORT_WARMUP).setMacro(DESTINATION, destinationName).send();
+		int warmupTime = plugin.getConfig().getInt("teleport-warmup");
+		if (warmupTime > 0) {
+			Message.create(player, TELEPORT_WARMUP)
+					.setMacro(DESTINATION, destinationName)
+					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(warmupTime))
+					.send();
 
 			// if enabled, play sound effect
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_WARMUP);
 		}
 
 		// initiate delayed teleport for player to destination
-		BukkitTask teleportTask =
-				new DelayedTeleportTask(player,
-						destination,
-						destinationName,
-						playerItem.clone()).runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20);
+		BukkitTask teleportTask = new DelayedTeleportTask(player, destination, destinationName,	playerItem)
+				.runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20);
 
 		// insert player and taskId into warmup hashmap
 		plugin.teleportManager.putWarmup(player, teleportTask.getTaskId());
