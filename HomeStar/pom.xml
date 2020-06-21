@@ -43,11 +43,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- MessageManagerLib -->
+		<!-- MessengerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>messenger-lib</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
@@ -99,9 +99,9 @@
 							<minimizeJar>true</minimizeJar>
 							<artifactSet>
 								<includes>
-									<include>com.winterhaven-mc:world-manager-lib</include>
 									<include>com.winterhaven-mc:messenger-lib</include>
 									<include>com.winterhaven-mc:sound-config-lib</include>
+									<include>com.winterhaven-mc:world-manager-lib</include>
 								</includes>
 							</artifactSet>
 							<relocations>
