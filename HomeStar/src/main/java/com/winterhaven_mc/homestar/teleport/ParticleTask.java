@@ -4,6 +4,7 @@ import com.winterhaven_mc.homestar.PluginMain;
 
 import org.bukkit.Effect;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -17,7 +18,7 @@ import java.util.Objects;
  */
 final class ParticleTask extends BukkitRunnable {
 
-	private final PluginMain plugin = PluginMain.instance;
+	private final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 	private final Player player;
 
 
