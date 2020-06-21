@@ -1,12 +1,12 @@
 package com.winterhaven_mc.homestar.commands;
 
 import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.homestar.SimpleAPI;
 import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.messages.MessageId;
 import com.winterhaven_mc.homestar.sounds.SoundId;
-
+import com.winterhaven_mc.homestar.util.HomeStar;
 import com.winterhaven_mc.util.LanguageManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 import static com.winterhaven_mc.homestar.messages.Macro.*;
@@ -47,17 +48,16 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 *
 	 * @param plugin reference to main class
 	 */
-	@SuppressWarnings("ConstantConditions")
 	public CommandManager(final PluginMain plugin) {
 
 		// set reference to main class
 		this.plugin = plugin;
 
 		// register this class as command executor
-		plugin.getCommand("homestar").setExecutor(this);
+		Objects.requireNonNull(plugin.getCommand("homestar")).setExecutor(this);
 
 		// register this class as tab completer
-		plugin.getCommand("homestar").setTabCompleter(this);
+		Objects.requireNonNull(plugin.getCommand("homestar")).setTabCompleter(this);
 	}
 
 
@@ -198,10 +198,14 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 				+ ChatColor.RESET + plugin.getConfig().getInt("minimum-distance"));
 
 		sender.sendMessage(ChatColor.GREEN + "Warmup: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("teleport-warmup") + " seconds");
+				+ ChatColor.RESET
+				+ LanguageManager.getInstance().getTimeString(TimeUnit.SECONDS.toMillis(
+				plugin.getConfig().getInt("teleport-warmup"))));
 
 		sender.sendMessage(ChatColor.GREEN + "Cooldown: "
-				+ ChatColor.RESET + plugin.getConfig().getInt("teleport-cooldown") + " seconds");
+				+ ChatColor.RESET
+				+ LanguageManager.getInstance().getTimeString(TimeUnit.SECONDS.toMillis(
+				plugin.getConfig().getInt("teleport-cooldown"))));
 
 		sender.sendMessage(ChatColor.GREEN + "Left-click allowed: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("left-click"));
@@ -267,7 +271,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		plugin.worldManager.reload();
 
 		// reload messages
-		LanguageManager.getInstance().reload();
+		LanguageManager.reload();
 
 		// reload sounds
 		plugin.soundConfig.reload();
@@ -352,7 +356,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 
 		// add specified quantity of homestar(s) to player inventory
-		HashMap<Integer, ItemStack> noFit = targetPlayer.getInventory().addItem(SimpleAPI.createItem(quantity));
+		HashMap<Integer, ItemStack> noFit = targetPlayer.getInventory().addItem(HomeStar.create(quantity));
 
 		// count items that didn't fit in inventory
 		int noFitCount = 0;
@@ -374,7 +378,10 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		if (!sender.getName().equals(targetPlayer.getName())) {
 
 			// send message and play sound to giver
-			Message.create(sender, COMMAND_SUCCESS_GIVE).setMacro(QUANTITY, quantity).send();
+			Message.create(sender, COMMAND_SUCCESS_GIVE)
+					.setMacro(QUANTITY, quantity)
+					.setMacro(TARGET_PLAYER, targetPlayer)
+					.send();
 
 			// if giver is in game, play sound
 			if (sender instanceof Player) {
@@ -382,7 +389,10 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 			}
 
 			// send message to target player
-			Message.create(targetPlayer, COMMAND_SUCCESS_GIVE_TARGET).setMacro(QUANTITY, quantity).send();
+			Message.create(targetPlayer, COMMAND_SUCCESS_GIVE_TARGET)
+					.setMacro(QUANTITY, quantity)
+					.setMacro(TARGET_PLAYER, sender)
+					.send();
 		}
 		// play sound to target player
 		plugin.soundConfig.playSound(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
@@ -415,7 +425,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		ItemStack playerItem = player.getInventory().getItemInMainHand();
 
 		// check that player is holding a homestar stack
-		if (!SimpleAPI.isHomeStar(playerItem)) {
+		if (!HomeStar.isItem(playerItem)) {
 			Message.create(sender, COMMAND_FAIL_DESTROY_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
