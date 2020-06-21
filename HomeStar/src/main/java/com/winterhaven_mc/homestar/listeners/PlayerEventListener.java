@@ -5,6 +5,7 @@ import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.sounds.SoundId;
 import com.winterhaven_mc.homestar.messages.MessageId;
 
+import com.winterhaven_mc.homestar.util.HomeStar;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Objects;
 
-import static com.winterhaven_mc.homestar.SimpleAPI.isHomeStar;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
 
@@ -80,7 +80,7 @@ public final class PlayerEventListener implements Listener {
 		}
 
 		// if item used is not a HomeStar, do nothing and return
-		if (!isHomeStar(player.getItemInHand())) {
+		if (!HomeStar.isItem(player.getItemInHand())) {
 			return;
 		}
 
@@ -167,7 +167,7 @@ public final class PlayerEventListener implements Listener {
 
 		// if crafting inventory contains HomeStar item, set result item to null
 		for (ItemStack itemStack : event.getInventory()) {
-			if (isHomeStar(itemStack)) {
+			if (HomeStar.isItem(itemStack)) {
 				event.getInventory().setResult(null);
 			}
 		}
