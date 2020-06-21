@@ -8,6 +8,7 @@ import com.winterhaven_mc.homestar.messages.MessageId;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -20,7 +21,7 @@ import static com.winterhaven_mc.homestar.messages.Macro.*;
 final class DelayedTeleportTask extends BukkitRunnable {
 
 	// reference to main class
-	private final PluginMain plugin = PluginMain.instance;
+	private final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 	// player being teleported
 	private final Player player;
