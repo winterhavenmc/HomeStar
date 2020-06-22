@@ -379,7 +379,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 			// send message and play sound to giver
 			Message.create(sender, COMMAND_SUCCESS_GIVE)
-					.setMacro(QUANTITY, quantity)
+					.setMacro(ITEM_QUANTITY, quantity)
 					.setMacro(TARGET_PLAYER, targetPlayer)
 					.send();
 
@@ -390,7 +390,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 			// send message to target player
 			Message.create(targetPlayer, COMMAND_SUCCESS_GIVE_TARGET)
-					.setMacro(QUANTITY, quantity)
+					.setMacro(ITEM_QUANTITY, quantity)
 					.setMacro(TARGET_PLAYER, sender)
 					.send();
 		}
@@ -433,7 +433,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		int quantity = playerItem.getAmount();
 		playerItem.setAmount(0);
 		player.getInventory().setItemInMainHand(playerItem);
-		Message.create(sender, COMMAND_SUCCESS_DESTROY).setMacro(QUANTITY, quantity).send();
+		Message.create(sender, COMMAND_SUCCESS_DESTROY).setMacro(ITEM_QUANTITY, quantity).send();
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_DESTROY);
 		return true;
 	}

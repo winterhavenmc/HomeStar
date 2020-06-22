@@ -4,7 +4,7 @@ public enum Macro {
 
 	DESTINATION,
 	DURATION,
-	QUANTITY,
+	ITEM_QUANTITY,
 	TARGET_PLAYER,
 
 }
