@@ -138,7 +138,7 @@ public final class TeleportManager {
 		}
 
 		// if warmup setting is greater than zero, send warmup message
-		int warmupTime = plugin.getConfig().getInt("teleport-warmup");
+		long warmupTime = plugin.getConfig().getLong("teleport-warmup");
 		if (warmupTime > 0) {
 			Message.create(player, TELEPORT_WARMUP)
 					.setMacro(DESTINATION, destinationName)
