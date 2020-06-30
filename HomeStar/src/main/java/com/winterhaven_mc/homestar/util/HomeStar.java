@@ -118,11 +118,11 @@ public class HomeStar {
 	public static void setMetaData(final ItemStack itemStack) {
 
 		// retrieve item name and lore from language file file
-		String displayName = languageManager.getItemName();
+		String itemName = languageManager.getItemName();
 		List<String> configLore = languageManager.getItemLore();
 
 		// allow for '&' character for color codes in name and lore
-		displayName = ChatColor.translateAlternateColorCodes('&', displayName);
+		itemName = ChatColor.translateAlternateColorCodes('&', itemName);
 
 		ArrayList<String> coloredLore = new ArrayList<>();
 
@@ -135,7 +135,7 @@ public class HomeStar {
 
 		// set item metadata display name to value from config file
 		//noinspection ConstantConditions
-		itemMeta.setDisplayName(ChatColor.RESET + displayName);
+		itemMeta.setDisplayName(itemName);
 
 		// set item metadata Lore to value from config file
 		itemMeta.setLore(coloredLore);
