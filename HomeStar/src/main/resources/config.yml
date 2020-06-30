@@ -61,7 +61,7 @@ cancel-on-interaction: false
 max-give-amount: -1
 
 # lightning strike at destination on use
-lightning: true
+lightning: false
 
 # write log entry on use
 log-use: true
