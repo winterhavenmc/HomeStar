@@ -6,6 +6,9 @@ import com.winterhaven_mc.homestar.sounds.SoundId;
 import com.winterhaven_mc.homestar.messages.MessageId;
 
 import com.winterhaven_mc.homestar.util.HomeStar;
+import org.bukkit.Material;
+import org.bukkit.block.TileState;
+import org.bukkit.block.data.Openable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,7 +22,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Objects;
+import java.util.*;
 
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
@@ -34,6 +37,14 @@ public final class PlayerEventListener implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
+
+	// set to hold craft table materials
+	private final Set<Material> craftTables =  Collections.unmodifiableSet(
+			new HashSet<>(Arrays.asList(
+					Material.CARTOGRAPHY_TABLE,
+					Material.CRAFTING_TABLE,
+					Material.FLETCHING_TABLE,
+					Material.SMITHING_TABLE )));
 
 
 	/**
@@ -91,6 +102,25 @@ public final class PlayerEventListener implements Listener {
 				&& !(event.getAction().equals(Action.LEFT_CLICK_AIR)
 				|| event.getAction().equals(Action.LEFT_CLICK_BLOCK)))) {
 			return;
+		}
+
+		// check if clicked block is null
+		if (event.getClickedBlock() != null) {
+
+			// allow use of doors, gates and trap doors with item in hand
+			if (event.getClickedBlock().getBlockData() instanceof Openable) {
+				return;
+			}
+
+			// allow use of containers and other tile state blocks with item in hand
+			if (event.getClickedBlock().getState() instanceof TileState) {
+				return;
+			}
+
+			// allow use of crafting tables with item in hand
+			if (craftTables.contains(event.getClickedBlock().getType())) {
+				return;
+			}
 		}
 
 		// cancel event
