@@ -1,7 +1,6 @@
 package com.winterhaven_mc.homestar;
 
 import com.winterhaven_mc.homestar.util.HomeStar;
-import com.winterhaven_mc.util.LanguageManager;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -190,8 +189,14 @@ public final class SimpleAPI {
 	}
 
 
+	/**
+	 * Get configured item display name
+	 *
+	 * @return String - configured item display name
+	 * @deprecated use HomeStar.getItemName()
+	 */
 	public static String getItemName() {
-		return LanguageManager.getInstance().getItemName();
+		return HomeStar.getItemName();
 	}
 
 

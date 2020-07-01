@@ -88,11 +88,20 @@ public class HomeStar {
 
 
 	/**
+	 * Get configured item display name
+	 *
+	 * @return String - configured item display name
+	 */
+	public static String getItemName() {
+		return LanguageManager.getInstance().getItemName();
+	}
+
+
+	/**
 	 * Create an itemStack with default material and data from config
 	 *
 	 * @return ItemStack
 	 */
-	@SuppressWarnings("WeakerAccess")
 	public static ItemStack getDefaultItem() {
 
 		// try to match material
