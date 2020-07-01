@@ -23,6 +23,9 @@ import static com.winterhaven_mc.homestar.messages.Macro.*;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
 
+/**
+ * Class that manages player teleportation, including warmup and cooldown.
+ */
 public final class TeleportManager {
 
 	// reference to main class
