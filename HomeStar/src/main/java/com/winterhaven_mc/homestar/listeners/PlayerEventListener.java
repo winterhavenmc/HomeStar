@@ -61,6 +61,8 @@ public final class PlayerEventListener implements Listener {
 
 	/**
 	 * PlayerInteract event handler
+	 *
+	 * @param event PlayerInteractEvent handled by this method
 	 */
 	@EventHandler
 	final void onPlayerUse(final PlayerInteractEvent event) {
@@ -149,7 +151,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * Player death event handler
 	 *
-	 * @param event PlayerDeathEvent
+	 * @param event PlayerDeathEvent handled by this method
 	 */
 	@EventHandler
 	final void onPlayerDeath(final PlayerDeathEvent event) {
@@ -165,7 +167,7 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * Player quit event handler
 	 *
-	 * @param event PlayerQuitEvent
+	 * @param event PlayerQuitEvent handled by this method
 	 */
 	@EventHandler
 	final void onPlayerQuit(final PlayerQuitEvent event) {
@@ -181,7 +183,7 @@ public final class PlayerEventListener implements Listener {
 	 * Prepare Item Craft event handler<br>
 	 * Prevents HomeStar items from being used in crafting recipes if configured
 	 *
-	 * @param event PrepareItemCraftEvent
+	 * @param event PrepareItemCraftEvent handled by this method
 	 */
 	@EventHandler
 	final void onCraftPrepare(final PrepareItemCraftEvent event) {
@@ -204,7 +206,7 @@ public final class PlayerEventListener implements Listener {
 	 * EntityDamageByEntity event handler<br>
 	 * Cancels pending teleport if player takes damage during warmup
 	 *
-	 * @param event EntityDamageEvent
+	 * @param event EntityDamageEvent handled by this method
 	 */
 	@EventHandler
 	final void onEntityDamage(final EntityDamageEvent event) {
@@ -237,7 +239,7 @@ public final class PlayerEventListener implements Listener {
 	 * PlayerMoveEvent handler<br>
 	 * Cancels teleport if player moves during warmup
 	 *
-	 * @param event PlayerMoveEvent
+	 * @param event PlayerMoveEvent handled by this method
 	 */
 	@EventHandler
 	final void onPlayerMovement(final PlayerMoveEvent event) {
