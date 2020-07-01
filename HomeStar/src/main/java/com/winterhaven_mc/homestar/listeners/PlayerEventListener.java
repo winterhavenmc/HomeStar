@@ -29,9 +29,6 @@ import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
 /**
  * Implements player event listener for HomeStar events
- *
- * @author Tim Savage
- * @version 1.0
  */
 public final class PlayerEventListener implements Listener {
 
