@@ -22,6 +22,7 @@ import java.util.concurrent.TimeUnit;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 import static com.winterhaven_mc.homestar.messages.Macro.*;
 
+
 /**
  * Implements command executor for HomeStar commands
  *
@@ -70,42 +71,30 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 		final List<String> returnList = new ArrayList<>();
 
-		// return list of valid matching subcommands
-		if (args.length == 1) {
+		switch (args.length) {
+			case 1: // return list of valid matching subcommands
+				returnList.addAll(matchSubcommand(sender, args[0]));
+				break;
 
-			for (String subcommand : SUBCOMMANDS) {
-				if (sender.hasPermission("homestar." + subcommand)
-						&& subcommand.startsWith(args[0].toLowerCase())) {
-					returnList.add(subcommand);
+			case 2: // return list of online players, or commands if subcommand is 'help'
+				if (args[0].equalsIgnoreCase("help")) {
+					returnList.addAll(matchSubcommand(sender, args[1]));
 				}
-			}
-		}
-
-		// return list of online players, or commands if subcommand is 'help'
-		if (args.length == 2) {
-			if (args[0].equalsIgnoreCase("help")) {
-				for (String subcommand : SUBCOMMANDS) {
-					if (sender.hasPermission("homestar." + subcommand)
-							&& subcommand.startsWith(args[0].toLowerCase())) {
-						returnList.add(subcommand);
+				else {
+					List<Player> matchedPlayers = plugin.getServer().matchPlayer(args[1]);
+					for (Player player : matchedPlayers) {
+						returnList.add(player.getName());
 					}
 				}
-			}
-			else {
-				List<Player> matchedPlayers = plugin.getServer().matchPlayer(args[1]);
-				for (Player player : matchedPlayers) {
-					returnList.add(player.getName());
-				}
-			}
-		}
+				break;
 
-		// return some useful quantities
-		if (args.length == 3) {
-			returnList.add("1");
-			returnList.add("2");
-			returnList.add("3");
-			returnList.add("5");
-			returnList.add("10");
+			case 3: // return some useful quantities
+				returnList.add("1");
+				returnList.add("2");
+				returnList.add("3");
+				returnList.add("5");
+				returnList.add("10");
+				break;
 		}
 
 		return returnList;
@@ -283,7 +272,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 
 
 	/**
-	 * Give target player a homestar item
+	 * Give target player a homeStar item
 	 *
 	 * @param sender command sender
 	 * @param args   command arguments
@@ -522,6 +511,14 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	}
 
 
+	/**
+	 * Match online player; sends appropriate message for offline or unknown players
+	 *
+	 * @param sender the command sender
+	 * @param targetPlayerName the player name to match
+	 *
+	 * @return Player - a matching player object, or null if no match
+	 */
 	private Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
 
 		Player targetPlayer;
@@ -559,6 +556,33 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		}
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		return null;
+	}
+
+
+	/**
+	 * Match list of subcommands for which player has permission
+	 *
+	 * @param sender the command sender (player) to check for permission
+	 * @param arg the partial subcommand string to match
+	 * @return List of String - matching subcommands
+	 */
+	List<String> matchSubcommand(CommandSender sender, String arg) {
+
+		// initialize return list
+		final List<String> returnList = new ArrayList<>();
+
+		// iterate over subcommands
+		for (String subcommand : SUBCOMMANDS) {
+
+			// if player has permission for subcommand matching string, add subcommand to return list
+			if (sender.hasPermission("spawnstar." + subcommand)
+					&& subcommand.toLowerCase().startsWith(arg.toLowerCase())) {
+				returnList.add(subcommand);
+			}
+		}
+
+		// return list of matching subcommands
+		return returnList;
 	}
 
 }
