@@ -18,6 +18,10 @@ import static com.winterhaven_mc.homestar.messages.MessageId.*;
 import static com.winterhaven_mc.homestar.messages.Macro.*;
 
 
+/**
+ * Class that extends BukkitRunnable to teleport a player to their home location
+ * after a configured warmup period.
+ */
 final class DelayedTeleportTask extends BukkitRunnable {
 
 	// reference to main class
@@ -41,6 +45,11 @@ final class DelayedTeleportTask extends BukkitRunnable {
 
 	/**
 	 * Class constructor method
+	 *
+	 * @param player the player to be teleported
+	 * @param destination location where player will be teleported
+	 * @param destinationName the configured name of the teleport destination
+	 * @param playerItem the item used to initiate teleport
 	 */
 	DelayedTeleportTask(final Player player, final Location destination,
 						final String destinationName, final ItemStack playerItem) {
