@@ -4,6 +4,7 @@
 	<artifactId>HomeStar</artifactId>
 	<version>1.16.0</version>
 	<name>HomeStar</name>
+	<url>https://github.com/tim-savage/HomeStar</url>
 
 	<properties>
 		<project.author>Tim Savage</project.author>
