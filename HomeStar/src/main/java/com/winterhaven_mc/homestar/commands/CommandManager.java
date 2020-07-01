@@ -24,10 +24,7 @@ import static com.winterhaven_mc.homestar.messages.Macro.*;
 
 
 /**
- * Implements command executor for HomeStar commands
- *
- * @author Tim Savage
- * @version 1.0
+ * Class that implements command executor and tab completer for HomeStar commands
  */
 public final class CommandManager implements CommandExecutor, TabCompleter {
 
