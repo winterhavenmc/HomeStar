@@ -12,12 +12,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 
 /**
- * Bukkit plugin to create items that return player to
- * bed spawn when clicked.<br>
+ * Bukkit plugin to create items that return player to bed spawn when clicked.<br>
  * An alternative to the /home command.
  *
  * @author Tim Savage
- * @version 1.0
  */
 public final class PluginMain extends JavaPlugin {
 
