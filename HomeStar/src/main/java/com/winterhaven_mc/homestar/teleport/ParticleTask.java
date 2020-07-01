@@ -22,6 +22,8 @@ final class ParticleTask extends BukkitRunnable {
 
 	/**
 	 * Class constructor method
+	 *
+	 * @param player the player to emit particles
 	 */
 	ParticleTask(final Player player) {
 
