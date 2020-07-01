@@ -13,8 +13,6 @@ import java.util.Objects;
 /**
  * A self-cancelling, repeating task that generates ender signal particles
  * at a player's location as long as they are in the warmup hashmap
- *
- * @author savage
  */
 final class ParticleTask extends BukkitRunnable {
 
