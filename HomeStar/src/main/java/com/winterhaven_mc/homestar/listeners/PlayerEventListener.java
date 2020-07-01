@@ -65,7 +65,6 @@ public final class PlayerEventListener implements Listener {
 	/**
 	 * PlayerInteract event handler
 	 */
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	final void onPlayerUse(final PlayerInteractEvent event) {
 
@@ -91,7 +90,7 @@ public final class PlayerEventListener implements Listener {
 		}
 
 		// if item used is not a HomeStar, do nothing and return
-		if (!HomeStar.isItem(player.getItemInHand())) {
+		if (!HomeStar.isItem(event.getItem())) {
 			return;
 		}
 
