@@ -150,6 +150,16 @@ MESSAGES:
     enabled: true
     string: '&3Bed spawn is missing or obstructed!'
 
+  TELEPORT_FAIL_SHIFT_CLICK:
+    enabled: true
+    repeat-delay: 1
+    string: '&3You must shift-click to use a %ITEM%.'
+
+  TELEPORT_FAIL_WORLD_DISABLED:
+    enabled: true
+    repeat-delay: 1
+    string: '&3HomeStars are not enabled in this world.'
+
   TELEPORT_MIN_DISTANCE:
     enabled: true
     repeat-delay: 1
@@ -162,13 +172,3 @@ MESSAGES:
   TELEPORT_WARMUP:
     enabled: true
     string: '&3Teleporting to %DESTINATION% in &b%DURATION%...'
-
-  USAGE_SHIFT_CLICK:
-    enabled: true
-    repeat-delay: 1
-    string: '&3You must shift-click to use a %ITEM%.'
-
-  USAGE_WORLD_DISABLED:
-    enabled: true
-    repeat-delay: 1
-    string: '&3HomeStars are not enabled in this world.'
