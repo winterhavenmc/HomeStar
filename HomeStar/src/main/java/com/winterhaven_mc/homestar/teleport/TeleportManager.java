@@ -222,7 +222,9 @@ public final class TeleportManager {
 	public final void cancelTeleport(final Player player) {
 
 		// check for null parameter
-		Objects.requireNonNull(player);
+		if (player == null) {
+			return;
+		}
 
 		// if player is in warmup hashmap, cancel delayed teleport task and remove player from warmup hashmap
 		if (warmupMap.containsKey(player.getUniqueId())) {

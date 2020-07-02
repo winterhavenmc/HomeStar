@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
@@ -34,6 +35,9 @@ public final class PlayerEventListener implements Listener {
 
 	// reference to main class
 	private final PluginMain plugin;
+
+	// player interact map
+	private final static Map<UUID,Long> teleportInitiated = new ConcurrentHashMap<>();
 
 	// set to hold craft table materials
 	private final Set<Material> craftTables =  Collections.unmodifiableSet(
@@ -77,11 +81,23 @@ public final class PlayerEventListener implements Listener {
 			if (plugin.teleportManager.isWarmingUp(player)) {
 
 				// if player is interacting with a block, cancel teleport, output message and return
-				if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)
+						|| event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+
+					// if player's last teleport initiated time is less than 50 milliseconds ago, do nothing and return
+					// this is a workaround for event double firing (once for each hand) on every player interaction
+					if (!teleportInitiated.containsKey(player.getUniqueId())
+							|| System.currentTimeMillis() - teleportInitiated.get(player.getUniqueId()) < 50L) {
+						return;
+					}
+
+					// cancel teleport
 					plugin.teleportManager.cancelTeleport(player);
+
+					// send cancelled teleport message
 					Message.create(player, TELEPORT_CANCELLED_INTERACTION).send();
 
-					// play sound effects if enabled
+					// play cancelled teleport sound
 					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 					return;
 				}
@@ -145,6 +161,9 @@ public final class PlayerEventListener implements Listener {
 
 		// initiate teleport
 		plugin.teleportManager.initiateTeleport(player);
+
+		// put key: player uuid, value: current time in teleport initiated map
+		teleportInitiated.put(player.getUniqueId(), System.currentTimeMillis());
 	}
 
 
