@@ -167,4 +167,8 @@ MESSAGES:
     enabled: true
     repeat-delay: 1
     string: '&3You must shift-click to use a %ITEM%.'
- 
+
+  USAGE_WORLD_DISABLED:
+    enabled: true
+    repeat-delay: 1
+    string: '&3HomeStars are not enabled in this world.'
