@@ -38,5 +38,6 @@ public enum MessageId {
 	TELEPORT_WARMUP,
 
 	USAGE_SHIFT_CLICK,
+	USAGE_WORLD_DISABLED,
 
 }
