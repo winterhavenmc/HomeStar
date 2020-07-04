@@ -183,6 +183,7 @@ public final class PlayerEventListener implements Listener {
 			// initiate teleport
 			plugin.teleportManager.initiateTeleport(player);
 		}
+
 		// cancel event
 		event.setCancelled(true);
 	}
