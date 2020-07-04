@@ -563,7 +563,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * @param arg the partial subcommand string to match
 	 * @return List of String - matching subcommands
 	 */
-	List<String> matchSubcommand(CommandSender sender, String arg) {
+	List<String> matchSubcommand(final CommandSender sender, final String arg) {
 
 		// initialize return list
 		final List<String> returnList = new ArrayList<>();
