@@ -13,9 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
@@ -31,11 +29,14 @@ public final class TeleportManager {
 	// reference to main class
 	private final PluginMain plugin;
 
-	// hashmap containing player UUID as key and cooldown expire time in milliseconds as value
+	// Map containing player UUID as key and cooldown expire time in milliseconds as value
 	private final Map<UUID, Long> cooldownMap;
 
-	// HashMap containing player UUID as key and warmup task id as value
+	// Map containing player UUID as key and warmup task id as value
 	private final Map<UUID, Integer> warmupMap;
+
+	// Map containing player uuid for teleport initiated
+	private final Set<UUID> teleportInitiated;
 
 
 	/**
@@ -53,6 +54,9 @@ public final class TeleportManager {
 
 		// initialize warmup map
 		warmupMap = new ConcurrentHashMap<>();
+
+		// initialize teleport initiated set
+		teleportInitiated = ConcurrentHashMap.newKeySet();
 	}
 
 
@@ -157,7 +161,7 @@ public final class TeleportManager {
 				.runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20);
 
 		// insert player and taskId into warmup hashmap
-		plugin.teleportManager.putWarmup(player, teleportTask.getTaskId());
+		putWarmup(player, teleportTask.getTaskId());
 
 		// if log-use is enabled in config, write log entry
 		if (plugin.getConfig().getBoolean("log-use")) {
@@ -182,6 +186,18 @@ public final class TeleportManager {
 		Objects.requireNonNull(player);
 
 		warmupMap.put(player.getUniqueId(), taskId);
+
+		// insert player uuid into teleport initiated set
+		teleportInitiated.add(player.getUniqueId());
+
+		// create task to remove player uuid from tpi set after set amount of ticks (default: 2)
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				teleportInitiated.remove(player.getUniqueId());
+			}
+		}.runTaskLater(plugin, plugin.getConfig().getInt("interact-delay", 2));
+
 	}
 
 
@@ -195,6 +211,7 @@ public final class TeleportManager {
 		// check for null parameter
 		Objects.requireNonNull(player);
 
+		// remove player uuid from warmup map
 		warmupMap.remove(player.getUniqueId());
 	}
 
@@ -227,7 +244,7 @@ public final class TeleportManager {
 		}
 
 		// if player is in warmup hashmap, cancel delayed teleport task and remove player from warmup hashmap
-		if (warmupMap.containsKey(player.getUniqueId())) {
+		if (isWarmingUp(player)) {
 
 			// get delayed teleport task id
 			Integer taskId = warmupMap.get(player.getUniqueId());
@@ -238,7 +255,7 @@ public final class TeleportManager {
 			}
 
 			// remove player from warmup hashmap
-			warmupMap.remove(player.getUniqueId());
+			removeWarmup(player);
 		}
 	}
 
@@ -291,6 +308,23 @@ public final class TeleportManager {
 			remainingTime = (cooldownMap.get(player.getUniqueId()) - System.currentTimeMillis());
 		}
 		return remainingTime;
+	}
+
+
+	/**
+	 * Check if player is in teleport initiated set
+	 *
+	 * @param player the player to check if teleport is initiated
+	 * @return {@code true} if teleport been initiated, {@code false} if it has not
+	 */
+	public final boolean isInitiated(final Player player) {
+
+		// check for null parameter
+		if (player == null) {
+			return false;
+		}
+
+		return !teleportInitiated.contains(player.getUniqueId());
 	}
 
 }
