@@ -13,7 +13,7 @@ public class Message extends AbstractMessage<MessageId,Macro> {
 	 * @param recipient the message recipient
 	 * @param messageId the enum entry representing the message to be displayed
 	 */
-	private Message(CommandSender recipient, MessageId messageId) {
+	private Message(final CommandSender recipient, final MessageId messageId) {
 		super(recipient, messageId);
 	}
 
@@ -25,7 +25,7 @@ public class Message extends AbstractMessage<MessageId,Macro> {
 	 * @param messageId the enum entry representing the message to be displayed
 	 * @return new instance of Message created with private constructor
 	 */
-	public static Message create(CommandSender recipient, MessageId messageId) {
+	public static Message create(final CommandSender recipient, final MessageId messageId) {
 		return new Message(recipient, messageId);
 	}
 
