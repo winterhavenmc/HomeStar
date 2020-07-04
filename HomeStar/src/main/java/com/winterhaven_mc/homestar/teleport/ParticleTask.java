@@ -4,7 +4,6 @@ import com.winterhaven_mc.homestar.PluginMain;
 
 import org.bukkit.Effect;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Objects;
@@ -16,7 +15,7 @@ import java.util.Objects;
  */
 final class ParticleTask extends BukkitRunnable {
 
-	private final PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
+	private final PluginMain plugin;
 	private final Player player;
 
 
@@ -25,9 +24,10 @@ final class ParticleTask extends BukkitRunnable {
 	 *
 	 * @param player the player to emit particles
 	 */
-	ParticleTask(final Player player) {
+	ParticleTask(final PluginMain plugin, final Player player) {
 
-		// check for null parameter
+		// check for null parameters
+		this.plugin = Objects.requireNonNull(plugin);
 		this.player = Objects.requireNonNull(player);
 	}
 

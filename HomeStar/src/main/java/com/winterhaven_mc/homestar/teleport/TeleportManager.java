@@ -157,7 +157,7 @@ public final class TeleportManager {
 		}
 
 		// initiate delayed teleport for player to destination
-		BukkitTask teleportTask = new DelayedTeleportTask(player, destination, destinationName,	playerItem)
+		BukkitTask teleportTask = new DelayedTeleportTask(plugin, player, destination, destinationName,	playerItem)
 				.runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20);
 
 		// insert player and taskId into warmup hashmap
