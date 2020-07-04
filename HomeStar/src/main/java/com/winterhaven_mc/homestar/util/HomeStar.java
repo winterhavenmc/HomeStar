@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.Objects;
 
 
-public class HomeStar {
+/**
+ * Utility class with static methods for creating and using HomeStar item stacks
+ */
+public final class HomeStar {
 
 	// static reference to main class
 	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
@@ -113,7 +116,7 @@ public class HomeStar {
 			configMaterial = Material.NETHER_STAR;
 		}
 
-		// return item stack with configured material and data
+		// return item stack with configured material
 		return new ItemStack(configMaterial, 1);
 	}
 
