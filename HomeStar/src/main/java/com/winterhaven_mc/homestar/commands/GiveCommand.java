@@ -14,10 +14,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-import static com.winterhaven_mc.homestar.messages.Macro.ITEM_QUANTITY;
-import static com.winterhaven_mc.homestar.messages.Macro.TARGET_PLAYER;
+import static com.winterhaven_mc.homestar.messages.Macro.*;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
-import static com.winterhaven_mc.homestar.messages.MessageId.COMMAND_SUCCESS_GIVE_TARGET;
 
 
 public class GiveCommand extends AbstractCommand {
