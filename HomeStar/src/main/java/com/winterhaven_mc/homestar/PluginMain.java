@@ -4,6 +4,7 @@ import com.winterhaven_mc.util.LanguageManager;
 import com.winterhaven_mc.util.SoundConfiguration;
 import com.winterhaven_mc.util.YamlSoundConfiguration;
 import com.winterhaven_mc.util.WorldManager;
+
 import com.winterhaven_mc.homestar.commands.CommandManager;
 import com.winterhaven_mc.homestar.teleport.TeleportManager;
 import com.winterhaven_mc.homestar.listeners.PlayerEventListener;
@@ -22,6 +23,7 @@ public final class PluginMain extends JavaPlugin {
 	public SoundConfiguration soundConfig;
 	public TeleportManager teleportManager;
 	public WorldManager worldManager;
+
 
 	@Override
 	public void onEnable() {
