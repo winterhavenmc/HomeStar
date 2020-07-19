@@ -7,7 +7,7 @@ softdepend: [Multiverse-Core]
 
 commands:
   homestar:
-    description: This is the HomeStar command.
+    description: Use /homestar help [subcommand] to view subcommand help.
     usage: /homestar [command]
 
 permissions:
@@ -16,15 +16,15 @@ permissions:
     default: true
 
   homestar.help:
-    description: Display help for HomeStar commands.
+    description: Allows display of help for HomeStar subcommands.
     default: true
 
   homestar.status:
-    description: Allows display of config settings.
+    description: Allows display of configuration settings.
     default: op
 
   homestar.reload:
-    description: Allows reloading the config file.
+    description: Allows reloading the configuration file.
     default: op
 
   homestar.give:
@@ -43,4 +43,3 @@ permissions:
       homestar.reload: true
       homestar.give: true
       homestar.destroy: true
-      
