@@ -86,7 +86,7 @@ MESSAGES:
 
   COMMAND_HELP_DESTROY:
     enabled: true
-    string: 'Destroys the stack of HomeStars you are holding.'
+    string: '&eDestroys the stack of HomeStars you are holding.'
 
   COMMAND_HELP_GIVE:
     enabled: true
