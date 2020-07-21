@@ -20,6 +20,10 @@ public class StatusCommand extends AbstractSubcommand {
 	private final PluginMain plugin;
 
 
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
 	StatusCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("status");

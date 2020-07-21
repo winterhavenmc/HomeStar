@@ -23,6 +23,10 @@ public class GiveCommand extends AbstractSubcommand {
 	private final PluginMain plugin;
 
 
+	/**
+	 * Class constructor
+	 * @param plugin reference to plugin main class instance
+	 */
 	GiveCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("give");
