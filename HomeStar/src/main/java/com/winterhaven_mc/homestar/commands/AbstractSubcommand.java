@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-public abstract class AbstractCommand implements com.winterhaven_mc.homestar.commands.Subcommand {
+public abstract class AbstractSubcommand implements com.winterhaven_mc.homestar.commands.Subcommand {
 
 	private String name;
 	private List<String> aliases = new ArrayList<>();

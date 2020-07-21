@@ -84,6 +84,10 @@ MESSAGES:
     string: '&3[HomeStar] &cInvalid quantity!'
 
 
+  COMMAND_HELP_INVALID:
+    enabled: true
+    string: '&3[LodeStar]&c That is not a valid command!'
+
   COMMAND_HELP_DESTROY:
     enabled: true
     string: '&eDestroys the stack of HomeStars you are holding.'
@@ -103,10 +107,6 @@ MESSAGES:
   COMMAND_HELP_STATUS:
     enabled: true
     string: '&eDisplays plugin configuration settings.'
-
-  COMMAND_HELP_INVALID:
-    enabled: true
-    string: '&3[HomeStar]&c That is not a valid command!'
 
   COMMAND_HELP_USAGE_HEADER:
     enabled: true

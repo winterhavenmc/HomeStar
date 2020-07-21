@@ -14,7 +14,7 @@ import static com.winterhaven_mc.homestar.messages.MessageId.*;
 import static com.winterhaven_mc.homestar.messages.MessageId.COMMAND_SUCCESS_RELOAD;
 
 
-public class ReloadCommand extends AbstractCommand {
+public class ReloadCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

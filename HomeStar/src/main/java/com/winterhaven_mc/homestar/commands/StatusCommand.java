@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
 
-public class StatusCommand extends AbstractCommand {
+public class StatusCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

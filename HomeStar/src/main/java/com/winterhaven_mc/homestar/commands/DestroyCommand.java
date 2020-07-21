@@ -16,7 +16,7 @@ import static com.winterhaven_mc.homestar.messages.Macro.ITEM_QUANTITY;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
 
-public class DestroyCommand extends AbstractCommand {
+public class DestroyCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

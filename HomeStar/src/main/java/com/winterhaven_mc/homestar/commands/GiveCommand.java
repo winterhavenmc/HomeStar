@@ -18,7 +18,7 @@ import static com.winterhaven_mc.homestar.messages.Macro.*;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
 
-public class GiveCommand extends AbstractCommand {
+public class GiveCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 
