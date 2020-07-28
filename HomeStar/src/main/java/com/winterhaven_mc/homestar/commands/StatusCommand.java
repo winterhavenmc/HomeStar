@@ -29,6 +29,7 @@ public class StatusCommand extends AbstractSubcommand {
 		this.setName("status");
 		this.setUsage("/homestar status");
 		this.setDescription(COMMAND_HELP_STATUS);
+		setMaxArgs(0);
 	}
 
 
@@ -42,11 +43,8 @@ public class StatusCommand extends AbstractSubcommand {
 			return true;
 		}
 
-		// argument limits
-		int maxArgs = 1;
-
 		// check max arguments
-		if (args.size() > maxArgs) {
+		if (args.size() > getMaxArgs()) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);

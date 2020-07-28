@@ -32,6 +32,8 @@ public class GiveCommand extends AbstractSubcommand {
 		this.setName("give");
 		this.setUsage("/homestar give <player> [quantity]");
 		this.setDescription(COMMAND_HELP_GIVE);
+		this.setMinArgs(1);
+		this.setMaxArgs(2);
 	}
 
 
@@ -72,12 +74,8 @@ public class GiveCommand extends AbstractSubcommand {
 			return true;
 		}
 
-		// argument limits
-		int minArgs = 2;
-		int maxArgs = 3;
-
 		// check min arguments
-		if (args.size() < minArgs) {
+		if (args.size() < getMinArgs()) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
@@ -85,20 +83,29 @@ public class GiveCommand extends AbstractSubcommand {
 		}
 
 		// check max arguments
-		if (args.size() > maxArgs) {
+		if (args.size() > getMaxArgs()) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
 
-		String targetPlayerName = args.get(1);
+		// get passed player name
+		String targetPlayerName = args.get(0);
+
+		// try to match target player name to currently online player
+		Player targetPlayer = matchPlayer(sender, targetPlayerName);
+
+		// if no match, do nothing and return (message was output by matchPlayer method)
+		if (targetPlayer == null) {
+			return true;
+		}
 
 		int quantity = 1;
 
-		if (args.size() > 2) {
+		if (args.size() > 1) {
 			try {
-				quantity = Integer.parseInt(args.get(2));
+				quantity = Integer.parseInt(args.get(1));
 			}
 			catch (NumberFormatException e) {
 				Message.create(sender, COMMAND_FAIL_QUANTITY_INVALID).send();
@@ -114,14 +121,6 @@ public class GiveCommand extends AbstractSubcommand {
 			maxQuantity = Integer.MAX_VALUE;
 		}
 		quantity = Math.min(maxQuantity, quantity);
-
-		// try to match target player name to currently online player
-		Player targetPlayer = matchPlayer(sender, targetPlayerName);
-
-		// if no match, do nothing and return (message was output by matchPlayer method)
-		if (targetPlayer == null) {
-			return true;
-		}
 
 		// add specified quantity of homestar(s) to player inventory
 		HashMap<Integer, ItemStack> noFit = targetPlayer.getInventory().addItem(HomeStar.create(quantity));
@@ -177,6 +176,10 @@ public class GiveCommand extends AbstractSubcommand {
 	 * @return Player - a matching player object, or null if no match
 	 */
 	private Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
+
+		// check for null parameters
+		Objects.requireNonNull(sender);
+		Objects.requireNonNull(targetPlayerName);
 
 		Player targetPlayer;
 

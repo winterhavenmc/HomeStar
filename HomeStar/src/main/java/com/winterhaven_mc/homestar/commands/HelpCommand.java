@@ -35,6 +35,7 @@ public class HelpCommand extends AbstractSubcommand implements Subcommand {
 		this.setName("help");
 		this.setUsage("/homestar help [command]");
 		this.setDescription(COMMAND_HELP_HELP);
+		this.setMaxArgs(1);
 	}
 
 
@@ -67,6 +68,14 @@ public class HelpCommand extends AbstractSubcommand implements Subcommand {
 		if (!sender.hasPermission("homestar.help")) {
 			Message.create(sender, PERMISSION_DENIED_HELP).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			return true;
+		}
+
+		// check max arguments
+		if (args.size() > getMaxArgs()) {
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
+			displayUsage(sender);
 			return true;
 		}
 

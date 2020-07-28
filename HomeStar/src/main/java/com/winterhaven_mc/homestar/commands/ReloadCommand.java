@@ -28,6 +28,7 @@ public class ReloadCommand extends AbstractSubcommand {
 		this.setName("reload");
 		this.setUsage("/homestar reload");
 		this.setDescription(COMMAND_HELP_RELOAD);
+		this.setMaxArgs(0);
 	}
 
 
@@ -41,11 +42,8 @@ public class ReloadCommand extends AbstractSubcommand {
 			return true;
 		}
 
-		// argument limits
-		int maxArgs = 1;
-
 		// check max arguments
-		if (args.size() > maxArgs) {
+		if (args.size() > getMaxArgs()) {
 			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
