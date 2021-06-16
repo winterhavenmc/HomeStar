@@ -1,0 +1,67 @@
+# configuration file for ${project.name} v${project.version}
+
+# localized language support
+language: en-US
+
+# Note: use only one enabled/disabled list, and comment out or remove the other
+# enabled worlds list (use this list for a default-deny world policy)
+#enabled-worlds:
+#  - enabled_world1
+#  - enabled_world2
+
+# disabled worlds list (use this list for a default-allow world policy)
+disabled-worlds:
+  - disabled_world1
+  - disabled_world2
+
+# material to be used as homestar item
+item-material: NETHER_STAR
+
+# minimum distance from destination
+minimum-distance: 10
+
+# change bedspawn location to center of block at server provided location
+# setting this to false will use bedspawn location exactly as returned from server
+center-on-block: true
+
+# cooldown time in seconds
+teleport-cooldown: 60
+
+# warmup time in seconds
+teleport-warmup: 5
+
+# play sound effects
+sound-effects: true
+
+# particle effects during warmup
+particle-effects: true
+
+# allow left-click to use
+left-click: false
+
+# require shift-click to use homestar item
+shift-click: true
+
+# remove item from inventory ( on-use | on-success | never )
+remove-from-inventory: on-success
+
+# allow homestar items to be used in crafting recipes
+allow-in-recipes: false
+
+# cancel teleport if player takes damage during warmup
+cancel-on-damage: false
+
+# cancel teleport if player moves during warmup
+cancel-on-movement: false
+
+# cancel teleport if player interacts with another block during warmup
+cancel-on-interaction: false
+
+# maximum number of homestar items that can be given at once (-1 for no limit)
+max-give-amount: -1
+
+# lightning strike at destination on use
+lightning: false
+
+# write log entry on use
+log-use: true
