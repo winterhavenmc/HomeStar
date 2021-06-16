@@ -1,6 +1,5 @@
 package com.winterhaven_mc.homestar;
 
-import com.winterhaven_mc.homestar.util.HomeStar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,7 +35,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.create(quantity) method
 	 */
 	public static ItemStack createItem(final int quantity) {
-		return HomeStar.create(quantity);
+		return plugin.homeStarFactory.create(quantity);
 	}
 
 
@@ -48,7 +47,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.isItem(itemStack) method
 	 */
 	public static boolean isHomeStar(final ItemStack itemStack) {
-		return HomeStar.isItem(itemStack);
+		return plugin.homeStarFactory.isItem(itemStack);
 	}
 
 
@@ -185,7 +184,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.getDefaultItem()
 	 */
 	public static ItemStack getDefaultItem() {
-		return HomeStar.getDefaultItem();
+		return plugin.homeStarFactory.getDefaultItemStack();
 	}
 
 
@@ -196,7 +195,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.getItemName()
 	 */
 	public static String getItemName() {
-		return HomeStar.getItemName();
+		return plugin.homeStarFactory.getItemName();
 	}
 
 
@@ -208,7 +207,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.setMetaData()
 	 */
 	private static void setMetaData(final ItemStack itemStack) {
-		HomeStar.setMetaData(itemStack);
+		plugin.homeStarFactory.setMetaData(itemStack);
 	}
 
 }

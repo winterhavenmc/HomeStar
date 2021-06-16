@@ -1,14 +1,12 @@
 package com.winterhaven_mc.homestar.util;
 
 import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.util.LanguageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,18 +14,21 @@ import java.util.Objects;
 
 
 /**
- * Utility class with static methods for creating and using HomeStar item stacks
+ * Factory class with methods for creating and using HomeStar item stacks
  */
-public final class HomeStar {
+public final class HomeStarFactory {
 
-	// static reference to main class
-	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
+	// reference to main class
+	private final PluginMain plugin;
 
-	// reference to language manager
-	private final static LanguageManager languageManager = LanguageManager.getInstance();
+	// name spaced key for persistent data
+	protected final NamespacedKey PERSISTENT_KEY;
 
-	// persistent metadata name spaced key
-	public final static NamespacedKey PERSISTENT_KEY = new NamespacedKey(plugin, "isHomeStar");
+	// item metadata fields
+	protected final int quantity;
+	protected final ItemStack itemStack;
+	protected final String itemStackName;
+	protected final List<String> itemStackLore;
 
 
 	/**
@@ -35,8 +36,35 @@ public final class HomeStar {
 	 *
 	 * @throws AssertionError on attempt to instantiate
 	 */
-	private HomeStar() {
-		throw new AssertionError();
+	public HomeStarFactory(PluginMain plugin) {
+		this.plugin = plugin;
+
+		this.PERSISTENT_KEY = new NamespacedKey(plugin, "isHomeStar");
+
+		this.quantity = 1;
+		this.itemStack = getDefaultItemStack();
+		this.itemStackName = plugin.languageHandler.getItemName();
+		this.itemStackLore = plugin.languageHandler.getItemLore();
+
+		setMetaData(this.itemStack);
+	}
+
+
+	/**
+	 * Create a HomeStar item stack of given quantity, with custom display name and lore
+	 *
+	 * @return ItemStack of HomeStar items
+	 */
+	public ItemStack create() {
+
+		ItemStack clonedItem = this.itemStack.clone();
+
+		// set quantity
+		clonedItem.setAmount(quantity);
+
+		// return cloned item
+		return clonedItem;
+
 	}
 
 
@@ -46,23 +74,16 @@ public final class HomeStar {
 	 * @param quantity number of HomeStar items in newly created stack
 	 * @return ItemStack of HomeStar items
 	 */
-	public static ItemStack create(final int quantity) {
+	public ItemStack create(final int quantity) {
 
-		// create item stack with configured material and data
-		final ItemStack newItem = getDefaultItem();
-
-		// validate min,max quantity
-		int newQuantity = Math.max(quantity, 1);
-		newQuantity = Math.min(newQuantity, newItem.getMaxStackSize());
+		ItemStack clonedItem = this.itemStack.clone();
 
 		// set quantity
-		newItem.setAmount(newQuantity);
+		clonedItem.setAmount(quantity);
 
-		// set item display name and lore
-		setMetaData(newItem);
+		// return cloned item
+		return clonedItem;
 
-		// return new item
-		return newItem;
 	}
 
 
@@ -72,7 +93,7 @@ public final class HomeStar {
 	 * @param itemStack the ItemStack to check
 	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
 	 */
-	public static boolean isItem(final ItemStack itemStack) {
+	public boolean isItem(final ItemStack itemStack) {
 
 		// if item stack is empty (null or air) return false
 		if (itemStack == null || itemStack.getType().equals(Material.AIR)) {
@@ -95,8 +116,8 @@ public final class HomeStar {
 	 *
 	 * @return String - configured item display name
 	 */
-	public static String getItemName() {
-		return LanguageManager.getInstance().getItemName();
+	public String getItemName() {
+		return plugin.languageHandler.getItemName();
 	}
 
 
@@ -105,7 +126,7 @@ public final class HomeStar {
 	 *
 	 * @return ItemStack
 	 */
-	public static ItemStack getDefaultItem() {
+	public ItemStack getDefaultItemStack() {
 
 		// try to match material
 		Material configMaterial = Material.matchMaterial(
@@ -127,11 +148,11 @@ public final class HomeStar {
 	 *
 	 * @param itemStack the ItemStack on which to set HomeStar MetaData
 	 */
-	public static void setMetaData(final ItemStack itemStack) {
+	public void setMetaData(final ItemStack itemStack) {
 
 		// retrieve item name and lore from language file file
-		String itemName = languageManager.getItemName();
-		List<String> configLore = languageManager.getItemLore();
+		String itemName = plugin.languageHandler.getItemName();
+		List<String> configLore = plugin.languageHandler.getItemLore();
 
 		// allow for '&' character for color codes in name and lore
 		itemName = ChatColor.translateAlternateColorCodes('&', itemName);

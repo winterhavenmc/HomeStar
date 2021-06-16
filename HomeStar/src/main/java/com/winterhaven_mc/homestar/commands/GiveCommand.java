@@ -4,7 +4,6 @@ import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.messages.MessageId;
 import com.winterhaven_mc.homestar.sounds.SoundId;
-import com.winterhaven_mc.homestar.util.HomeStar;
 
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
@@ -69,14 +68,14 @@ public class GiveCommand extends AbstractSubcommand {
 
 		// if command sender does not have permission to give HomeStars, output error message and return true
 		if (!sender.hasPermission("homestar.give")) {
-			Message.create(sender, PERMISSION_DENIED_GIVE).send();
+			Message.create(sender, PERMISSION_DENIED_GIVE).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check min arguments
 		if (args.size() < getMinArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -84,7 +83,7 @@ public class GiveCommand extends AbstractSubcommand {
 
 		// check max arguments
 		if (args.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -108,7 +107,7 @@ public class GiveCommand extends AbstractSubcommand {
 				quantity = Integer.parseInt(args.get(1));
 			}
 			catch (NumberFormatException e) {
-				Message.create(sender, COMMAND_FAIL_QUANTITY_INVALID).send();
+				Message.create(sender, COMMAND_FAIL_QUANTITY_INVALID).send(plugin.languageHandler);
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
@@ -123,7 +122,7 @@ public class GiveCommand extends AbstractSubcommand {
 		quantity = Math.min(maxQuantity, quantity);
 
 		// add specified quantity of homestar(s) to player inventory
-		HashMap<Integer, ItemStack> noFit = targetPlayer.getInventory().addItem(HomeStar.create(quantity));
+		HashMap<Integer, ItemStack> noFit = targetPlayer.getInventory().addItem(plugin.homeStarFactory.create(quantity));
 
 		// count items that didn't fit in inventory
 		int noFitCount = 0;
@@ -133,7 +132,7 @@ public class GiveCommand extends AbstractSubcommand {
 
 		// if remaining items equals quantity given, send player-inventory-full message and return
 		if (noFitCount == quantity) {
-			Message.create(sender, COMMAND_FAIL_GIVE_INVENTORY_FULL).send();
+			Message.create(sender, COMMAND_FAIL_GIVE_INVENTORY_FULL).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -148,7 +147,7 @@ public class GiveCommand extends AbstractSubcommand {
 			Message.create(sender, COMMAND_SUCCESS_GIVE)
 					.setMacro(ITEM_QUANTITY, quantity)
 					.setMacro(TARGET_PLAYER, targetPlayer)
-					.send();
+					.send(plugin.languageHandler);
 
 			// if giver is in game, play sound
 			if (sender instanceof Player) {
@@ -159,7 +158,7 @@ public class GiveCommand extends AbstractSubcommand {
 			Message.create(targetPlayer, COMMAND_SUCCESS_GIVE_TARGET)
 					.setMacro(ITEM_QUANTITY, quantity)
 					.setMacro(TARGET_PLAYER, sender)
-					.send();
+					.send(plugin.languageHandler);
 		}
 		// play sound to target player
 		plugin.soundConfig.playSound(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
@@ -209,10 +208,10 @@ public class GiveCommand extends AbstractSubcommand {
 			}
 		}
 		if (matchedPlayers.isEmpty()) {
-			Message.create(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send();
+			Message.create(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send(plugin.languageHandler);
 		}
 		else {
-			Message.create(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE).send();
+			Message.create(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE).send(plugin.languageHandler);
 		}
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		return null;

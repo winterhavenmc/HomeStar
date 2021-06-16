@@ -1,15 +1,17 @@
 package com.winterhaven_mc.homestar;
 
-import com.winterhaven_mc.util.LanguageManager;
-import com.winterhaven_mc.util.SoundConfiguration;
-import com.winterhaven_mc.util.YamlSoundConfiguration;
-import com.winterhaven_mc.util.WorldManager;
+import com.winterhaven_mc.homestar.util.HomeStarFactory;
+import com.winterhaven_mc.util.*;
 
 import com.winterhaven_mc.homestar.commands.CommandManager;
 import com.winterhaven_mc.homestar.teleport.TeleportManager;
 import com.winterhaven_mc.homestar.listeners.PlayerEventListener;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
+
+import java.io.File;
 
 
 /**
@@ -20,9 +22,31 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class PluginMain extends JavaPlugin {
 
+	public LanguageHandler languageHandler;
 	public SoundConfiguration soundConfig;
 	public TeleportManager teleportManager;
 	public WorldManager worldManager;
+	public CommandManager commandManager;
+	public PlayerEventListener playerEventListener;
+	public HomeStarFactory homeStarFactory;
+
+
+	/**
+	 * Constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	public PluginMain() {
+		super();
+	}
+
+
+	/**
+	 * Constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	protected PluginMain(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
+		super(loader, descriptionFile, dataFolder, file);
+	}
 
 
 	@Override
@@ -31,8 +55,8 @@ public final class PluginMain extends JavaPlugin {
 		// install default configuration file if not already present
 		saveDefaultConfig();
 
-		// initialize language manager
-		LanguageManager.init();
+		// instantiate language manager
+		languageHandler = new LanguageHandler(this);
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
@@ -44,10 +68,12 @@ public final class PluginMain extends JavaPlugin {
 		worldManager = new WorldManager(this);
 
 		// instantiate command manager
-		new CommandManager(this);
+		commandManager = new CommandManager(this);
 
 		// instantiate player event listener
-		new PlayerEventListener(this);
+		playerEventListener = new PlayerEventListener(this);
+		
+		homeStarFactory = new HomeStarFactory(this);
 	}
 
 }

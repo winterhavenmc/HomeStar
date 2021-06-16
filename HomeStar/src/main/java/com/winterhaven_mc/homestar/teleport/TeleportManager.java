@@ -4,7 +4,6 @@ import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.sounds.SoundId;
 
-import com.winterhaven_mc.util.LanguageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -13,11 +12,15 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import static com.winterhaven_mc.homestar.messages.Macro.*;
+import static com.winterhaven_mc.homestar.messages.Macro.DESTINATION;
+import static com.winterhaven_mc.homestar.messages.Macro.DURATION;
 import static com.winterhaven_mc.homestar.messages.MessageId.*;
 
 
@@ -77,7 +80,7 @@ public final class TeleportManager {
 		if (getCooldownTimeRemaining(player) > 0) {
 			Message.create(player, TELEPORT_COOLDOWN)
 					.setMacro(DURATION, getCooldownTimeRemaining(player))
-					.send();
+					.send(plugin.languageHandler);
 			return;
 		}
 
@@ -90,7 +93,7 @@ public final class TeleportManager {
 		World playerWorld = player.getWorld();
 
 		// get home display name from language file
-		String destinationName = LanguageManager.getInstance().getHomeDisplayName();
+		String destinationName = plugin.languageHandler.getHomeDisplayName();
 
 		// if player has bukkit bedspawn, try to get safe bedspawn location
 		Location destination = player.getBedSpawnLocation();
@@ -105,7 +108,7 @@ public final class TeleportManager {
 		if (destination == null) {
 
 			// send missing or obstructed message
-			Message.create(player, TELEPORT_FAIL_NO_BEDSPAWN).send();
+			Message.create(player, TELEPORT_FAIL_NO_BEDSPAWN).send(plugin.languageHandler);
 
 			// if bedspawn-fallback is configured false, play teleport fail sound and return
 			if (!plugin.getConfig().getBoolean("bedspawn-fallback")) {
@@ -116,7 +119,7 @@ public final class TeleportManager {
 			else {
 
 				// set destinationName string to spawn name from language file
-				destinationName = LanguageManager.getInstance().getSpawnDisplayName();
+				destinationName = plugin.languageHandler.getSpawnDisplayName();
 
 				// if multiverse is enabled, get spawn location from it so we have pitch and yaw
 				destination = plugin.worldManager.getSpawnLocation(playerWorld);
@@ -126,7 +129,7 @@ public final class TeleportManager {
 		// if player is less than config min-distance from destination, send player min-distance message and return
 		if (player.getWorld().equals(destination.getWorld())
 				&& destination.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
-			Message.create(player, TELEPORT_MIN_DISTANCE).setMacro(DESTINATION, destinationName).send();
+			Message.create(player, TELEPORT_MIN_DISTANCE).setMacro(DESTINATION, destinationName).send(plugin.languageHandler);
 			return;
 		}
 
@@ -150,7 +153,7 @@ public final class TeleportManager {
 			Message.create(player, TELEPORT_WARMUP)
 					.setMacro(DESTINATION, destinationName)
 					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(warmupTime))
-					.send();
+					.send(plugin.languageHandler);
 
 			// if enabled, play sound effect
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_WARMUP);
@@ -158,7 +161,7 @@ public final class TeleportManager {
 
 		// initiate delayed teleport for player to destination
 		BukkitTask teleportTask = new DelayedTeleportTask(plugin, player, destination, destinationName,	playerItem)
-				.runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20);
+				.runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20L);
 
 		// insert player and taskId into warmup hashmap
 		putWarmup(player, teleportTask.getTaskId());
@@ -168,7 +171,7 @@ public final class TeleportManager {
 
 			// write message to log
 			plugin.getLogger().info(player.getName() + ChatColor.RESET + " used a "
-					+ LanguageManager.getInstance().getItemName() + ChatColor.RESET + " in "
+					+ plugin.languageHandler.getItemName() + ChatColor.RESET + " in "
 					+ plugin.worldManager.getWorldName(player) + ChatColor.RESET + ".");
 		}
 	}
@@ -180,7 +183,7 @@ public final class TeleportManager {
 	 * @param player the player whose uuid will be used as the key in the warmup map
 	 * @param taskId the warmup task Id to be placed in the warmup map
 	 */
-	private void putWarmup(final Player player, final int taskId) {
+	protected final void putWarmup(final Player player, final int taskId) {
 
 		// check for null parameter
 		Objects.requireNonNull(player);
@@ -285,7 +288,7 @@ public final class TeleportManager {
 			public void run() {
 				cooldownMap.remove(player.getUniqueId());
 			}
-		}.runTaskLater(plugin, (cooldownSeconds * 20));
+		}.runTaskLater(plugin, (cooldownSeconds * 20L));
 	}
 
 

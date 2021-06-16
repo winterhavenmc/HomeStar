@@ -3,7 +3,6 @@ package com.winterhaven_mc.homestar.commands;
 import com.winterhaven_mc.homestar.PluginMain;
 import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.sounds.SoundId;
-import com.winterhaven_mc.util.LanguageManager;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -38,14 +37,14 @@ public class StatusCommand extends AbstractSubcommand {
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("homestar.reload")) {
-			Message.create(sender, PERMISSION_DENIED_STATUS).send();
+			Message.create(sender, PERMISSION_DENIED_STATUS).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (args.size() > getMaxArgs()) {
-			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			Message.create(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -71,12 +70,12 @@ public class StatusCommand extends AbstractSubcommand {
 
 		sender.sendMessage(ChatColor.GREEN + "Warmup: "
 				+ ChatColor.RESET
-				+ LanguageManager.getInstance().getTimeString(TimeUnit.SECONDS.toMillis(
+				+ plugin.languageHandler.getTimeString(TimeUnit.SECONDS.toMillis(
 				plugin.getConfig().getInt("teleport-warmup"))));
 
 		sender.sendMessage(ChatColor.GREEN + "Cooldown: "
 				+ ChatColor.RESET
-				+ LanguageManager.getInstance().getTimeString(TimeUnit.SECONDS.toMillis(
+				+ plugin.languageHandler.getTimeString(TimeUnit.SECONDS.toMillis(
 				plugin.getConfig().getInt("teleport-cooldown"))));
 
 		sender.sendMessage(ChatColor.GREEN + "Left-click allowed: "
