@@ -5,7 +5,7 @@ language: en-US
 
 # Note: use only one enabled/disabled list, and comment out or remove the other
 # enabled worlds list (use this list for a default-deny world policy)
-#enabled-worlds:
+enabled-worlds: []
 #  - enabled_world1
 #  - enabled_world2
 
@@ -59,6 +59,12 @@ cancel-on-interaction: false
 
 # maximum number of homestar items that can be given at once (-1 for no limit)
 max-give-amount: -1
+
+# if player is in netherworld, try to respawn in matching overworld
+from-nether: true
+
+# if player is in end world, try to respawn in matching overworld
+from-end: true
 
 # lightning strike at destination on use
 lightning: false

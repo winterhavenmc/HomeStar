@@ -7,8 +7,11 @@ import org.bukkit.configuration.Configuration;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.Stream;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -99,50 +102,50 @@ public class PluginMainTests {
 
     }
 
-
     @Nested
-    @DisplayName("Test HomeStar elements.")
-    class HomeStarTests {
+    @DisplayName("Test plugin config.")
+    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+    class Config {
 
-        @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-        @Nested
-        @DisplayName("Test HomeStar config.")
-        class Config {
+        Configuration config = plugin.getConfig();
+        Set<String> enumConfigKeyStrings = new HashSet<>();
 
-            Configuration config = plugin.getConfig();
-
-
-            @Test
-            @DisplayName("config not null.")
-            void ConfigNotNull() {
-                Assertions.assertNotNull(config);
+        public Config() {
+            for (ConfigSetting configSetting : ConfigSetting.values()) {
+                this.enumConfigKeyStrings.add(configSetting.getKey());
             }
+        }
 
-            @Test
-            @DisplayName("test configured language.")
-            void GetLanguage() {
-                Assertions.assertEquals("en-US", config.getString("language"));
-            }
+        @Test
+        @DisplayName("config not null.")
+        void ConfigNotNull() {
+            Assertions.assertNotNull(config);
+        }
 
-//            @ParameterizedTest
-//            @EnumSource(ConfigKey.class)
-//            @DisplayName("enum config key is contained in getConfig() keys.")
-//            void MatchConfigEnumKey(ConfigKey configKey) {
-//                Assertions.assertNotNull(configKey);
-//                Assertions.assertTrue(plugin.getConfig().getKeys(false).contains(configKey.getKey()));
-//            }
+        @Test
+        @DisplayName("test configured language.")
+        void GetLanguage() {
+            Assertions.assertEquals("en-US", config.getString("language"));
+        }
 
-            @SuppressWarnings("unused")
-            Stream<String> GetConfigFileKeys() {
-                return Stream.of(config.getKeys(false).toString());
-            }
+        @SuppressWarnings("unused")
+        Set<String> ConfigFileKeys() {
+            return config.getKeys(false);
+        }
 
-            @ParameterizedTest
-            @MethodSource("GetConfigFileKeys")
-            void ConfigFileKeyNotNull(String key) {
-                Assertions.assertNotNull(key);
-                System.out.println("config key: " + key);
-            }
+        @ParameterizedTest
+        @DisplayName("file config key is contained in enum.")
+        @MethodSource("ConfigFileKeys")
+        void ConfigFileKeyNotNull(String key) {
+            Assertions.assertNotNull(key);
+            Assertions.assertTrue(enumConfigKeyStrings.contains(key));
+        }
+
+        @ParameterizedTest
+        @EnumSource(ConfigSetting.class)
+        @DisplayName("ConfigSetting enum matches config file key/value pairs.")
+        void ConfigFileKeysContainsEnumKey(ConfigSetting configSetting) {
+            Assertions.assertEquals(configSetting.getValue(), plugin.getConfig().getString(configSetting.getKey()));
         }
     }
 }
