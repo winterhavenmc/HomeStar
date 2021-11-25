@@ -66,7 +66,7 @@ public class SoundsTests {
 
         @SuppressWarnings("unused")
         Collection<String> GetConfigFileKeys() {
-            return plugin.soundConfig.getSoundNames();
+            return plugin.soundConfig.getSoundConfigKeys();
         }
 
         @ParameterizedTest
@@ -80,7 +80,7 @@ public class SoundsTests {
         @EnumSource(SoundId.class)
         @DisplayName("all SoundId enum members have matching key in sound config file")
         void SoundConfigContainsAllEnumSounds(SoundId soundId) {
-            Assertions.assertTrue(plugin.soundConfig.getSoundNames().contains(soundId.name()));
+            Assertions.assertTrue(plugin.soundConfig.getSoundConfigKeys().contains(soundId.name()));
         }
 
         @Nested
