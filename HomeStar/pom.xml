@@ -4,7 +4,13 @@
 	<artifactId>HomeStar</artifactId>
 	<version>1.18.1</version>
 	<name>HomeStar</name>
+
 	<url>https://github.com/tim-savage/HomeStar</url>
+
+	<description>
+		A minecraft plugin that provides configurable items
+		that serve as a physical replacement for the /home command.
+	</description>
 
 	<properties>
 		<project.author>Tim Savage</project.author>
