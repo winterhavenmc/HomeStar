@@ -96,13 +96,14 @@
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
 			<artifactId>MockBukkit-v1.16</artifactId>
+			<!--suppress MavenPackageUpdate -->
 			<version>1.0.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
 	<build>
-		<finalName>${name}-${version}</finalName>
+		<finalName>${project.name}-${project.version}</finalName>
 
 		<!-- Resources -->
 		<resources>
