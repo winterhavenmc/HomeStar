@@ -103,6 +103,7 @@
 	</dependencies>
 
 	<build>
+		<!-- jar filename -->
 		<finalName>${project.name}-${project.version}</finalName>
 
 		<!-- Resources -->
