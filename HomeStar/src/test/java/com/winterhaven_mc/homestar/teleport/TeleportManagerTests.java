@@ -27,6 +27,9 @@ public class TeleportManagerTests {
 
     @AfterAll
     public void tearDown() {
+        // cancel all tasks for plugin
+        server.getScheduler().cancelTasks(plugin);
+
         // Stop the mock server
         MockBukkit.unmock();
     }
