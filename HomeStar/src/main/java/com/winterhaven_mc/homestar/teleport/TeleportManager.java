@@ -1,7 +1,6 @@
 package com.winterhaven_mc.homestar.teleport;
 
 import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.sounds.SoundId;
 
 import org.bukkit.ChatColor;
@@ -68,7 +67,7 @@ public final class TeleportManager {
 	 *
 	 * @param player the player being teleported
 	 */
-	public final void initiateTeleport(final Player player) {
+	public void initiateTeleport(final Player player) {
 
 		// check for null parameter
 		Objects.requireNonNull(player);
@@ -78,7 +77,7 @@ public final class TeleportManager {
 
 		// if player cooldown has not expired, send player cooldown message and return
 		if (getCooldownTimeRemaining(player) > 0) {
-			Message.create(player, TELEPORT_COOLDOWN)
+			plugin.messageBuilder.build(player, TELEPORT_COOLDOWN)
 					.setMacro(DURATION, getCooldownTimeRemaining(player))
 					.send(plugin.languageHandler);
 			return;
@@ -108,7 +107,7 @@ public final class TeleportManager {
 		if (destination == null) {
 
 			// send missing or obstructed message
-			Message.create(player, TELEPORT_FAIL_NO_BEDSPAWN).send(plugin.languageHandler);
+			plugin.messageBuilder.build(player, TELEPORT_FAIL_NO_BEDSPAWN).send(plugin.languageHandler);
 
 			// if bedspawn-fallback is configured false, play teleport fail sound and return
 			if (!plugin.getConfig().getBoolean("bedspawn-fallback")) {
@@ -129,7 +128,7 @@ public final class TeleportManager {
 		// if player is less than config min-distance from destination, send player min-distance message and return
 		if (player.getWorld().equals(destination.getWorld())
 				&& destination.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
-			Message.create(player, TELEPORT_MIN_DISTANCE).setMacro(DESTINATION, destinationName).send(plugin.languageHandler);
+			plugin.messageBuilder.build(player, TELEPORT_MIN_DISTANCE).setMacro(DESTINATION, destinationName).send(plugin.languageHandler);
 			return;
 		}
 
@@ -150,7 +149,7 @@ public final class TeleportManager {
 		// if warmup setting is greater than zero, send warmup message
 		long warmupTime = plugin.getConfig().getLong("teleport-warmup");
 		if (warmupTime > 0) {
-			Message.create(player, TELEPORT_WARMUP)
+			plugin.messageBuilder.build(player, TELEPORT_WARMUP)
 					.setMacro(DESTINATION, destinationName)
 					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(warmupTime))
 					.send(plugin.languageHandler);
@@ -183,7 +182,7 @@ public final class TeleportManager {
 	 * @param player the player whose uuid will be used as the key in the warmup map
 	 * @param taskId the warmup task Id to be placed in the warmup map
 	 */
-	protected final void putWarmup(final Player player, final int taskId) {
+	void putWarmup(final Player player, final int taskId) {
 
 		// check for null parameter
 		Objects.requireNonNull(player);
@@ -209,7 +208,7 @@ public final class TeleportManager {
 	 *
 	 * @param player the player whose uuid will be removed from the warmup map
 	 */
-	final void removeWarmup(final Player player) {
+	void removeWarmup(final Player player) {
 
 		// check for null parameter
 		Objects.requireNonNull(player);
@@ -225,7 +224,7 @@ public final class TeleportManager {
 	 * @param player the player whose uuid is to be checked for existence in the warmup map
 	 * @return {@code true} if player uuid is in the warmup map, {@code false} if it is not
 	 */
-	public final boolean isWarmingUp(final Player player) {
+	public boolean isWarmingUp(final Player player) {
 
 		// check for null parameter
 		Objects.requireNonNull(player);
@@ -239,7 +238,7 @@ public final class TeleportManager {
 	 *
 	 * @param player the player whose teleport will be cancelled
 	 */
-	public final void cancelTeleport(final Player player) {
+	public void cancelTeleport(final Player player) {
 
 		// check for null parameter
 		if (player == null) {
@@ -269,7 +268,7 @@ public final class TeleportManager {
 	 *
 	 * @param player the player whose uuid will be added to the cooldown map
 	 */
-	final void startCooldown(final Player player) {
+	void startCooldown(final Player player) {
 
 		// check for null parameter
 		Objects.requireNonNull(player);
@@ -298,7 +297,7 @@ public final class TeleportManager {
 	 * @param player the player whose cooldown time remaining to retrieve
 	 * @return long remainingTime
 	 */
-	public final long getCooldownTimeRemaining(final Player player) {
+	public long getCooldownTimeRemaining(final Player player) {
 
 		// check for null parameter
 		Objects.requireNonNull(player);
@@ -320,7 +319,7 @@ public final class TeleportManager {
 	 * @param player the player to check if teleport is initiated
 	 * @return {@code true} if teleport been initiated, {@code false} if it has not
 	 */
-	public final boolean isInitiated(final Player player) {
+	public boolean isInitiated(final Player player) {
 
 		// check for null parameter
 		if (player == null) {

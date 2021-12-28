@@ -1,5 +1,7 @@
 package com.winterhaven_mc.homestar;
 
+import com.winterhaven_mc.homestar.messages.Macro;
+import com.winterhaven_mc.homestar.messages.MessageId;
 import com.winterhaven_mc.homestar.util.HomeStarFactory;
 import com.winterhaven_mc.util.*;
 
@@ -7,6 +9,8 @@ import com.winterhaven_mc.homestar.commands.CommandManager;
 import com.winterhaven_mc.homestar.teleport.TeleportManager;
 import com.winterhaven_mc.homestar.listeners.PlayerEventListener;
 
+import com.winterhavenmc.util.messagebuilder.LanguageHandler;
+import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
@@ -23,6 +27,7 @@ import java.io.File;
 public final class PluginMain extends JavaPlugin {
 
 	public LanguageHandler languageHandler;
+	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public SoundConfiguration soundConfig;
 	public TeleportManager teleportManager;
 	public WorldManager worldManager;
@@ -44,7 +49,7 @@ public final class PluginMain extends JavaPlugin {
 	 * Constructor for testing
 	 */
 	@SuppressWarnings("unused")
-	protected PluginMain(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
+	PluginMain(JavaPluginLoader loader, PluginDescriptionFile descriptionFile, File dataFolder, File file) {
 		super(loader, descriptionFile, dataFolder, file);
 	}
 
@@ -57,6 +62,7 @@ public final class PluginMain extends JavaPlugin {
 
 		// instantiate language manager
 		languageHandler = new LanguageHandler(this);
+		messageBuilder = new MessageBuilder<>();
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);

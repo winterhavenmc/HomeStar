@@ -1,7 +1,6 @@
 package com.winterhaven_mc.homestar.listeners;
 
 import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.homestar.messages.Message;
 import com.winterhaven_mc.homestar.sounds.SoundId;
 import com.winterhaven_mc.homestar.messages.MessageId;
 
@@ -68,7 +67,7 @@ public final class PlayerEventListener implements Listener {
 	 * @param event PlayerInteractEvent handled by this method
 	 */
 	@EventHandler
-	final void onPlayerUse(final PlayerInteractEvent event) {
+	void onPlayerUse(final PlayerInteractEvent event) {
 
 		// get player
 		final Player player = event.getPlayer();
@@ -93,7 +92,7 @@ public final class PlayerEventListener implements Listener {
 					plugin.teleportManager.cancelTeleport(player);
 
 					// send cancelled teleport message
-					Message.create(player, TELEPORT_CANCELLED_INTERACTION).send(plugin.languageHandler);
+					plugin.messageBuilder.build(player, TELEPORT_CANCELLED_INTERACTION).send(plugin.languageHandler);
 
 					// play cancelled teleport sound
 					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
@@ -161,14 +160,14 @@ public final class PlayerEventListener implements Listener {
 
 			// if players current world is not enabled in config, do nothing and return
 			if (!plugin.worldManager.isEnabled(player.getWorld())) {
-				Message.create(player, TELEPORT_FAIL_WORLD_DISABLED).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, TELEPORT_FAIL_WORLD_DISABLED).send(plugin.languageHandler);
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_DENIED_WORLD_DISABLED);
 				return;
 			}
 
 			// if player does not have homestar.use permission, send message and return
 			if (!player.hasPermission("homestar.use")) {
-				Message.create(player, MessageId.PERMISSION_DENIED_USE).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, MessageId.PERMISSION_DENIED_USE).send(plugin.languageHandler);
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_DENIED_PERMISSION);
 				return;
 			}
@@ -177,7 +176,7 @@ public final class PlayerEventListener implements Listener {
 			// send teleport fail shift-click message, cancel event and return
 			if (plugin.getConfig().getBoolean("shift-click")
 					&& !player.isSneaking()) {
-				Message.create(player, TELEPORT_FAIL_SHIFT_CLICK).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, TELEPORT_FAIL_SHIFT_CLICK).send(plugin.languageHandler);
 				return;
 			}
 
@@ -193,7 +192,7 @@ public final class PlayerEventListener implements Listener {
 	 * @param event PlayerDeathEvent handled by this method
 	 */
 	@EventHandler
-	final void onPlayerDeath(final PlayerDeathEvent event) {
+	void onPlayerDeath(final PlayerDeathEvent event) {
 
 		// get event player
 		Player player = event.getEntity();
@@ -209,7 +208,7 @@ public final class PlayerEventListener implements Listener {
 	 * @param event PlayerQuitEvent handled by this method
 	 */
 	@EventHandler
-	final void onPlayerQuit(final PlayerQuitEvent event) {
+	void onPlayerQuit(final PlayerQuitEvent event) {
 
 		Player player = event.getPlayer();
 
@@ -225,7 +224,7 @@ public final class PlayerEventListener implements Listener {
 	 * @param event PrepareItemCraftEvent handled by this method
 	 */
 	@EventHandler
-	final void onCraftPrepare(final PrepareItemCraftEvent event) {
+	void onCraftPrepare(final PrepareItemCraftEvent event) {
 
 		// if allow-in-recipes is true in configuration, do nothing and return
 		if (plugin.getConfig().getBoolean("allow-in-recipes")) {
@@ -248,7 +247,7 @@ public final class PlayerEventListener implements Listener {
 	 * @param event EntityDamageEvent handled by this method
 	 */
 	@EventHandler
-	final void onEntityDamage(final EntityDamageEvent event) {
+	void onEntityDamage(final EntityDamageEvent event) {
 
 		// if event is already cancelled, do nothing and return
 		if (event.isCancelled()) {
@@ -266,7 +265,7 @@ public final class PlayerEventListener implements Listener {
 				// if player is in warmup hashmap, cancel teleport and send player message
 				if (plugin.teleportManager.isWarmingUp((Player) entity)) {
 					plugin.teleportManager.cancelTeleport((Player) entity);
-					Message.create(entity, TELEPORT_CANCELLED_DAMAGE).send(plugin.languageHandler);
+					plugin.messageBuilder.build(entity, TELEPORT_CANCELLED_DAMAGE).send(plugin.languageHandler);
 					plugin.soundConfig.playSound(entity, SoundId.TELEPORT_CANCELLED);
 				}
 			}
@@ -281,7 +280,7 @@ public final class PlayerEventListener implements Listener {
 	 * @param event PlayerMoveEvent handled by this method
 	 */
 	@EventHandler
-	final void onPlayerMovement(final PlayerMoveEvent event) {
+	void onPlayerMovement(final PlayerMoveEvent event) {
 
 		// if cancel-on-movement configuration is false, do nothing and return
 		if (!plugin.getConfig().getBoolean("cancel-on-movement")) {
@@ -300,7 +299,7 @@ public final class PlayerEventListener implements Listener {
 				plugin.teleportManager.cancelTeleport(player);
 
 				// send player message
-				Message.create(player, TELEPORT_CANCELLED_MOVEMENT).send(plugin.languageHandler);
+				plugin.messageBuilder.build(player, TELEPORT_CANCELLED_MOVEMENT).send(plugin.languageHandler);
 
 				// play sound
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);

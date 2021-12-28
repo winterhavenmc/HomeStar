@@ -1,13 +1,13 @@
 package com.winterhaven_mc.homestar.commands;
 
 import com.winterhaven_mc.homestar.PluginMain;
-import com.winterhaven_mc.homestar.messages.Message;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
+import javax.annotation.Nonnull;
 import java.util.*;
 
 import static com.winterhaven_mc.homestar.messages.MessageId.COMMAND_FAIL_INVALID_COMMAND;
@@ -50,8 +50,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * Tab completer for HomeStar
 	 */
 	@Override
-	public final List<String> onTabComplete(final CommandSender sender, final Command command,
-											final String alias, final String[] args) {
+	public List<String> onTabComplete(final @Nonnull CommandSender sender, final @Nonnull Command command,
+	                                  final @Nonnull String alias, final String[] args) {
 
 		// if more than one argument, use tab completer of subcommand
 		if (args.length > 1) {
@@ -77,8 +77,8 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 	 * command executor method for HomeStar
 	 */
 	@Override
-	public final boolean onCommand(final CommandSender sender, final Command cmd,
-								   final String label, final String[] args) {
+	public boolean onCommand(final @Nonnull CommandSender sender, final @Nonnull Command cmd,
+	                         final @Nonnull String label, final String[] args) {
 
 		// convert args array to list
 		List<String> argsList = new ArrayList<>(Arrays.asList(args));
@@ -101,7 +101,7 @@ public final class CommandManager implements CommandExecutor, TabCompleter {
 		// if subcommand is null, get help command from map
 		if (subcommand == null) {
 			subcommand = subcommandMap.getCommand("help");
-			Message.create(sender, COMMAND_FAIL_INVALID_COMMAND).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_INVALID_COMMAND).send(plugin.languageHandler);
 			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
 		}
 

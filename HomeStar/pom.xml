@@ -63,11 +63,11 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<!-- MessengerLib -->
+		<!-- MessageBuilder -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>messenger-lib</artifactId>
-			<version>1.16.2</version>
+			<artifactId>message-builder</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
