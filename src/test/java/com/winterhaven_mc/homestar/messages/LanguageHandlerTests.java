@@ -35,19 +35,19 @@ public class LanguageHandlerTests {
         @Test
         @DisplayName("language manager is not null.")
         void LanguageManagerNotNull() {
-            Assertions.assertNotNull(plugin.languageHandler);
+            Assertions.assertNotNull(plugin.messageBuilder);
         }
 
         @Test
         @DisplayName("item name is not null.")
         void ItemNameNotNull() {
-            Assertions.assertNotNull(plugin.languageHandler.getItemName());
+            Assertions.assertNotNull(plugin.messageBuilder.getItemName());
         }
 
         @Test
         @DisplayName("item lore is not null.")
         void ItemLoreNotNull() {
-            Assertions.assertNotNull(plugin.languageHandler.getItemLore());
+            Assertions.assertNotNull(plugin.messageBuilder.getItemLore());
         }
     }
 

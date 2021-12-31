@@ -9,7 +9,6 @@ import com.winterhaven_mc.homestar.commands.CommandManager;
 import com.winterhaven_mc.homestar.teleport.TeleportManager;
 import com.winterhaven_mc.homestar.listeners.PlayerEventListener;
 
-import com.winterhavenmc.util.messagebuilder.LanguageHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -26,7 +25,6 @@ import java.io.File;
  */
 public final class PluginMain extends JavaPlugin {
 
-	public LanguageHandler languageHandler;
 	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public SoundConfiguration soundConfig;
 	public TeleportManager teleportManager;
@@ -60,9 +58,8 @@ public final class PluginMain extends JavaPlugin {
 		// install default configuration file if not already present
 		saveDefaultConfig();
 
-		// instantiate language manager
-		languageHandler = new LanguageHandler(this);
-		messageBuilder = new MessageBuilder<>();
+		// instantiate message builder
+		messageBuilder = new MessageBuilder<>(this);
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);

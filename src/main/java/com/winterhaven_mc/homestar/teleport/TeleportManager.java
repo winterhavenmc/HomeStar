@@ -79,7 +79,7 @@ public final class TeleportManager {
 		if (getCooldownTimeRemaining(player) > 0) {
 			plugin.messageBuilder.build(player, TELEPORT_COOLDOWN)
 					.setMacro(DURATION, getCooldownTimeRemaining(player))
-					.send(plugin.languageHandler);
+					.send();
 			return;
 		}
 
@@ -92,7 +92,7 @@ public final class TeleportManager {
 		World playerWorld = player.getWorld();
 
 		// get home display name from language file
-		String destinationName = plugin.languageHandler.getHomeDisplayName();
+		String destinationName = plugin.messageBuilder.getHomeDisplayName();
 
 		// if player has bukkit bedspawn, try to get safe bedspawn location
 		Location destination = player.getBedSpawnLocation();
@@ -107,7 +107,7 @@ public final class TeleportManager {
 		if (destination == null) {
 
 			// send missing or obstructed message
-			plugin.messageBuilder.build(player, TELEPORT_FAIL_NO_BEDSPAWN).send(plugin.languageHandler);
+			plugin.messageBuilder.build(player, TELEPORT_FAIL_NO_BEDSPAWN).send();
 
 			// if bedspawn-fallback is configured false, play teleport fail sound and return
 			if (!plugin.getConfig().getBoolean("bedspawn-fallback")) {
@@ -118,7 +118,7 @@ public final class TeleportManager {
 			else {
 
 				// set destinationName string to spawn name from language file
-				destinationName = plugin.languageHandler.getSpawnDisplayName();
+				destinationName = plugin.messageBuilder.getSpawnDisplayName();
 
 				// if multiverse is enabled, get spawn location from it so we have pitch and yaw
 				destination = plugin.worldManager.getSpawnLocation(playerWorld);
@@ -128,7 +128,7 @@ public final class TeleportManager {
 		// if player is less than config min-distance from destination, send player min-distance message and return
 		if (player.getWorld().equals(destination.getWorld())
 				&& destination.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
-			plugin.messageBuilder.build(player, TELEPORT_MIN_DISTANCE).setMacro(DESTINATION, destinationName).send(plugin.languageHandler);
+			plugin.messageBuilder.build(player, TELEPORT_MIN_DISTANCE).setMacro(DESTINATION, destinationName).send();
 			return;
 		}
 
@@ -152,7 +152,7 @@ public final class TeleportManager {
 			plugin.messageBuilder.build(player, TELEPORT_WARMUP)
 					.setMacro(DESTINATION, destinationName)
 					.setMacro(DURATION, TimeUnit.SECONDS.toMillis(warmupTime))
-					.send(plugin.languageHandler);
+					.send();
 
 			// if enabled, play sound effect
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_WARMUP);
@@ -170,7 +170,7 @@ public final class TeleportManager {
 
 			// write message to log
 			plugin.getLogger().info(player.getName() + ChatColor.RESET + " used a "
-					+ plugin.languageHandler.getItemName() + ChatColor.RESET + " in "
+					+ plugin.messageBuilder.getItemName() + ChatColor.RESET + " in "
 					+ plugin.worldManager.getWorldName(player) + ChatColor.RESET + ".");
 		}
 	}

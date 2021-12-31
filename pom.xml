@@ -67,7 +67,7 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>message-builder</artifactId>
-			<version>1.0.0</version>
+			<version>1.0.1</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
@@ -138,7 +138,7 @@
 							<rules>
 								<bannedDependencies>
 									<excludes>
-										<exclude>org.apache.logging.log4j:log4j-core:(,2.16.0)</exclude>
+										<exclude>org.apache.logging.log4j:log4j-core:(,2.17.0)</exclude>
 									</excludes>
 								</bannedDependencies>
 							</rules>
@@ -152,7 +152,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
+				<version>3.8.1</version>
 				<configuration>
 					<source>1.8</source>
 					<target>1.8</target>
@@ -172,6 +172,11 @@
 						</goals>
 						<configuration>
 							<minimizeJar>true</minimizeJar>
+							<transformers>
+								<transformer implementation="org.apache.maven.plugins.shade.resource.DontIncludeResourceTransformer">
+									<resource>META-INF/MANIFEST.MF</resource>
+								</transformer>
+							</transformers>
 							<artifactSet>
 								<includes>
 									<include>com.winterhaven-mc:message-builder</include>
@@ -197,10 +202,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
+				<version>3.3.1</version>
 				<configuration>
 					<source>8</source>
-					<doclint>none</doclint>
+					<doclint>all,-missing</doclint>
 				</configuration>
 				<executions>
 					<execution>

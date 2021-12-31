@@ -67,14 +67,14 @@ public class GiveCommand extends AbstractSubcommand {
 
 		// if command sender does not have permission to give HomeStars, output error message and return true
 		if (!sender.hasPermission("homestar.give")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_GIVE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_GIVE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check min arguments
 		if (args.size() < getMinArgs()) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -82,7 +82,7 @@ public class GiveCommand extends AbstractSubcommand {
 
 		// check max arguments
 		if (args.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -106,7 +106,7 @@ public class GiveCommand extends AbstractSubcommand {
 				quantity = Integer.parseInt(args.get(1));
 			}
 			catch (NumberFormatException e) {
-				plugin.messageBuilder.build(sender, COMMAND_FAIL_QUANTITY_INVALID).send(plugin.languageHandler);
+				plugin.messageBuilder.build(sender, COMMAND_FAIL_QUANTITY_INVALID).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
@@ -131,7 +131,7 @@ public class GiveCommand extends AbstractSubcommand {
 
 		// if remaining items equals quantity given, send player-inventory-full message and return
 		if (noFitCount == quantity) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_GIVE_INVENTORY_FULL).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_GIVE_INVENTORY_FULL).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -146,7 +146,7 @@ public class GiveCommand extends AbstractSubcommand {
 			plugin.messageBuilder.build(sender, COMMAND_SUCCESS_GIVE)
 					.setMacro(ITEM_QUANTITY, quantity)
 					.setMacro(TARGET_PLAYER, targetPlayer)
-					.send(plugin.languageHandler);
+					.send();
 
 			// if giver is in game, play sound
 			if (sender instanceof Player) {
@@ -157,7 +157,7 @@ public class GiveCommand extends AbstractSubcommand {
 			plugin.messageBuilder.build(targetPlayer, COMMAND_SUCCESS_GIVE_TARGET)
 					.setMacro(ITEM_QUANTITY, quantity)
 					.setMacro(TARGET_PLAYER, sender)
-					.send(plugin.languageHandler);
+					.send();
 		}
 		// play sound to target player
 		plugin.soundConfig.playSound(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
@@ -207,10 +207,10 @@ public class GiveCommand extends AbstractSubcommand {
 			}
 		}
 		if (matchedPlayers.isEmpty()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send();
 		}
 		else {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE).send();
 		}
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 		return null;

@@ -22,13 +22,15 @@ public final class HomeStarFactory {
 	private final PluginMain plugin;
 
 	// name spaced key for persistent data
-	protected final NamespacedKey PERSISTENT_KEY;
+	private final NamespacedKey PERSISTENT_KEY;
 
 	// item metadata fields
-	protected final int quantity;
-	protected final ItemStack itemStack;
-	protected final String itemStackName;
-	protected final List<String> itemStackLore;
+	private final int quantity;
+	private final ItemStack itemStack;
+	@SuppressWarnings({"FieldCanBeLocal", "unused"})
+	private final String itemStackName;
+	@SuppressWarnings({"FieldCanBeLocal", "unused"})
+	private final List<String> itemStackLore;
 
 
 	/**
@@ -43,8 +45,8 @@ public final class HomeStarFactory {
 
 		this.quantity = 1;
 		this.itemStack = getDefaultItemStack();
-		this.itemStackName = plugin.languageHandler.getItemName();
-		this.itemStackLore = plugin.languageHandler.getItemLore();
+		this.itemStackName = plugin.messageBuilder.getItemName();
+		this.itemStackLore = plugin.messageBuilder.getItemLore();
 
 		setMetaData(this.itemStack);
 	}
@@ -117,7 +119,7 @@ public final class HomeStarFactory {
 	 * @return String - configured item display name
 	 */
 	public String getItemName() {
-		return plugin.languageHandler.getItemName();
+		return plugin.messageBuilder.getItemName();
 	}
 
 
@@ -151,8 +153,8 @@ public final class HomeStarFactory {
 	public void setMetaData(final ItemStack itemStack) {
 
 		// retrieve item name and lore from language file file
-		String itemName = plugin.languageHandler.getItemName();
-		List<String> configLore = plugin.languageHandler.getItemLore();
+		String itemName = plugin.messageBuilder.getItemName();
+		List<String> configLore = plugin.messageBuilder.getItemLore();
 
 		// allow for '&' character for color codes in name and lore
 		itemName = ChatColor.translateAlternateColorCodes('&', itemName);

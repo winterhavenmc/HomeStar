@@ -36,13 +36,13 @@ public class DestroyCommand extends AbstractSubcommand {
 
 		// sender must be in game player
 		if (!(sender instanceof Player)) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_DESTROY_CONSOLE).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_DESTROY_CONSOLE).send();
 			return true;
 		}
 
 		// if command sender does not have permission to destroy HomeStars, output error message and return true
 		if (!sender.hasPermission("homestar.destroy")) {
-			plugin.messageBuilder.build(sender, PERMISSION_DENIED_DESTROY).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, PERMISSION_DENIED_DESTROY).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -52,7 +52,7 @@ public class DestroyCommand extends AbstractSubcommand {
 
 		// check that player is holding a homestar stack
 		if (!plugin.homeStarFactory.isItem(playerItem)) {
-			plugin.messageBuilder.build(sender, COMMAND_FAIL_DESTROY_NO_MATCH).send(plugin.languageHandler);
+			plugin.messageBuilder.build(sender, COMMAND_FAIL_DESTROY_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -61,7 +61,7 @@ public class DestroyCommand extends AbstractSubcommand {
 		player.getInventory().setItemInMainHand(playerItem);
 		plugin.messageBuilder.build(sender, COMMAND_SUCCESS_DESTROY)
 				.setMacro(ITEM_QUANTITY, quantity)
-				.send(plugin.languageHandler);
+				.send();
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_DESTROY);
 		return true;
 	}
