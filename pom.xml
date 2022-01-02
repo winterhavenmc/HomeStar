@@ -74,20 +74,20 @@
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.16.1</version>
+			<version>1.16.3</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.16.1</version>
+			<version>1.16.3</version>
 		</dependency>
 
 		<!-- Unit Testing Framework -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
+			<artifactId>junit-jupiter-api</artifactId>
 			<version>5.8.2</version>
 			<scope>test</scope>
 		</dependency>
@@ -96,8 +96,7 @@
 		<dependency>
 			<groupId>com.github.seeseemelk</groupId>
 			<artifactId>MockBukkit-v1.18</artifactId>
-			<!--suppress MavenPackageUpdate -->
-			<version>1.14.0</version>
+			<version>1.15.0</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -163,7 +162,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.2.4</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -192,11 +191,8 @@
 							</artifactSet>
 							<relocations>
 								<relocation>
-									<pattern>com.winterhaven_mc.util</pattern>
+									<pattern>com.winterhavenmc.util</pattern>
 									<shadedPattern>com.winterhaven_mc.homestar.shaded</shadedPattern>
-									<includes>
-										<include>com.winterhaven_mc.util.*</include>
-									</includes>
 								</relocation>
 							</relocations>
 						</configuration>
