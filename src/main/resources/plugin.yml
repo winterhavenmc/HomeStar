@@ -1,5 +1,5 @@
 name: HomeStar
-main: com.winterhaven_mc.homestar.PluginMain
+main: com.winterhavenmc.homestar.PluginMain
 author: ${project.author}
 version: ${project.version}
 api-version: 1.16
