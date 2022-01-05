@@ -38,7 +38,7 @@ public final class HomeStarFactory {
 	 *
 	 * @throws AssertionError on attempt to instantiate
 	 */
-	public HomeStarFactory(PluginMain plugin) {
+	public HomeStarFactory(final PluginMain plugin) {
 		this.plugin = plugin;
 
 		this.PERSISTENT_KEY = new NamespacedKey(plugin, "isHomeStar");

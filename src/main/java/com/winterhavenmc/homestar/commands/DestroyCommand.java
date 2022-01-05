@@ -22,7 +22,7 @@ public class DestroyCommand extends AbstractSubcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	DestroyCommand(PluginMain plugin) {
+	DestroyCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.setName("destroy");
 		this.setUsage("/homestar destroy");
