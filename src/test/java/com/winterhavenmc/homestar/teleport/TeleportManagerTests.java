@@ -47,18 +47,23 @@ public class TeleportManagerTests {
                 Assertions.assertNotNull(plugin.teleportManager);
             }
 
-            @Test
-            @DisplayName("player is not warming up.")
-            void PlayerIsNotWarmingUp() {
-                Assertions.assertFalse(plugin.teleportManager.isWarmingUp(player));
-            }
+        @Nested
+        @DisplayName("Teleport warmup tests")
+        class TeleportWarmupTests {
 
-            @Test
-            @DisplayName("player is warming up.")
-            void PlayerIsWarmingUp() {
-                plugin.teleportManager.putWarmup(player, 1234);
-                Assertions.assertTrue(plugin.teleportManager.isWarmingUp(player));
-                plugin.teleportManager.cancelTeleport(player);
+                @Test
+                @DisplayName("player is not warming up.")
+                void PlayerIsNotWarmingUp() {
+                    Assertions.assertFalse(plugin.teleportManager.isWarmingUp(player));
+                }
+
+                @Test
+                @DisplayName("player is warming up.")
+                void PlayerIsWarmingUp() {
+                    plugin.teleportManager.putWarmup(player, 1234);
+                    Assertions.assertTrue(plugin.teleportManager.isWarmingUp(player));
+                    plugin.teleportManager.cancelTeleport(player);
+                }
             }
         }
     }
