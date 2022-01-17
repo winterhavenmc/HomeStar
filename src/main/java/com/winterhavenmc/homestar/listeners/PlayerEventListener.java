@@ -34,14 +34,13 @@ public final class PlayerEventListener implements Listener {
 	private final PluginMain plugin;
 
 	// set of craft table materials
-	private final Set<Material> craftTables =  Collections.unmodifiableSet(
-			new HashSet<>(Arrays.asList(
+	private final Set<Material> craftTables =  Set.of(
 					Material.CARTOGRAPHY_TABLE,
 					Material.CRAFTING_TABLE,
 					Material.FLETCHING_TABLE,
 					Material.LOOM,
 					Material.SMITHING_TABLE,
-					Material.STONECUTTER)));
+					Material.STONECUTTER );
 
 
 	/**
