@@ -92,7 +92,7 @@ public final class TeleportManager {
 		// get home display name from language file
 		String destinationName = plugin.messageBuilder.getHomeDisplayName();
 
-		// if player has bukkit bedspawn, try to get safe bedspawn location
+		// if player has bukkit bed spawn, try to get safe bed spawn location
 		Location destination = player.getBedSpawnLocation();
 
 		// if center-on-block is configured true, get block centered location
@@ -101,7 +101,7 @@ public final class TeleportManager {
 			destination.add( 0.5, 0.0, 0.5);
 		}
 
-		// if bedspawn location is null, check if bedspawn-fallback is configured true
+		// if bed spawn location is null, check if bed spawn-fallback is configured true
 		if (destination == null) {
 
 			// send missing or obstructed message
@@ -118,7 +118,7 @@ public final class TeleportManager {
 				// set destinationName string to spawn name from language file
 				destinationName = plugin.messageBuilder.getSpawnDisplayName();
 
-				// if multiverse is enabled, get spawn location from it so we have pitch and yaw
+				// if multiverse is enabled, get spawn location from it, so we have pitch and yaw
 				destination = plugin.worldManager.getSpawnLocation(playerWorld);
 			}
 		}
