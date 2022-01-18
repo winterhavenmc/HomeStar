@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 
-public class GiveCommand extends AbstractSubcommand {
+final class GiveCommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 
@@ -39,7 +39,7 @@ public class GiveCommand extends AbstractSubcommand {
 
 		List<String> returnList = new ArrayList<>();
 
-		// return list of matching players players
+		// return list of matching players
 		if (args.length == 2) {
 			List<Player> matchedPlayers = plugin.getServer().matchPlayer(args[1]);
 			for (Player player : matchedPlayers) {

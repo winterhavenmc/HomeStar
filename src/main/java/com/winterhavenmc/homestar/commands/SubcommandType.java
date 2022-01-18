@@ -3,7 +3,7 @@ package com.winterhavenmc.homestar.commands;
 import com.winterhavenmc.homestar.PluginMain;
 
 
-public enum SubcommandType {
+enum SubcommandType {
 
 	DESTROY() {
 		@Override
