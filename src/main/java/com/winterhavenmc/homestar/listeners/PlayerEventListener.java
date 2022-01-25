@@ -106,7 +106,7 @@ public final class PlayerEventListener implements Listener {
 		// get event action
 		Action action = event.getAction();
 
-		// if event action is PHYSICAL (not left click or right click), do nothing and return
+		// if event action is PHYSICAL (not left-click or right click), do nothing and return
 		if (action.equals(Action.PHYSICAL)) {
 			return;
 		}
@@ -243,13 +243,8 @@ public final class PlayerEventListener implements Listener {
 	 *
 	 * @param event EntityDamageEvent handled by this method
 	 */
-	@EventHandler
+	@EventHandler(ignoreCancelled = true)
 	void onEntityDamage(final EntityDamageEvent event) {
-
-		// if event is already cancelled, do nothing and return
-		if (event.isCancelled()) {
-			return;
-		}
 
 		// if cancel-on-damage configuration is true, check if damaged entity is player
 		if (plugin.getConfig().getBoolean("cancel-on-damage")) {
