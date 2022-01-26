@@ -37,9 +37,7 @@ public final class PluginMain extends JavaPlugin {
 	public void onEnable() {
 
 		// bStats
-		final int pluginId = 13928;
-		@SuppressWarnings("unused")
-		Metrics metrics = new Metrics(this, pluginId);
+		new Metrics(this, 13928);
 
 		// install default configuration file if not already present
 		saveDefaultConfig();
