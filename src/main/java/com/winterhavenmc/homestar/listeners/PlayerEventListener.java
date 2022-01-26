@@ -86,13 +86,7 @@ public final class PlayerEventListener implements Listener {
 					}
 
 					// cancel teleport
-					plugin.teleportManager.cancelTeleport(player);
-
-					// send cancelled teleport message
-					plugin.messageBuilder.build(player, MessageId.TELEPORT_CANCELLED_INTERACTION).send();
-
-					// play cancelled teleport sound
-					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
+					cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_INTERACTION);
 					return;
 				}
 			}
@@ -256,9 +250,7 @@ public final class PlayerEventListener implements Listener {
 
 				// if player is in warmup hashmap, cancel teleport and send player message
 				if (plugin.teleportManager.isWarmingUp((Player) entity)) {
-					plugin.teleportManager.cancelTeleport((Player) entity);
-					plugin.messageBuilder.build(entity, MessageId.TELEPORT_CANCELLED_DAMAGE).send();
-					plugin.soundConfig.playSound(entity, SoundId.TELEPORT_CANCELLED);
+					cancelTeleportWithMessage(entity, MessageId.TELEPORT_CANCELLED_DAMAGE);
 				}
 			}
 		}
@@ -286,17 +278,21 @@ public final class PlayerEventListener implements Listener {
 
 			// check for player movement other than head turning
 			if (event.getFrom().distance(Objects.requireNonNull(event.getTo())) > 0) {
-
-				// cancel player teleport
-				plugin.teleportManager.cancelTeleport(player);
-
-				// send player message
-				plugin.messageBuilder.build(player, MessageId.TELEPORT_CANCELLED_MOVEMENT).send();
-
-				// play sound
-				plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
+				cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_MOVEMENT);
 			}
 		}
+	}
+
+
+	/**
+	 * Cancel player teleportation, send message and play sound
+	 * @param entity the player whose teleportation is being cancelled
+	 * @param messageId the message id of the message sent to the player
+	 */
+	private void cancelTeleportWithMessage(final Entity entity, final MessageId messageId) {
+		plugin.teleportManager.cancelTeleport((Player) entity);
+		plugin.messageBuilder.build(entity, messageId).send();
+		plugin.soundConfig.playSound(entity, SoundId.TELEPORT_CANCELLED);
 	}
 
 }
