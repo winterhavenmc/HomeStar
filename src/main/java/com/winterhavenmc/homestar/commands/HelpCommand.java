@@ -1,17 +1,15 @@
 package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
+import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
 
-import com.winterhavenmc.homestar.messages.MessageId;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static com.winterhavenmc.homestar.sounds.SoundId.COMMAND_INVALID;
 
 
 /**
@@ -110,7 +108,7 @@ final class HelpCommand extends AbstractSubcommand implements Subcommand {
 		// else display invalid command help message and usage for all commands
 		else {
 			plugin.messageBuilder.build(sender, MessageId.COMMAND_HELP_INVALID).send();
-			plugin.soundConfig.playSound(sender, COMMAND_INVALID);
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 			displayUsageAll(sender);
 		}
 	}
