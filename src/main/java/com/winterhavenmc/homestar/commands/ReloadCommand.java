@@ -21,10 +21,9 @@ final class ReloadCommand extends SubcommandAbstract {
 	 */
 	ReloadCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("reload");
-		this.setUsage("/homestar reload");
-		this.setDescription(MessageId.COMMAND_HELP_RELOAD);
-		this.setMaxArgs(0);
+		this.name = "reload";
+		this.usageString = "/homestar reload";
+		this.description = MessageId.COMMAND_HELP_RELOAD;
 	}
 
 

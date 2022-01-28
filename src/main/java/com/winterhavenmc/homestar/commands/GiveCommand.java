@@ -25,11 +25,11 @@ final class GiveCommand extends SubcommandAbstract {
 	 */
 	GiveCommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
-		this.setName("give");
-		this.setUsage("/homestar give <player> [quantity]");
-		this.setDescription(MessageId.COMMAND_HELP_GIVE);
-		this.setMinArgs(1);
-		this.setMaxArgs(2);
+		this.name = "give";
+		this.usageString = "/homestar give <player> [quantity]";
+		this.description = MessageId.COMMAND_HELP_GIVE;
+		this.minArgs = 1;
+		this.maxArgs = 2;
 	}
 
 

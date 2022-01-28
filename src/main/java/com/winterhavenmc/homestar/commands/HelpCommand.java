@@ -29,10 +29,10 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 	HelpCommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);
-		this.setName("help");
-		this.setUsage("/homestar help [command]");
-		this.setDescription(MessageId.COMMAND_HELP_HELP);
-		this.setMaxArgs(1);
+		this.name ="help";
+		this.usageString = "/homestar help [command]";
+		this.description = MessageId.COMMAND_HELP_HELP;
+		this.maxArgs = 1;
 	}
 
 

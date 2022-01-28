@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 import java.util.List;
 
 
-@SuppressWarnings("unused")
 interface Subcommand {
 
 	boolean onCommand(final CommandSender sender, final List<String> argsList);
@@ -17,30 +16,15 @@ interface Subcommand {
 
 	String getName();
 
-	void setName(final String name);
-
-	List<String> getAliases();
-
-	void setAliases(final List<String> aliases);
-
-	void addAlias(final String alias);
-
+	@SuppressWarnings("unused")
 	String getUsage();
-
-	void setUsage(final String usageString);
 
 	void displayUsage(final CommandSender sender);
 
 	MessageId getDescription();
 
-	void setDescription(final MessageId messageId);
-
 	int getMinArgs();
 
-	void setMinArgs(final int minArgs);
-
 	int getMaxArgs();
-
-	void setMaxArgs(final int maxArgs);
 
 }
