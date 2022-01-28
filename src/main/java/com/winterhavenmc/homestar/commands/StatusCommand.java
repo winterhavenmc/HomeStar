@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
-final class StatusCommand extends AbstractSubcommand {
+final class StatusCommand extends SubcommandAbstract {
 
 	private final PluginMain plugin;
 
