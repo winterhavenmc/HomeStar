@@ -60,6 +60,7 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate player event listener
 		playerEventListener = new PlayerEventListener(this);
 		
+		// instantiate homestar factory
 		homeStarFactory = new HomeStarFactory(this);
 	}
 
