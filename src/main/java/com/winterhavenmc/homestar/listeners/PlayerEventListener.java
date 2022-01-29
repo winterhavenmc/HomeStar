@@ -289,6 +289,7 @@ public final class PlayerEventListener implements Listener {
 
 	/**
 	 * Cancel player teleportation, send message and play sound
+	 *
 	 * @param player the player whose teleportation is being cancelled
 	 * @param messageId the message id of the message sent to the player
 	 */
