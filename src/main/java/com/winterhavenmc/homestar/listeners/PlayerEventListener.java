@@ -248,9 +248,12 @@ public final class PlayerEventListener implements Listener {
 			// if damaged entity is player, check for pending teleport
 			if (entity instanceof Player) {
 
+				// cast entity to player
+				Player player = (Player) entity;
+
 				// if player is in warmup hashmap, cancel teleport and send player message
-				if (plugin.teleportManager.isWarmingUp((Player) entity)) {
-					cancelTeleportWithMessage(entity, MessageId.TELEPORT_CANCELLED_DAMAGE);
+				if (plugin.teleportManager.isWarmingUp(player)) {
+					cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_DAMAGE);
 				}
 			}
 		}
@@ -286,13 +289,13 @@ public final class PlayerEventListener implements Listener {
 
 	/**
 	 * Cancel player teleportation, send message and play sound
-	 * @param entity the player whose teleportation is being cancelled
+	 * @param player the player whose teleportation is being cancelled
 	 * @param messageId the message id of the message sent to the player
 	 */
-	private void cancelTeleportWithMessage(final Entity entity, final MessageId messageId) {
-		plugin.teleportManager.cancelTeleport((Player) entity);
-		plugin.messageBuilder.build(entity, messageId).send();
-		plugin.soundConfig.playSound(entity, SoundId.TELEPORT_CANCELLED);
+	private void cancelTeleportWithMessage(final Player player, final MessageId messageId) {
+		plugin.teleportManager.cancelTeleport(player);
+		plugin.messageBuilder.build(player, messageId).send();
+		plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 	}
 
 }
