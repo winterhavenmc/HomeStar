@@ -74,6 +74,9 @@ final class ReloadCommand extends SubcommandAbstract {
 		// reload sounds
 		plugin.soundConfig.reload();
 
+		// reload homestar factory
+		plugin.homeStarFactory.reload();
+
 		// send reloaded message
 		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
 		return true;
