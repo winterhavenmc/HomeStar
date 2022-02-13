@@ -47,9 +47,9 @@ public final class HomeStarFactory {
 
 
 	/**
-	 * Private constructor to prevent instantiation
+	 * class constructor
 	 *
-	 * @throws AssertionError on attempt to instantiate
+	 * @param plugin reference to plugin main class
 	 */
 	public HomeStarFactory(final PluginMain plugin) {
 		this.plugin = plugin;
