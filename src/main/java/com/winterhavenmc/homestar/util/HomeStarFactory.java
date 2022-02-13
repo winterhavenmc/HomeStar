@@ -21,13 +21,14 @@ import com.winterhavenmc.homestar.PluginMain;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 
 /**
@@ -41,9 +42,14 @@ public final class HomeStarFactory {
 	// name spaced key for persistent data
 	private final NamespacedKey PERSISTENT_KEY;
 
-	// item metadata fields
-	private final int quantity;
-	private final ItemStack itemStack;
+	// item metadata flags
+	private static final Set<ItemFlag> itemFlagSet = Set.of(
+			ItemFlag.HIDE_ATTRIBUTES,
+			ItemFlag.HIDE_ENCHANTS,
+			ItemFlag.HIDE_UNBREAKABLE );
+
+	// the proto item
+	private ItemStack protoItem;
 
 
 	/**
@@ -53,31 +59,19 @@ public final class HomeStarFactory {
 	 */
 	public HomeStarFactory(final PluginMain plugin) {
 		this.plugin = plugin;
-
 		this.PERSISTENT_KEY = new NamespacedKey(plugin, "isHomeStar");
-
-		this.quantity = 1;
-		this.itemStack = getDefaultItemStack();
-
-		setMetaData(this.itemStack);
+		this.protoItem = getDefaultItemStack();
+		setMetaData(this.protoItem);
 	}
 
 
 	/**
-	 * Create a HomeStar item stack of given quantity, with custom display name and lore
+	 * Create a HomeStar item stack with quantity of one, with custom display name and lore
 	 *
 	 * @return ItemStack of HomeStar items
 	 */
 	public ItemStack create() {
-
-		ItemStack clonedItem = this.itemStack.clone();
-
-		// set quantity
-		clonedItem.setAmount(quantity);
-
-		// return cloned item
-		return clonedItem;
-
+		return this.protoItem.clone();
 	}
 
 
@@ -89,14 +83,19 @@ public final class HomeStarFactory {
 	 */
 	public ItemStack create(final int quantity) {
 
-		ItemStack clonedItem = this.itemStack.clone();
+		// get clone of proto item
+		ItemStack clonedItem = this.protoItem.clone();
+
+		// validate passed in quantity
+		int validatedQuantity = quantity;
+ 		validatedQuantity = Math.max(1, validatedQuantity);
+		validatedQuantity = Math.min(validatedQuantity, clonedItem.getType().getMaxStackSize());
 
 		// set quantity
-		clonedItem.setAmount(quantity);
+		clonedItem.setAmount(validatedQuantity);
 
 		// return cloned item
 		return clonedItem;
-
 	}
 
 
@@ -125,32 +124,29 @@ public final class HomeStarFactory {
 
 
 	/**
-	 * Get configured item display name
-	 *
-	 * @return String - configured item display name
-	 */
-	public String getItemName() {
-		return plugin.messageBuilder.getItemName();
-	}
-
-
-	/**
 	 * Create an itemStack with default material and data from config
 	 *
 	 * @return ItemStack
 	 */
 	public ItemStack getDefaultItemStack() {
 
-		// try to match material
-		Material configMaterial = Material.matchMaterial(
-				Objects.requireNonNull(plugin.getConfig().getString("item-material")));
+		// get configured material string
+		String configMaterialString = plugin.getConfig().getString("default-material");
 
-		// if no match default to nether star
-		if (configMaterial == null) {
+		// if string is null, use default
+		if (configMaterialString == null) {
+			configMaterialString = "NETHER_STAR";
+		}
+
+		// match material to configured string
+		Material configMaterial = Material.matchMaterial(configMaterialString);
+
+		// if no match or unobtainable material, default to nether star
+		if (configMaterial == null || !configMaterial.isItem()) {
 			configMaterial = Material.NETHER_STAR;
 		}
 
-		// return item stack with configured material
+		// return item stack of configured material
 		return new ItemStack(configMaterial, 1);
 	}
 
@@ -189,8 +185,22 @@ public final class HomeStarFactory {
 		// set persistent data in item metadata
 		itemMeta.getPersistentDataContainer().set(PERSISTENT_KEY, PersistentDataType.BYTE, (byte) 1);
 
+		// set item metadata flags
+		for (ItemFlag itemFlag : itemFlagSet) {
+			itemMeta.addItemFlags(itemFlag);
+		}
+
 		// save new item metadata
 		itemStack.setItemMeta(itemMeta);
+	}
+
+
+	/**
+	 * Reload plugin's HomeStarFactory. replaces proto item with new item stack with configured attributes
+	 */
+	public void reload() {
+		this.protoItem = getDefaultItemStack();
+		setMetaData(this.protoItem);
 	}
 
 }
