@@ -232,7 +232,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.getItemName()
 	 */
 	public static String getItemName() {
-		return plugin.homeStarFactory.getItemName();
+		return plugin.messageBuilder.getItemName();
 	}
 
 
