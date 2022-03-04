@@ -24,6 +24,7 @@ import com.winterhavenmc.homestar.teleport.TeleportManager;
 import com.winterhavenmc.homestar.listeners.PlayerEventListener;
 import com.winterhavenmc.homestar.util.HomeStarFactory;
 
+import com.winterhavenmc.homestar.util.MetricsHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
@@ -53,9 +54,6 @@ public final class PluginMain extends JavaPlugin {
 	@Override
 	public void onEnable() {
 
-		// bStats
-		new Metrics(this, 13928);
-
 		// install default configuration file if not already present
 		saveDefaultConfig();
 
@@ -79,6 +77,9 @@ public final class PluginMain extends JavaPlugin {
 		
 		// instantiate homestar factory
 		homeStarFactory = new HomeStarFactory(this);
+
+		// instantiate metrics handler
+		new MetricsHandler(this);
 	}
 
 }
