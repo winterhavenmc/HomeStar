@@ -35,7 +35,8 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.TimeUnit;
+
+import static com.winterhavenmc.homestar.util.BukkitTime.SECONDS;
 
 
 /**
@@ -161,12 +162,14 @@ public final class TeleportManager {
 			player.getInventory().setItemInMainHand(playerItem);
 		}
 
+		// get teleport warm-up time in seconds from config
+		long warmupSeconds = plugin.getConfig().getLong("teleport-warmup");
+
 		// if warmup setting is greater than zero, send warmup message
-		long warmupTime = plugin.getConfig().getLong("teleport-warmup");
-		if (warmupTime > 0) {
+		if (warmupSeconds > 0) {
 			plugin.messageBuilder.build(player, MessageId.TELEPORT_WARMUP)
 					.setMacro(Macro.DESTINATION, destinationName)
-					.setMacro(Macro.DURATION, TimeUnit.SECONDS.toMillis(warmupTime))
+					.setMacro(Macro.DURATION, SECONDS.toMillis(warmupSeconds))
 					.send();
 
 			// if enabled, play sound effect
@@ -175,7 +178,7 @@ public final class TeleportManager {
 
 		// initiate delayed teleport for player to destination
 		BukkitTask teleportTask = new DelayedTeleportTask(plugin, player, destination, destinationName,	playerItem)
-				.runTaskLater(plugin, plugin.getConfig().getInt("teleport-warmup") * 20L);
+				.runTaskLater(plugin, SECONDS.toTicks(warmupSeconds));
 
 		// insert player and taskId into warmup hashmap
 		putWarmup(player, teleportTask.getTaskId());
@@ -286,7 +289,7 @@ public final class TeleportManager {
 		final int cooldownSeconds = plugin.getConfig().getInt("teleport-cooldown");
 
 		// set expireTime to current time + configured cooldown period, in milliseconds
-		final Long expireTime = System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(cooldownSeconds);
+		final Long expireTime = System.currentTimeMillis() + SECONDS.toMillis(cooldownSeconds);
 
 		// put in cooldown map with player UUID as key and expireTime as value
 		cooldownMap.put(player.getUniqueId(), expireTime);
@@ -296,7 +299,7 @@ public final class TeleportManager {
 			public void run() {
 				cooldownMap.remove(player.getUniqueId());
 			}
-		}.runTaskLater(plugin, (cooldownSeconds * 20L));
+		}.runTaskLater(plugin, SECONDS.toTicks(cooldownSeconds));
 	}
 
 
