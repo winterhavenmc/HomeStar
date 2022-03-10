@@ -36,7 +36,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import static com.winterhavenmc.homestar.util.BukkitTime.SECONDS;
+import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
 /**
@@ -144,7 +144,9 @@ public final class TeleportManager {
 		// if player is less than config min-distance from destination, send player min-distance message and return
 		if (player.getWorld().equals(destination.getWorld())
 				&& destination.distance(player.getLocation()) < plugin.getConfig().getInt("minimum-distance")) {
-			plugin.messageBuilder.build(player, MessageId.TELEPORT_MIN_DISTANCE).setMacro(Macro.DESTINATION, destinationName).send();
+			plugin.messageBuilder.compose(player, MessageId.TELEPORT_MIN_DISTANCE)
+					.setMacro(Macro.DESTINATION, destinationName)
+					.send();
 			return;
 		}
 
