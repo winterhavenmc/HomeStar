@@ -136,7 +136,7 @@ class TeleportExecutor {
 	 * Check if player is within configured minimum distance from destination location
 	 *
 	 * @param player   the player
-	 * @param location the destination locaiton
+	 * @param location the destination location
 	 * @return true if under minimum distance, false if not
 	 */
 	private boolean isUnderMinimumDistance(final Player player, final Location location) {
