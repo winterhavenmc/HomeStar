@@ -90,7 +90,7 @@ public final class PlayerEventListener implements Listener {
 		if (plugin.getConfig().getBoolean("cancel-on-interaction")) {
 
 			// if player is in warmup hashmap, check if they are interacting with a block (not air)
-			if (plugin.teleportManager.isWarmingUp(player)) {
+			if (plugin.teleportHandler.isWarmingUp(player)) {
 
 				// if player is interacting with a block, cancel teleport, output message and return
 				if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)
@@ -98,7 +98,7 @@ public final class PlayerEventListener implements Listener {
 
 					// if player's last teleport initiated time is less than x ticks (def: 2), do nothing and return
 					// this is a workaround for event double firing (once for each hand) on every player interaction
-					if (!plugin.teleportManager.isInitiated(player)) {
+					if (!plugin.teleportHandler.isInitiated(player)) {
 						return;
 					}
 
@@ -130,7 +130,7 @@ public final class PlayerEventListener implements Listener {
 		}
 
 		// if player is not warming
-		if (!plugin.teleportManager.isWarmingUp(player)) {
+		if (!plugin.teleportHandler.isWarmingUp(player)) {
 
 			// get clicked block
 			Block block = event.getClickedBlock();
@@ -189,7 +189,7 @@ public final class PlayerEventListener implements Listener {
 			}
 
 			// initiate teleport
-			plugin.teleportManager.initiateTeleport(player);
+			plugin.teleportHandler.initiateTeleport(player);
 		}
 	}
 
@@ -206,7 +206,7 @@ public final class PlayerEventListener implements Listener {
 		Player player = event.getEntity();
 
 		// cancel any pending teleport for player
-		plugin.teleportManager.cancelTeleport(player);
+		plugin.teleportHandler.cancelTeleport(player);
 	}
 
 
@@ -221,7 +221,7 @@ public final class PlayerEventListener implements Listener {
 		Player player = event.getPlayer();
 
 		// cancel any pending teleport for player
-		plugin.teleportManager.cancelTeleport(player);
+		plugin.teleportHandler.cancelTeleport(player);
 	}
 
 
@@ -269,7 +269,7 @@ public final class PlayerEventListener implements Listener {
 				Player player = (Player) entity;
 
 				// if player is in warmup hashmap, cancel teleport and send player message
-				if (plugin.teleportManager.isWarmingUp(player)) {
+				if (plugin.teleportHandler.isWarmingUp(player)) {
 					cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_DAMAGE);
 				}
 			}
@@ -294,7 +294,7 @@ public final class PlayerEventListener implements Listener {
 		Player player = event.getPlayer();
 
 		// if player is in warmup hashmap, cancel teleport and send player message
-		if (plugin.teleportManager.isWarmingUp(player)) {
+		if (plugin.teleportHandler.isWarmingUp(player)) {
 
 			// check for player movement other than head turning
 			if (event.getFrom().distance(Objects.requireNonNull(event.getTo())) > 0) {
@@ -311,7 +311,7 @@ public final class PlayerEventListener implements Listener {
 	 * @param messageId the message id of the message sent to the player
 	 */
 	private void cancelTeleportWithMessage(final Player player, final MessageId messageId) {
-		plugin.teleportManager.cancelTeleport(player);
+		plugin.teleportHandler.cancelTeleport(player);
 		plugin.messageBuilder.build(player, messageId).send();
 		plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 	}
