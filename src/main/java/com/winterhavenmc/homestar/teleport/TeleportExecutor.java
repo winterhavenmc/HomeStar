@@ -22,9 +22,8 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
-import org.bukkit.ChatColor;
+
 import org.bukkit.Location;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
@@ -157,13 +156,10 @@ class TeleportExecutor {
 		// if log-use is enabled in config, write log entry
 		if (plugin.getConfig().getBoolean("log-use")) {
 
-			// get console command sender
-			CommandSender console = plugin.getServer().getConsoleSender();
-
-			// write message to log
-			console.sendMessage(player.getName() + ChatColor.RESET + " used a "
-					+ plugin.messageBuilder.getItemName() + ChatColor.RESET + " in "
-					+ plugin.worldManager.getWorldName(player) + ChatColor.RESET + ".");
+			// send message to console
+			plugin.messageBuilder.compose(plugin.getServer().getConsoleSender(), MessageId.LOG_USAGE)
+					.setMacro(Macro.TARGET_PLAYER, player)
+					.send();
 		}
 	}
 
