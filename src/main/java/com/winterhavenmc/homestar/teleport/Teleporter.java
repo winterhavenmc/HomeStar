@@ -17,7 +17,6 @@
 
 package com.winterhavenmc.homestar.teleport;
 
-import com.winterhavenmc.homestar.messages.MessageId;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
