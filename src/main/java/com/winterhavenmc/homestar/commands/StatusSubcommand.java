@@ -30,7 +30,7 @@ import java.util.Objects;
 import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
-final class StatusCommand extends SubcommandAbstract {
+final class StatusSubcommand extends SubcommandAbstract {
 
 	private final PluginMain plugin;
 
@@ -39,7 +39,7 @@ final class StatusCommand extends SubcommandAbstract {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	StatusCommand(final PluginMain plugin) {
+	StatusSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "status";
 		this.usageString = "/homestar status";

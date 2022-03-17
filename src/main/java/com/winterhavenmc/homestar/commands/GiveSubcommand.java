@@ -31,7 +31,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-final class GiveCommand extends SubcommandAbstract {
+final class GiveSubcommand extends SubcommandAbstract {
 
 	private final PluginMain plugin;
 
@@ -40,7 +40,7 @@ final class GiveCommand extends SubcommandAbstract {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	GiveCommand(final PluginMain plugin) {
+	GiveSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "give";
 		this.usageString = "/homestar give <player> [quantity]";

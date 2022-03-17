@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-final class DestroyCommand extends SubcommandAbstract {
+final class DestroySubcommand extends SubcommandAbstract {
 
 	private final PluginMain plugin;
 
@@ -39,7 +39,7 @@ final class DestroyCommand extends SubcommandAbstract {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	DestroyCommand(final PluginMain plugin) {
+	DestroySubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "destroy";
 		this.usageString = "/homestar destroy";
