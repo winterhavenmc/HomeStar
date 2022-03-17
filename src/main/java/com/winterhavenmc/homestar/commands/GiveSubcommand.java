@@ -174,61 +174,16 @@ final class GiveSubcommand extends SubcommandAbstract {
 					.setMacro(Macro.TARGET_PLAYER, sender)
 					.send();
 		}
+		else {
+			// send message when giving to self
+			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_GIVE_SELF)
+					.setMacro(Macro.ITEM_QUANTITY, quantity)
+					.send();
+		}
+
 		// play sound to target player
 		plugin.soundConfig.playSound(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
 		return true;
 	}
-
-
-//	/**
-//	 * Match online player; sends appropriate message for offline or unknown players
-//	 *
-//	 * @param sender the command sender
-//	 * @param targetPlayerName the player name to match
-//	 *
-//	 * @return Player - a matching player object, or null if no match
-//	 */
-//	private Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
-//
-//		// check for null parameters
-//		Objects.requireNonNull(sender);
-//		Objects.requireNonNull(targetPlayerName);
-//
-//		Player targetPlayer;
-//
-//		// check exact match first
-//		targetPlayer = plugin.getServer().getPlayer(targetPlayerName);
-//
-//		// if no match, try substring match
-//		if (targetPlayer == null) {
-//			List<Player> playerList = plugin.getServer().matchPlayer(targetPlayerName);
-//
-//			// if only one matching player, use it, otherwise send error message (no match or more than 1 match)
-//			if (playerList.size() == 1) {
-//				targetPlayer = playerList.get(0);
-//			}
-//		}
-//
-//		// if match found, return target player object
-//		if (targetPlayer != null) {
-//			return targetPlayer;
-//		}
-//
-//		// check if name matches known offline player
-//		HashSet<OfflinePlayer> matchedPlayers = new HashSet<>();
-//		for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
-//			if (targetPlayerName.equalsIgnoreCase(offlinePlayer.getName())) {
-//				matchedPlayers.add(offlinePlayer);
-//			}
-//		}
-//		if (matchedPlayers.isEmpty()) {
-//			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send();
-//		}
-//		else {
-//			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE).send();
-//		}
-//		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-//		return null;
-//	}
 
 }
