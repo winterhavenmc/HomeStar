@@ -95,11 +95,6 @@ class WarmupMap {
 	}
 
 
-	boolean containsPlayer(final Player player) {
-		return warmupMap.containsKey(player.getUniqueId());
-	}
-
-
 	int getTaskId(final Player player) {
 		return warmupMap.get(player.getUniqueId());
 	}
