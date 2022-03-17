@@ -51,7 +51,6 @@ public final class SimpleAPI {
 	 *
 	 * @param quantity number of HomeStar items in newly created stack
 	 * @return ItemStack of HomeStar items
-	 * @deprecated use HomeStar.create(quantity) method
 	 */
 	public static ItemStack createItem(final int quantity) {
 		return plugin.homeStarFactory.create(quantity);
@@ -63,7 +62,6 @@ public final class SimpleAPI {
 	 *
 	 * @param itemStack the ItemStack to check
 	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
-	 * @deprecated use HomeStar.isItem(itemStack) method
 	 */
 	public static boolean isHomeStar(final ItemStack itemStack) {
 		return plugin.homeStarFactory.isItem(itemStack);
@@ -120,7 +118,7 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static Boolean isCancelledOnDamage() {
+	public static boolean isCancelledOnDamage() {
 		return plugin.getConfig().getBoolean("cancel-on-damage");
 	}
 
@@ -131,7 +129,7 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static Boolean isCancelledOnMovement() {
+	public static boolean isCancelledOnMovement() {
 		return plugin.getConfig().getBoolean("cancel-on-movement");
 	}
 
@@ -142,28 +140,30 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static Boolean isCancelledOnInteraction() {
+	public static boolean isCancelledOnInteraction() {
 		return plugin.getConfig().getBoolean("cancel-on-interaction");
 	}
 
 
 	/**
 	 * Test if player is warming up for pending teleport
+	 *
 	 * @param player the player to check if warming up
 	 * @return boolean {@code true} if player is currently warming up, {@code false} if not
 	 */
-	public static Boolean isWarmingUp(final Player player) {
-		return plugin.teleportManager.isWarmingUp(player);
+	public static boolean isWarmingUp(final Player player) {
+		return plugin.teleportHandler.isWarmingUp(player);
 	}
 
 
 	/**
 	 * Test if player is currently cooling down for item use
+	 *
 	 * @param player the player to check if cooling down
 	 * @return boolean {@code true} if player is currently cooling down, {@code false} if not
 	 */
 	public static boolean isCoolingDown(final Player player) {
-		return plugin.teleportManager.getCooldownTimeRemaining(player) > 0;
+		return plugin.teleportHandler.getCooldownTimeRemaining(player) > 0;
 	}
 
 
@@ -174,12 +174,13 @@ public final class SimpleAPI {
 	 * @return remaining time
 	 */
 	public static long cooldownTimeRemaining(final Player player) {
-		return plugin.teleportManager.getCooldownTimeRemaining(player);
+		return plugin.teleportHandler.getCooldownTimeRemaining(player);
 	}
 
 
 	/**
 	 * Get list of world name strings in which plugin is enabled
+	 *
 	 * @return List of world names
 	 */
 	public static List<String> getEnabledWorldNames() {
@@ -189,6 +190,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Get list of world name strings in which plugin is enabled
+	 *
 	 * @return List of world names
 	 */
 	public static List<String> getEnabledWorldNamesList() {
@@ -198,6 +200,7 @@ public final class SimpleAPI {
 
 	/**
 	 * Get collection of world name strings in which plugin is enabled
+	 *
 	 * @return List of world names
 	 */
 	public static Collection<String> getEnabledWorldNamesCollection() {
@@ -207,10 +210,11 @@ public final class SimpleAPI {
 
 	/**
 	 * Cancel player teleport
+	 *
 	 * @param player the player to cancel teleporting
 	 */
 	public static void cancelTeleport(final Player player) {
-		plugin.teleportManager.cancelTeleport(player);
+		plugin.teleportHandler.cancelTeleport(player);
 	}
 
 
@@ -232,7 +236,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.getItemName()
 	 */
 	public static String getItemName() {
-		return plugin.messageBuilder.getItemName();
+		return plugin.messageBuilder.getItemName().orElse("HomeStar");
 	}
 
 
