@@ -49,9 +49,9 @@ public final class TeleportHandler {
 	 */
 	public TeleportHandler(final PluginMain plugin) {
 		this.plugin = plugin;
-		cooldownMap = new CooldownMap(plugin);
-		warmupMap = new WarmupMap(plugin);
-		teleportExecutor = new TeleportExecutor(plugin, warmupMap);
+		this.cooldownMap = new CooldownMap(plugin);
+		this.warmupMap = new WarmupMap(plugin);
+		this.teleportExecutor = new TeleportExecutor(plugin, warmupMap);
 	}
 
 
