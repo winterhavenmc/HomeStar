@@ -119,7 +119,7 @@ public final class CommandManager implements TabExecutor {
 		// get subcommand from map by name
 		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(subcommandName);
 
-		// if subcommand is null, get help command from map
+		// if subcommand is empty, get help command
 		if (optionalSubcommand.isEmpty()) {
 			optionalSubcommand = subcommandRegistry.getCommand("help");
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
