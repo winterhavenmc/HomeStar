@@ -95,6 +95,12 @@ class WarmupMap {
 	}
 
 
+	/**
+	 * Get the task id for a warming up player
+	 *
+	 * @param player the player
+	 * @return the task id for the player
+	 */
 	int getTaskId(final Player player) {
 		return warmupMap.get(player.getUniqueId());
 	}
