@@ -74,6 +74,9 @@ class TeleportExecutor {
 			return;
 		}
 
+		// if remove-from-inventory is configured on-use, take one LodeStar item from inventory now
+		removeFromInventoryOnUse(player, playerItem);
+
 		// initiate delayed teleport for player to final destination
 		BukkitTask teleportTask = new DelayedTeleportTask(plugin, player, location, destinationName, playerItem.clone())
 				.runTaskLater(plugin, SECONDS.toTicks(plugin.getConfig().getLong("teleport-warmup")));
@@ -160,6 +163,21 @@ class TeleportExecutor {
 			plugin.messageBuilder.compose(plugin.getServer().getConsoleSender(), MessageId.LOG_USAGE)
 					.setMacro(Macro.TARGET_PLAYER, player)
 					.send();
+		}
+	}
+
+
+	/**
+	 * remove one lode star item from player inventory
+	 * @param player     the player
+	 * @param playerItem the item
+	 */
+	final void removeFromInventoryOnUse(final Player player, final ItemStack playerItem) {
+		// if remove-from-inventory is configured on-use, take one LodeStar item from inventory now
+		String removeItem = plugin.getConfig().getString("remove-from-inventory");
+		if (removeItem != null && removeItem.equalsIgnoreCase("on-use")) {
+			playerItem.setAmount(playerItem.getAmount() - 1);
+			player.getInventory().setItemInMainHand(playerItem);
 		}
 	}
 

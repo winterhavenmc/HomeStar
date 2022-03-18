@@ -58,9 +58,6 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter {
 			// get location from destination
 			Location location = optionalDestination.get();
 
-			// if remove-from-inventory is configured on-use, take one LodeStar item from inventory now
-			removeFromInventoryOnUse(player, playerItem);
-
 			// get destination name
 			String destinationName = plugin.messageBuilder.getHomeDisplayName().orElse("Home");
 

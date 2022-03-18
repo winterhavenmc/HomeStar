@@ -70,9 +70,6 @@ final class SpawnTeleporter extends AbstractTeleporter implements Teleporter {
 				location = getOverworldSpawnLocation(player).orElse(location);
 			}
 
-			// if remove-from-inventory is configured on-use, take one LodeStar item from inventory now
-			removeFromInventoryOnUse(player, playerItem);
-
 			// get destination name
 			String destinationName = plugin.messageBuilder.getSpawnDisplayName().orElse("Spawn");
 
