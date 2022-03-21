@@ -32,7 +32,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 
-final class GiveSubcommand extends SubcommandAbstract {
+final class GiveSubcommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

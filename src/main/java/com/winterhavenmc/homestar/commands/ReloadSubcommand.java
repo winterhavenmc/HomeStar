@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-final class ReloadSubcommand extends SubcommandAbstract {
+final class ReloadSubcommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

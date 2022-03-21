@@ -30,7 +30,7 @@ import java.util.Objects;
 import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
-final class StatusSubcommand extends SubcommandAbstract {
+final class StatusSubcommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 

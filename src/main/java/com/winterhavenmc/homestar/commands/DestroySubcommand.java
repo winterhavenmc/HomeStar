@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-final class DestroySubcommand extends SubcommandAbstract {
+final class DestroySubcommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 
