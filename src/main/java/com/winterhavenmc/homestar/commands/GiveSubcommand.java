@@ -24,6 +24,7 @@ import com.winterhavenmc.homestar.messages.Macro;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -58,8 +59,10 @@ final class GiveSubcommand extends SubcommandAbstract {
 
 		// return list of matching players
 		if (args.length == 2) {
-			return plugin.getServer().matchPlayer(args[1]).stream()
-					.map(Player::getName).collect(Collectors.toList());
+			return plugin.getServer().getOnlinePlayers().stream()
+					.map(HumanEntity::getName)
+					.filter(playerName -> matchPrefix(playerName, args[1]))
+					.collect(Collectors.toList());
 		}
 
 		// return some useful quantities
