@@ -22,7 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-public interface Teleporter {
+interface Teleporter {
 
 	void initiate(final Player player);
 
