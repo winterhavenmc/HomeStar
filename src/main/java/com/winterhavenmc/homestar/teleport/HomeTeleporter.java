@@ -25,8 +25,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Optional;
-
 
 final class HomeTeleporter extends AbstractTeleporter implements Teleporter {
 
@@ -46,45 +44,35 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter {
 	 */
 	@Override
 	public void initiate(final Player player) {
+		getHomeDestination(player).ifPresentOrElse(
+				destination -> execute(player, destination, plugin.messageBuilder.getHomeDisplayName().orElse("Home"), player.getInventory().getItemInMainHand()),
+				() -> fallbackToSpawn(player)
+		);
+	}
 
-		// get player item in hand
-		ItemStack playerItem = player.getInventory().getItemInMainHand();
 
-		// get home destination
-		Optional<Location> optionalDestination = getHomeDestination(player);
+	@Override
+	public void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem) {
+		teleportExecutor.execute(player, location, destinationName, playerItem);
+	}
 
-		if (optionalDestination.isPresent()) {
 
-			// get location from destination
-			Location location = optionalDestination.get();
-
-			// get destination name
-			String destinationName = plugin.messageBuilder.getHomeDisplayName().orElse("Home");
-
-			// initiate delayed teleport for player to final destination
-			execute(player, location, destinationName, playerItem);
-		}
-		else if (plugin.getConfig().getBoolean("bedspawn-fallback")) {
-
-			Optional<Location> spawnDestination = getSpawnDestination(player);
-			if (spawnDestination.isPresent()) {
-				Teleporter teleporterSpawn = new SpawnTeleporter(plugin, teleportExecutor);
-				teleporterSpawn.initiate(player);
-			}
-			else {
-				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN).send();
-				plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
-			}
+	/**
+	 * Initiate fallback teleport to spawn if configured
+	 *
+	 * @param player the player to teleport
+	 */
+	void fallbackToSpawn(final Player player) {
+		if (plugin.getConfig().getBoolean("bedspawn-fallback")) {
+			getSpawnDestination(player).ifPresentOrElse(
+					destination -> new SpawnTeleporter(plugin, teleportExecutor).initiate(player),
+					() -> sendInvalidDestinationMessage(player, plugin.messageBuilder.getHomeDisplayName().orElse("Home"))
+			);
 		}
 		else {
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN).send();
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 		}
-	}
-
-	@Override
-	public void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem) {
-		teleportExecutor.execute(player, location, destinationName, playerItem);
 	}
 
 }
