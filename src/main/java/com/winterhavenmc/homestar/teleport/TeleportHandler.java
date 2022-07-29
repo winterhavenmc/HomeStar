@@ -69,7 +69,7 @@ public final class TeleportHandler {
 
 		// if player cooldown has not expired, send player cooldown message and return
 		if (cooldownMap.isCoolingDown(player)) {
-			plugin.messageBuilder.build(player, MessageId.TELEPORT_COOLDOWN)
+			plugin.messageBuilder.compose(player, MessageId.TELEPORT_COOLDOWN)
 					.setMacro(Macro.DURATION, cooldownMap.getCooldownTimeRemaining(player))
 					.send();
 			return;

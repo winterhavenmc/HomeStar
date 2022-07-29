@@ -68,7 +68,7 @@ class TeleportExecutor {
 
 		// if player is less than configured minimum distance from destination, send player proximity message and return
 		if (isUnderMinimumDistance(player, location)) {
-			plugin.messageBuilder.build(player, MessageId.TELEPORT_MIN_DISTANCE)
+			plugin.messageBuilder.compose(player, MessageId.TELEPORT_MIN_DISTANCE)
 					.setMacro(Macro.DESTINATION, destinationName)
 					.send();
 			return;
