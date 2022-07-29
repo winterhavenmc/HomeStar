@@ -80,14 +80,14 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("homestar.help")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_HELP).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_HELP).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (args.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -116,7 +116,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	 * @param subcommand the subcommand to display help description
 	 */
 	private void sendCommandHelpMessage(CommandSender sender, Subcommand subcommand) {
-		plugin.messageBuilder.build(sender, subcommand.getDescription()).send();
+		plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
 		subcommand.displayUsage(sender);
 	}
 
@@ -127,7 +127,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	 * @param sender the command sender
 	 */
 	private void sendCommandInvalidMessage(CommandSender sender) {
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_HELP_INVALID).send();
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 		displayUsageAll(sender);
 	}
@@ -139,7 +139,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	 */
 	void displayUsageAll(final CommandSender sender) {
 
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
 		for (String subcommandName : subcommandRegistry.getKeys()) {
 			subcommandRegistry.getCommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
