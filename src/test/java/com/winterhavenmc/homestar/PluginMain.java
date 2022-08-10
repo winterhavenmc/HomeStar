@@ -4,7 +4,7 @@ import com.winterhavenmc.homestar.commands.CommandManager;
 import com.winterhavenmc.homestar.listeners.PlayerEventListener;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.teleport.TeleportManager;
+import com.winterhavenmc.homestar.teleport.TeleportHandler;
 import com.winterhavenmc.homestar.util.HomeStarFactory;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
@@ -27,7 +27,7 @@ public final class PluginMain extends JavaPlugin {
 
 	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public SoundConfiguration soundConfig;
-	public TeleportManager teleportManager;
+	public TeleportHandler teleportHandler;
 	public WorldManager worldManager;
 	public CommandManager commandManager;
 	public PlayerEventListener playerEventListener;
@@ -68,7 +68,7 @@ public final class PluginMain extends JavaPlugin {
 		soundConfig = new YamlSoundConfiguration(this);
 
 		// instantiate teleport manager
-		teleportManager = new TeleportManager(this);
+		teleportHandler = new TeleportHandler(this);
 
 		// instantiate world manager
 		worldManager = new WorldManager(this);

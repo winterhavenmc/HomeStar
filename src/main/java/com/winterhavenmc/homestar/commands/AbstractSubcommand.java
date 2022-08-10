@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-abstract class SubcommandAbstract implements Subcommand {
+abstract class AbstractSubcommand implements Subcommand {
 
 	protected String name;
 	protected String usageString = "";
@@ -65,6 +65,10 @@ abstract class SubcommandAbstract implements Subcommand {
 									  final String alias, final String[] args) {
 
 		return Collections.emptyList();
+	}
+
+	protected boolean matchPrefix(String string1, String string2) {
+		return string1.toLowerCase().startsWith(string2.toLowerCase());
 	}
 
 }

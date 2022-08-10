@@ -20,18 +20,19 @@ package com.winterhavenmc.homestar.commands;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
-
 import com.winterhavenmc.homestar.messages.Macro;
-import org.bukkit.OfflinePlayer;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
-final class GiveCommand extends SubcommandAbstract {
+final class GiveSubcommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 
@@ -40,7 +41,7 @@ final class GiveCommand extends SubcommandAbstract {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	GiveCommand(final PluginMain plugin) {
+	GiveSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "give";
 		this.usageString = "/homestar give <player> [quantity]";
@@ -58,10 +59,10 @@ final class GiveCommand extends SubcommandAbstract {
 
 		// return list of matching players
 		if (args.length == 2) {
-			List<Player> matchedPlayers = plugin.getServer().matchPlayer(args[1]);
-			for (Player player : matchedPlayers) {
-				returnList.add(player.getName());
-			}
+			return plugin.getServer().getOnlinePlayers().stream()
+					.map(HumanEntity::getName)
+					.filter(playerName -> matchPrefix(playerName, args[1]))
+					.collect(Collectors.toList());
 		}
 
 		// return some useful quantities
@@ -82,14 +83,14 @@ final class GiveCommand extends SubcommandAbstract {
 
 		// if command sender does not have permission to give HomeStars, output error message and return true
 		if (!sender.hasPermission("homestar.give")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_GIVE).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_GIVE).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check min arguments
 		if (args.size() < getMinArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -97,7 +98,7 @@ final class GiveCommand extends SubcommandAbstract {
 
 		// check max arguments
 		if (args.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -107,10 +108,12 @@ final class GiveCommand extends SubcommandAbstract {
 		String targetPlayerName = args.get(0);
 
 		// try to match target player name to currently online player
-		Player targetPlayer = matchPlayer(sender, targetPlayerName);
+		Player targetPlayer = plugin.getServer().getPlayer(targetPlayerName);
 
-		// if no match, do nothing and return (message was output by matchPlayer method)
+		// if no match, send player not found message and return
 		if (targetPlayer == null) {
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send();
+			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -121,7 +124,7 @@ final class GiveCommand extends SubcommandAbstract {
 				quantity = Integer.parseInt(args.get(1));
 			}
 			catch (NumberFormatException e) {
-				plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_QUANTITY_INVALID).send();
+				plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_QUANTITY_INVALID).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
@@ -146,7 +149,7 @@ final class GiveCommand extends SubcommandAbstract {
 
 		// if remaining items equals quantity given, send player-inventory-full message and return
 		if (noFitCount == quantity) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_GIVE_INVENTORY_FULL).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_GIVE_INVENTORY_FULL).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -158,7 +161,7 @@ final class GiveCommand extends SubcommandAbstract {
 		if (!sender.getName().equals(targetPlayer.getName())) {
 
 			// send message and play sound to giver
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_GIVE)
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_GIVE)
 					.setMacro(Macro.ITEM_QUANTITY, quantity)
 					.setMacro(Macro.TARGET_PLAYER, targetPlayer)
 					.send();
@@ -169,66 +172,21 @@ final class GiveCommand extends SubcommandAbstract {
 			}
 
 			// send message to target player
-			plugin.messageBuilder.build(targetPlayer, MessageId.COMMAND_SUCCESS_GIVE_TARGET)
+			plugin.messageBuilder.compose(targetPlayer, MessageId.COMMAND_SUCCESS_GIVE_TARGET)
 					.setMacro(Macro.ITEM_QUANTITY, quantity)
 					.setMacro(Macro.TARGET_PLAYER, sender)
 					.send();
 		}
+		else {
+			// send message when giving to self
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_GIVE_SELF)
+					.setMacro(Macro.ITEM_QUANTITY, quantity)
+					.send();
+		}
+
 		// play sound to target player
 		plugin.soundConfig.playSound(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
 		return true;
-	}
-
-
-	/**
-	 * Match online player; sends appropriate message for offline or unknown players
-	 *
-	 * @param sender the command sender
-	 * @param targetPlayerName the player name to match
-	 *
-	 * @return Player - a matching player object, or null if no match
-	 */
-	private Player matchPlayer(final CommandSender sender, final String targetPlayerName) {
-
-		// check for null parameters
-		Objects.requireNonNull(sender);
-		Objects.requireNonNull(targetPlayerName);
-
-		Player targetPlayer;
-
-		// check exact match first
-		targetPlayer = plugin.getServer().getPlayer(targetPlayerName);
-
-		// if no match, try substring match
-		if (targetPlayer == null) {
-			List<Player> playerList = plugin.getServer().matchPlayer(targetPlayerName);
-
-			// if only one matching player, use it, otherwise send error message (no match or more than 1 match)
-			if (playerList.size() == 1) {
-				targetPlayer = playerList.get(0);
-			}
-		}
-
-		// if match found, return target player object
-		if (targetPlayer != null) {
-			return targetPlayer;
-		}
-
-		// check if name matches known offline player
-		HashSet<OfflinePlayer> matchedPlayers = new HashSet<>();
-		for (OfflinePlayer offlinePlayer : plugin.getServer().getOfflinePlayers()) {
-			if (targetPlayerName.equalsIgnoreCase(offlinePlayer.getName())) {
-				matchedPlayers.add(offlinePlayer);
-			}
-		}
-		if (matchedPlayers.isEmpty()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send();
-		}
-		else {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_ONLINE).send();
-		}
-		plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
-		return null;
 	}
 
 }

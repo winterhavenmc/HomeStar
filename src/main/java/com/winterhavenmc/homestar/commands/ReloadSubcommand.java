@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Objects;
 
 
-final class ReloadCommand extends SubcommandAbstract {
+final class ReloadSubcommand extends AbstractSubcommand {
 
 	private final PluginMain plugin;
 
@@ -36,7 +36,7 @@ final class ReloadCommand extends SubcommandAbstract {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	ReloadCommand(final PluginMain plugin) {
+	ReloadSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "reload";
 		this.usageString = "/homestar reload";
@@ -49,14 +49,14 @@ final class ReloadCommand extends SubcommandAbstract {
 
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission("homestar.reload")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (args.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -74,11 +74,8 @@ final class ReloadCommand extends SubcommandAbstract {
 		// reload sounds
 		plugin.soundConfig.reload();
 
-		// reload homestar factory
-		plugin.homeStarFactory.reload();
-
 		// send reloaded message
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
 		return true;
 	}
 

@@ -77,7 +77,7 @@ public class HomeStarPluginTests {
         @Test
         @DisplayName("teleport manager not null.")
         void TeleportManagerNotNull() {
-            Assertions.assertNotNull(plugin.teleportManager);
+            Assertions.assertNotNull(plugin.teleportHandler);
         }
 
         @Test

@@ -48,9 +48,6 @@ public final class HomeStarFactory {
 			ItemFlag.HIDE_ENCHANTS,
 			ItemFlag.HIDE_UNBREAKABLE );
 
-	// the proto item
-	private ItemStack protoItem;
-
 
 	/**
 	 * class constructor
@@ -60,8 +57,6 @@ public final class HomeStarFactory {
 	public HomeStarFactory(final PluginMain plugin) {
 		this.plugin = plugin;
 		this.PERSISTENT_KEY = new NamespacedKey(plugin, "isHomeStar");
-		this.protoItem = getDefaultItemStack();
-		setMetaData(this.protoItem);
 	}
 
 
@@ -71,7 +66,7 @@ public final class HomeStarFactory {
 	 * @return ItemStack of HomeStar items
 	 */
 	public ItemStack create() {
-		return this.protoItem.clone();
+		return create(1);
 	}
 
 
@@ -83,19 +78,22 @@ public final class HomeStarFactory {
 	 */
 	public ItemStack create(final int quantity) {
 
-		// get clone of proto item
-		ItemStack clonedItem = this.protoItem.clone();
+		// get default item stack
+		ItemStack itemStack = getDefaultItemStack();
 
 		// validate passed in quantity
 		int validatedQuantity = quantity;
  		validatedQuantity = Math.max(1, validatedQuantity);
-		validatedQuantity = Math.min(validatedQuantity, clonedItem.getType().getMaxStackSize());
+		validatedQuantity = Math.min(validatedQuantity, itemStack.getType().getMaxStackSize());
 
 		// set quantity
-		clonedItem.setAmount(validatedQuantity);
+		itemStack.setAmount(validatedQuantity);
 
-		// return cloned item
-		return clonedItem;
+		// set item metadata
+		setMetaData(itemStack);
+
+		// return new item stack
+		return itemStack;
 	}
 
 
@@ -160,7 +158,7 @@ public final class HomeStarFactory {
 	public void setMetaData(final ItemStack itemStack) {
 
 		// retrieve item name and lore from language file
-		String itemName = plugin.messageBuilder.getItemName();
+		String itemName = plugin.messageBuilder.getItemName().orElse("HomeStar");
 		List<String> configLore = plugin.messageBuilder.getItemLore();
 
 		// allow for '&' character for color codes in name and lore
@@ -192,15 +190,6 @@ public final class HomeStarFactory {
 
 		// save new item metadata
 		itemStack.setItemMeta(itemMeta);
-	}
-
-
-	/**
-	 * Reload plugin's HomeStarFactory. replaces proto item with new item stack with configured attributes
-	 */
-	public void reload() {
-		this.protoItem = getDefaultItemStack();
-		setMetaData(this.protoItem);
 	}
 
 }

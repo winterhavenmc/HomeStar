@@ -33,7 +33,7 @@ import java.util.Objects;
  * Help command implementation<br>
  * displays help and usage messages for plugin commands
  */
-final class HelpCommand extends SubcommandAbstract implements Subcommand {
+final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 
 	private final PluginMain plugin;
 	private final SubcommandRegistry subcommandRegistry;
@@ -43,7 +43,7 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 	 * Class constructor
 	 * @param plugin reference to plugin main class instance
 	 */
-	HelpCommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+	HelpSubcommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);
 		this.name ="help";
@@ -80,14 +80,14 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission("homestar.help")) {
-			plugin.messageBuilder.build(sender, MessageId.PERMISSION_DENIED_HELP).send();
+			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_HELP).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
 		if (args.size() > getMaxArgs()) {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
@@ -99,35 +99,37 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 			return true;
 		}
 
-		// get subcommand name
-		String subcommandName = args.get(0);
-		displayHelp(sender, subcommandName);
+		// display subcommand help message or invalid command message
+		subcommandRegistry.getCommand(args.get(0)).ifPresentOrElse(
+				subcommand -> sendCommandHelpMessage(sender, subcommand),
+				() -> sendCommandInvalidMessage(sender)
+		);
+
 		return true;
 	}
 
 
 	/**
-	 * Display help message and usage for a command
+	 * Send help description for subcommand to command sender
+	 *
 	 * @param sender the command sender
-	 * @param commandName the name of the command for which to show help and usage
+	 * @param subcommand the subcommand to display help description
 	 */
-	void displayHelp(final CommandSender sender, final String commandName) {
+	private void sendCommandHelpMessage(CommandSender sender, Subcommand subcommand) {
+		plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
+		subcommand.displayUsage(sender);
+	}
 
-		// get subcommand from map by name
-		Subcommand subcommand = subcommandRegistry.getCommand(commandName);
 
-		// if subcommand found in map, display help message and usage
-		if (subcommand != null) {
-			plugin.messageBuilder.build(sender, subcommand.getDescription()).send();
-			subcommand.displayUsage(sender);
-		}
-
-		// else display invalid command help message and usage for all commands
-		else {
-			plugin.messageBuilder.build(sender, MessageId.COMMAND_HELP_INVALID).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
-			displayUsageAll(sender);
-		}
+	/**
+	 * Send invalid subcommand message to command sender
+	 *
+	 * @param sender the command sender
+	 */
+	private void sendCommandInvalidMessage(CommandSender sender) {
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
+		plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
+		displayUsageAll(sender);
 	}
 
 
@@ -137,12 +139,10 @@ final class HelpCommand extends SubcommandAbstract implements Subcommand {
 	 */
 	void displayUsageAll(final CommandSender sender) {
 
-		plugin.messageBuilder.build(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
 		for (String subcommandName : subcommandRegistry.getKeys()) {
-			if (subcommandRegistry.getCommand(subcommandName) != null) {
-				subcommandRegistry.getCommand(subcommandName).displayUsage(sender);
-			}
+			subcommandRegistry.getCommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
 		}
 	}
 
