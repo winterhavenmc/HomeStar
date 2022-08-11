@@ -58,7 +58,7 @@ final class DestroySubcommand extends AbstractSubcommand {
 		}
 
 		// if command sender does not have permission to destroy HomeStars, output error message and return true
-		if (!sender.hasPermission("homestar.destroy")) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_DESTROY).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

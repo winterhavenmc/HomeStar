@@ -75,7 +75,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if command sender does not have permission to display help, output error message and return true
-		if (!sender.hasPermission("homestar.help")) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_HELP).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -130,16 +130,19 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 
 
 	/**
-	 * Display usage message for all commands
+	 * Display usage message for all commands for which sender has permission
+	 *
 	 * @param sender the command sender
 	 */
 	void displayUsageAll(final CommandSender sender) {
 
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
-		for (String subcommandName : subcommandRegistry.getKeys()) {
-			subcommandRegistry.getSubcommand(subcommandName).ifPresent(subcommand -> subcommand.displayUsage(sender));
-		}
+		subcommandRegistry.getKeys().stream()
+				.map(subcommandRegistry::getSubcommand)
+				.filter(Optional::isPresent)
+				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
+				.forEach(subcommand -> subcommand.get().displayUsage(sender));
 	}
 
 }
