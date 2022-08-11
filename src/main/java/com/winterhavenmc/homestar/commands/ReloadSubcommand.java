@@ -39,6 +39,7 @@ final class ReloadSubcommand extends AbstractSubcommand {
 	ReloadSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "reload";
+		this.permissionNode = "homestar.reload";
 		this.usageString = "/homestar reload";
 		this.description = MessageId.COMMAND_HELP_RELOAD;
 	}

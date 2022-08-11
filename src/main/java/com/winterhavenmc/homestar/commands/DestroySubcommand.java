@@ -42,6 +42,7 @@ final class DestroySubcommand extends AbstractSubcommand {
 	DestroySubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "destroy";
+		this.permissionNode = "homestar.destroy";
 		this.usageString = "/homestar destroy";
 		this.description = MessageId.COMMAND_HELP_DESTROY;
 	}

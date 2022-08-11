@@ -40,6 +40,8 @@ interface Subcommand {
 
 	MessageId getDescription();
 
+	String getPermissionNode();
+
 	int getMinArgs();
 
 	int getMaxArgs();

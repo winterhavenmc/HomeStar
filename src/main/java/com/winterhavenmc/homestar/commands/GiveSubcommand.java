@@ -44,6 +44,7 @@ final class GiveSubcommand extends AbstractSubcommand {
 	GiveSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "give";
+		this.permissionNode = "homestar.give";
 		this.usageString = "/homestar give <player> [quantity]";
 		this.description = MessageId.COMMAND_HELP_GIVE;
 		this.minArgs = 1;

@@ -42,6 +42,7 @@ final class StatusSubcommand extends AbstractSubcommand {
 	StatusSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "status";
+		this.permissionNode = "homestar.status";
 		this.usageString = "/homestar status";
 		this.description = MessageId.COMMAND_HELP_STATUS;
 	}
