@@ -17,7 +17,7 @@ permissions:
 
   homestar.help:
     description: Allows display of help for HomeStar subcommands.
-    default: true
+    default: op
 
   homestar.status:
     description: Allows display of configuration settings.
@@ -39,6 +39,7 @@ permissions:
     description: Allows all admin commands
     default: op
     children:
+      homestar.help: true
       homestar.status: true
       homestar.reload: true
       homestar.give: true
