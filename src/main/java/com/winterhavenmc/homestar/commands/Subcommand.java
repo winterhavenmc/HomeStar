@@ -26,6 +26,7 @@ import java.util.List;
 
 interface Subcommand {
 
+	@SuppressWarnings("UnusedReturnValue")
 	boolean onCommand(final CommandSender sender, final List<String> argsList);
 
 	List<String> onTabComplete(final CommandSender sender, final Command command,
@@ -39,6 +40,8 @@ interface Subcommand {
 	void displayUsage(final CommandSender sender);
 
 	MessageId getDescription();
+
+	String getPermissionNode();
 
 	int getMinArgs();
 

@@ -39,6 +39,7 @@ final class ReloadSubcommand extends AbstractSubcommand {
 	ReloadSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "reload";
+		this.permissionNode = "homestar.reload";
 		this.usageString = "/homestar reload";
 		this.description = MessageId.COMMAND_HELP_RELOAD;
 	}
@@ -48,7 +49,7 @@ final class ReloadSubcommand extends AbstractSubcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if sender does not have permission to reload config, send error message and return true
-		if (!sender.hasPermission("homestar.reload")) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;

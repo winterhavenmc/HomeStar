@@ -42,6 +42,7 @@ final class StatusSubcommand extends AbstractSubcommand {
 	StatusSubcommand(final PluginMain plugin) {
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "status";
+		this.permissionNode = "homestar.status";
 		this.usageString = "/homestar status";
 		this.description = MessageId.COMMAND_HELP_STATUS;
 	}
@@ -51,7 +52,7 @@ final class StatusSubcommand extends AbstractSubcommand {
 	public boolean onCommand(final CommandSender sender, final List<String> args) {
 
 		// if sender does not have permission to reload config, send error message and return true
-		if (!sender.hasPermission("homestar.reload")) {
+		if (!sender.hasPermission(permissionNode)) {
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_STATUS).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -75,6 +76,7 @@ final class StatusSubcommand extends AbstractSubcommand {
 		showTeleportCooldownSetting(sender);
 		showLeftClickAllowedSetting(sender);
 		showShiftClickRequiredSetting(sender);
+		showBedspawnFallback(sender);
 		showCancelOnMovementSetting(sender);
 		showRemoveFromInventorySetting(sender);
 		showAllowInRecipesSetting(sender);
@@ -137,6 +139,12 @@ final class StatusSubcommand extends AbstractSubcommand {
 	private void showShiftClickRequiredSetting(final CommandSender sender) {
 		sender.sendMessage(ChatColor.GREEN + "Shift-click required: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("shift-click"));
+	}
+
+
+	private void showBedspawnFallback(final CommandSender sender) {
+		sender.sendMessage(ChatColor.GREEN + "Bedspawn fallback enabled: "
+				+ ChatColor.RESET + plugin.getConfig().getBoolean("bedspawn-fallback"));
 	}
 
 

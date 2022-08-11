@@ -27,6 +27,7 @@ import org.bukkit.command.TabExecutor;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 /**
@@ -75,22 +76,19 @@ public final class CommandManager implements TabExecutor {
 		if (args.length > 1) {
 
 			// get subcommand from map
-			Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(args[0]);
+			Optional<Subcommand> subcommand = subcommandRegistry.getSubcommand(args[0]);
 
 			// if no subcommand returned from map, return empty list
-			if (optionalSubcommand.isEmpty()) {
+			if (subcommand.isEmpty()) {
 				return Collections.emptyList();
 			}
 
-			// unwrap optional subcommand
-			Subcommand subcommand = optionalSubcommand.get();
-
 			// return subcommand tab completer output
-			return subcommand.onTabComplete(sender, command, alias, args);
+			return subcommand.get().onTabComplete(sender, command, alias, args);
 		}
 
 		// return list of subcommands for which sender has permission
-		return matchingCommands(sender, args[0]);
+		return getMatchingSubcommandNames(sender, args[0]);
 	}
 
 
@@ -117,11 +115,11 @@ public final class CommandManager implements TabExecutor {
 		}
 
 		// get subcommand from map by name
-		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getCommand(subcommandName);
+		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getSubcommand(subcommandName);
 
 		// if subcommand is empty, get help command
 		if (optionalSubcommand.isEmpty()) {
-			optionalSubcommand = subcommandRegistry.getCommand("help");
+			optionalSubcommand = subcommandRegistry.getSubcommand("help");
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 		}
@@ -140,17 +138,15 @@ public final class CommandManager implements TabExecutor {
 	 * @param matchString the string prefix to match against command names
 	 * @return List of String - command names that match prefix and sender has permission
 	 */
-	private List<String> matchingCommands(final CommandSender sender, final String matchString) {
+	private List<String> getMatchingSubcommandNames(final CommandSender sender, final String matchString) {
 
-		List<String> returnList = new ArrayList<>();
-
-		for (String subcommand : subcommandRegistry.getKeys()) {
-			if (sender.hasPermission("homestar." + subcommand)
-					&& subcommand.startsWith(matchString.toLowerCase())) {
-				returnList.add(subcommand);
-			}
-		}
-		return returnList;
+		return subcommandRegistry.getKeys().stream()
+				.map(subcommandRegistry::getSubcommand)
+				.filter(Optional::isPresent)
+				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
+				.map(subcommand -> subcommand.get().getName())
+				.filter(name -> name.toLowerCase().startsWith(matchString.toLowerCase()))
+				.collect(Collectors.toList());
 	}
 
 }

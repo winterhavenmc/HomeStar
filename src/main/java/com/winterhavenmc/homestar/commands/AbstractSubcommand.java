@@ -29,6 +29,7 @@ abstract class AbstractSubcommand implements Subcommand {
 
 	protected String name;
 	protected String usageString = "";
+	protected String permissionNode = "";
 	protected MessageId description;
 	protected int minArgs;
 	protected int maxArgs;
@@ -59,6 +60,11 @@ abstract class AbstractSubcommand implements Subcommand {
 
 	@Override
 	public int getMaxArgs() { return maxArgs; }
+
+	@Override
+	public String getPermissionNode() {
+		return permissionNode;
+	}
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command,

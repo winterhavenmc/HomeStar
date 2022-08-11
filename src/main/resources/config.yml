@@ -42,6 +42,9 @@ left-click: false
 # require shift-click to use homestar item
 shift-click: true
 
+# send player to world spawn if they do not have a home bed spawn set
+bedspawn-fallback: false
+
 # remove item from inventory ( on-use | on-success | never )
 remove-from-inventory: on-success
 
