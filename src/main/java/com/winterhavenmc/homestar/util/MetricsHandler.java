@@ -30,6 +30,23 @@ public class MetricsHandler {
 		// pie chart of configured language
 		metrics.addCustomChart(new SimplePie("language", () -> plugin.getConfig().getString("language")));
 
+		// pie chart of particle effects enabled
+		metrics.addCustomChart(new SimplePie("particle_effects", () -> plugin.getConfig().getString("particle-effects")));
+
+		// pie chart of sound effects enabled
+		metrics.addCustomChart(new SimplePie("sound_effects", () -> plugin.getConfig().getString("sound-effects")));
+
+		// pie chart of from-nether enabled
+		metrics.addCustomChart(new SimplePie("from_nether", () -> plugin.getConfig().getString("from-nether")));
+
+		// pie chart of from-end enabled
+		metrics.addCustomChart(new SimplePie("from_end", () -> plugin.getConfig().getString("from-end")));
+
+		// pie chart of teleport cooldown time
+		metrics.addCustomChart(new SimplePie("teleport_cooldown", () -> plugin.getConfig().getString("teleport-cooldown")));
+
+		// pie chart of teleport warmup time
+		metrics.addCustomChart(new SimplePie("teleport_warmup", () -> plugin.getConfig().getString("teleport-warmup")));
 	}
 
 }
