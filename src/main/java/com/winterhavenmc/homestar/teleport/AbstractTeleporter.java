@@ -40,7 +40,7 @@ import java.util.Optional;
  */
 abstract class AbstractTeleporter {
 
-	protected PluginMain plugin;
+	final protected PluginMain plugin;
 
 	public AbstractTeleporter(final PluginMain plugin) {
 		this.plugin = plugin;

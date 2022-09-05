@@ -23,7 +23,7 @@ import java.util.*;
 final class SubcommandRegistry {
 
 	// instantiate empty subcommand map
-	Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
+	final Map<String, Subcommand> subcommandMap = new LinkedHashMap<>();
 
 
 	/**
