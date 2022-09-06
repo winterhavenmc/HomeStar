@@ -111,8 +111,8 @@ public class HomeStarPluginTests {
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     class ConfigTests {
 
-        Configuration config = plugin.getConfig();
-        Set<String> enumConfigKeyStrings = new HashSet<>();
+        final Configuration config = plugin.getConfig();
+        final Set<String> enumConfigKeyStrings = new HashSet<>();
 
         public ConfigTests() {
             for (ConfigSetting configSetting : ConfigSetting.values()) {
@@ -161,7 +161,7 @@ public class HomeStarPluginTests {
     class SoundTests {
 
         // collection of enum sound name strings
-        Collection<String> enumSoundNames = new HashSet<>();
+        final Collection<String> enumSoundNames = new HashSet<>();
 
         // class constructor
         SoundTests() {
@@ -203,7 +203,7 @@ public class HomeStarPluginTests {
     @DisplayName("Test spawn star factory methods.")
     class HomeStarFactoryTests {
 
-        ItemStack HomeStarItem = plugin.homeStarFactory.create();
+        final ItemStack HomeStarItem = plugin.homeStarFactory.create();
 
         @Test
         @DisplayName("new item type is nether star.")
