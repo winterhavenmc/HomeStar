@@ -34,6 +34,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class HomeStarUtilityTest {
 
+	@SuppressWarnings({"FieldCanBeLocal", "unused"})
 	private ServerMock server;
 	private PluginMain plugin;
 
