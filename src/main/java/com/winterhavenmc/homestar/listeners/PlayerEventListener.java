@@ -110,7 +110,7 @@ public final class PlayerEventListener implements Listener {
 		}
 
 		// if item used is not a HomeStar, do nothing and return
-		if (!plugin.homeStarFactory.isItem(event.getItem())) {
+		if (!plugin.homeStarUtility.isItem(event.getItem())) {
 			return;
 		}
 
@@ -241,7 +241,7 @@ public final class PlayerEventListener implements Listener {
 
 		// if crafting inventory contains HomeStar item, set result item to null
 		for (ItemStack itemStack : event.getInventory()) {
-			if (plugin.homeStarFactory.isItem(itemStack)) {
+			if (plugin.homeStarUtility.isItem(itemStack)) {
 				event.getInventory().setResult(null);
 			}
 		}

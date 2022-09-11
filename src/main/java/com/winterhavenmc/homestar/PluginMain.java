@@ -22,7 +22,7 @@ import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.commands.CommandManager;
 import com.winterhavenmc.homestar.teleport.TeleportHandler;
 import com.winterhavenmc.homestar.listeners.PlayerEventListener;
-import com.winterhavenmc.homestar.util.HomeStarFactory;
+import com.winterhavenmc.homestar.util.HomeStarUtility;
 
 import com.winterhavenmc.homestar.util.MetricsHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
@@ -47,7 +47,7 @@ public final class PluginMain extends JavaPlugin {
 	public WorldManager worldManager;
 	public CommandManager commandManager;
 	public PlayerEventListener playerEventListener;
-	public HomeStarFactory homeStarFactory;
+	public HomeStarUtility homeStarUtility;
 
 
 	@Override
@@ -75,7 +75,7 @@ public final class PluginMain extends JavaPlugin {
 		playerEventListener = new PlayerEventListener(this);
 		
 		// instantiate homestar factory
-		homeStarFactory = new HomeStarFactory(this);
+		homeStarUtility = new HomeStarUtility(this);
 
 		// instantiate metrics handler
 		new MetricsHandler(this);

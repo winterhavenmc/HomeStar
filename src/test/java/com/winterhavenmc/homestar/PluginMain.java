@@ -5,7 +5,7 @@ import com.winterhavenmc.homestar.listeners.PlayerEventListener;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.teleport.TeleportHandler;
-import com.winterhavenmc.homestar.util.HomeStarFactory;
+import com.winterhavenmc.homestar.util.HomeStarUtility;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
@@ -31,7 +31,7 @@ public final class PluginMain extends JavaPlugin {
 	public WorldManager worldManager;
 	public CommandManager commandManager;
 	public PlayerEventListener playerEventListener;
-	public HomeStarFactory homeStarFactory;
+	public HomeStarUtility homeStarUtility;
 
 
 	/**
@@ -79,7 +79,7 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate player event listener
 		playerEventListener = new PlayerEventListener(this);
 		
-		homeStarFactory = new HomeStarFactory(this);
+		homeStarUtility = new HomeStarUtility(this);
 	}
 
 }

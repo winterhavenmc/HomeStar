@@ -34,7 +34,7 @@ import java.util.Set;
 /**
  * Factory class with methods for creating and using HomeStar item stacks
  */
-public final class HomeStarFactory {
+public final class HomeStarUtility {
 
 	// reference to main class
 	private final PluginMain plugin;
@@ -54,7 +54,7 @@ public final class HomeStarFactory {
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public HomeStarFactory(final PluginMain plugin) {
+	public HomeStarUtility(final PluginMain plugin) {
 		this.plugin = plugin;
 		this.PERSISTENT_KEY = new NamespacedKey(plugin, "isHomeStar");
 	}

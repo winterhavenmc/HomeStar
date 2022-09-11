@@ -101,7 +101,7 @@ public class HomeStarPluginTests {
         @Test
         @DisplayName("spawn star factory not null.")
         void HomeStarFactoryNotNull() {
-            Assertions.assertNotNull(plugin.homeStarFactory);
+            Assertions.assertNotNull(plugin.homeStarUtility);
         }
 
     }
@@ -203,7 +203,7 @@ public class HomeStarPluginTests {
     @DisplayName("Test spawn star factory methods.")
     class HomeStarFactoryTests {
 
-        final ItemStack HomeStarItem = plugin.homeStarFactory.create();
+        final ItemStack HomeStarItem = plugin.homeStarUtility.create();
 
         @Test
         @DisplayName("new item type is nether star.")
@@ -232,7 +232,7 @@ public class HomeStarPluginTests {
 
         @Test
         void CreateAndTestValidItem() {
-            Assertions.assertTrue(plugin.homeStarFactory.isItem(HomeStarItem));
+            Assertions.assertTrue(plugin.homeStarUtility.isItem(HomeStarItem));
         }
     }
 

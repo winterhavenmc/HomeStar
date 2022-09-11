@@ -53,7 +53,7 @@ public final class SimpleAPI {
 	 * @return ItemStack of HomeStar items
 	 */
 	public static ItemStack createItem(final int quantity) {
-		return plugin.homeStarFactory.create(quantity);
+		return plugin.homeStarUtility.create(quantity);
 	}
 
 
@@ -64,7 +64,7 @@ public final class SimpleAPI {
 	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
 	 */
 	public static boolean isHomeStar(final ItemStack itemStack) {
-		return plugin.homeStarFactory.isItem(itemStack);
+		return plugin.homeStarUtility.isItem(itemStack);
 	}
 
 
@@ -225,7 +225,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.getDefaultItem()
 	 */
 	public static ItemStack getDefaultItem() {
-		return plugin.homeStarFactory.getDefaultItemStack();
+		return plugin.homeStarUtility.getDefaultItemStack();
 	}
 
 
@@ -248,7 +248,7 @@ public final class SimpleAPI {
 	 * @deprecated use HomeStar.setMetaData()
 	 */
 	private static void setMetaData(final ItemStack itemStack) {
-		plugin.homeStarFactory.setMetaData(itemStack);
+		plugin.homeStarUtility.setMetaData(itemStack);
 	}
 
 }

@@ -67,7 +67,7 @@ final class DestroySubcommand extends AbstractSubcommand {
 		ItemStack playerItem = player.getInventory().getItemInMainHand();
 
 		// check that player is holding a homestar stack
-		if (!plugin.homeStarFactory.isItem(playerItem)) {
+		if (!plugin.homeStarUtility.isItem(playerItem)) {
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_DESTROY_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
