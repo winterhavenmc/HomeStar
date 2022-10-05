@@ -3,23 +3,19 @@ package com.winterhavenmc.homestar;
 import be.seeseemelk.mockbukkit.MockBukkit;
 import be.seeseemelk.mockbukkit.ServerMock;
 
-import com.winterhavenmc.homestar.sounds.SoundId;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 
-import org.bukkit.inventory.ItemStack;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class HomeStarPluginTests {
+public class PluginMainTest {
 
     private ServerMock server;
     private PluginMain plugin;
@@ -63,7 +59,7 @@ public class HomeStarPluginTests {
     class PluginMainObjectTests {
 
         @Test
-        @DisplayName("language handler not null.")
+        @DisplayName("message builder not null.")
         void LanguageHandlerNotNull() {
             Assertions.assertNotNull(plugin.messageBuilder);
         }
@@ -93,17 +89,10 @@ public class HomeStarPluginTests {
         }
 
         @Test
-        @DisplayName("player event listener not null.")
-        void PlayerEventListenerNotNull() {
-            Assertions.assertNotNull(plugin.playerEventListener);
-        }
-
-        @Test
-        @DisplayName("spawn star factory not null.")
-        void HomeStarFactoryNotNull() {
+        @DisplayName("home star utility not null.")
+        void HomeStarUtilityNotNull() {
             Assertions.assertNotNull(plugin.homeStarUtility);
         }
-
     }
 
     @Nested
@@ -154,98 +143,9 @@ public class HomeStarPluginTests {
     }
 
 
-
-    @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-    @Nested
-    @DisplayName("Test Sounds config.")
-    class SoundTests {
-
-        // collection of enum sound name strings
-        final Collection<String> enumSoundNames = new HashSet<>();
-
-        // class constructor
-        SoundTests() {
-            // add all SoundId enum values to collection
-            for (SoundId soundId : SoundId.values()) {
-                enumSoundNames.add(soundId.name());
-            }
-        }
-
-        @Test
-        @DisplayName("Sounds config is not null.")
-        void SoundConfigNotNull() {
-            Assertions.assertNotNull(plugin.soundConfig);
-        }
-
-        @SuppressWarnings("unused")
-        Collection<String> GetConfigFileKeys() {
-            return plugin.soundConfig.getSoundConfigKeys();
-        }
-
-        @ParameterizedTest
-        @MethodSource("GetConfigFileKeys")
-        @DisplayName("get enum member names of SoundId as list of string")
-        void SoundConfigTest12(String soundName) {
-            Assertions.assertTrue(enumSoundNames.contains(soundName));
-        }
-
-        @ParameterizedTest
-        @EnumSource(SoundId.class)
-        @DisplayName("all SoundId enum members have matching key in sound config file")
-        void SoundConfigContainsAllEnumSounds(SoundId soundId) {
-            Assertions.assertTrue(plugin.soundConfig.getSoundConfigKeys().contains(soundId.name()));
-        }
-    }
-
-
-
-    @Nested
-    @DisplayName("Test spawn star factory methods.")
-    class HomeStarFactoryTests {
-
-        final ItemStack HomeStarItem = plugin.homeStarUtility.create();
-
-        @Test
-        @DisplayName("new item type is nether star.")
-        void ItemSetDefaultType() {
-            Assertions.assertEquals(Material.NETHER_STAR, HomeStarItem.getType());
-        }
-
-        @Test
-        @DisplayName("new item name is HomeStar.")
-        void NewItemHasDefaultName() {
-            Assertions.assertNotNull(HomeStarItem.getItemMeta());
-            Assertions.assertNotNull(HomeStarItem.getItemMeta().getDisplayName());
-            Assertions.assertEquals("HomeStar",
-                    ChatColor.stripColor(HomeStarItem.getItemMeta().getDisplayName()));
-        }
-
-        @Test
-        @DisplayName("new item has lore.")
-        void NewItemHasDefaultLore() {
-            Assertions.assertNotNull(HomeStarItem.getItemMeta());
-            Assertions.assertNotNull(HomeStarItem.getItemMeta().getLore());
-            Assertions.assertEquals("Use to Return to Home",
-                    ChatColor.stripColor(String.join(" ",
-                            HomeStarItem.getItemMeta().getLore())));
-        }
-
-        @Test
-        void CreateAndTestValidItem() {
-            Assertions.assertTrue(plugin.homeStarUtility.isItem(HomeStarItem));
-        }
-    }
-
-
     @Nested
     @DisplayName("Test MessageBuilder.")
     class MessageBuilderTests {
-
-        @Test
-        @DisplayName("language manager is not null.")
-        void LanguageManagerNotNull() {
-            Assertions.assertNotNull(plugin.messageBuilder);
-        }
 
         @Test
         @DisplayName("item name is not null.")
@@ -258,29 +158,6 @@ public class HomeStarPluginTests {
         void ItemLoreNotNull() {
             Assertions.assertNotNull(plugin.messageBuilder.getItemLore());
         }
-    }
-
-
-// Command tests
-
-    @Test
-    void HelpCommandTest() {
-        server.dispatchCommand(server.getConsoleSender(), "/HomeStar help");
-    }
-
-    @Test
-    void StatusCommandTest() {
-        server.dispatchCommand(server.getConsoleSender(), "/HomeStar status");
-    }
-
-    @Test
-    void GiveCommandTest() {
-        server.dispatchCommand(server.getConsoleSender(), "/HomeStar give testy");
-    }
-
-    @Test
-    void ReloadCommandTest() {
-        server.dispatchCommand(server.getConsoleSender(), "/HomeStar reload");
     }
 
 }
