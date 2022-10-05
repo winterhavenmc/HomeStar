@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.homestar;
 
+import com.winterhavenmc.homestar.listeners.PlayerInteractEventListener;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.commands.CommandManager;
@@ -87,17 +88,18 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
 
-		// instantiate teleport manager
-		teleportHandler = new TeleportHandler(this);
-
 		// instantiate world manager
 		worldManager = new WorldManager(this);
+
+		// instantiate teleport manager
+		teleportHandler = new TeleportHandler(this);
 
 		// instantiate command manager
 		commandManager = new CommandManager(this);
 
 		// instantiate player event listener
-		playerEventListener = new PlayerEventListener(this);
+		new PlayerEventListener(this);
+		new PlayerInteractEventListener(this);
 		
 		// instantiate homestar factory
 		homeStarUtility = new HomeStarUtility(this);
