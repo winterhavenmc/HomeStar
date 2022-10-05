@@ -66,7 +66,7 @@ class WarmupMap {
 	 * @param player the player to test if in warmup map
 	 * @return {@code true} if player is in warmup map, {@code false} if not
 	 */
-	boolean isWarmingUp(final Player player) {
+	boolean containsPlayer(final Player player) {
 		return warmupMap.containsKey(player.getUniqueId());
 	}
 

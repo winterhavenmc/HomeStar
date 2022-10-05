@@ -145,7 +145,7 @@ public final class TeleportHandler {
 	 * @return {@code true} if player is in warmup map, {@code false} if not
 	 */
 	public boolean isWarmingUp(final Player player) {
-		return warmupMap.isWarmingUp(player);
+		return warmupMap.containsPlayer(player);
 	}
 
 
