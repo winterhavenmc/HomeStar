@@ -1,3 +1,5 @@
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/2b4783ba190c481ea339faad8ba19574)](https://app.codacy.com/gh/winterhavenmc/HomeStar/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
 # HomeStar
 
 A configurable item that serves as a physical replacement for the /home command. Exactly like *SpawnStar*, except for home! In my survival world, I felt that the /home command was too easy. But my players really wanted to be able to return to home easily. So I made this plugin as a compromise. Now, players need to buy HomeStars from shops before venturing out into the wilderness if they want to be able to teleport back to their home (bed spawn) location.
