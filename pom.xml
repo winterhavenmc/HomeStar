@@ -45,18 +45,19 @@
 				</repository>
 			</distributionManagement>
 
-	<repositories>
-		<repository>
-			<id>public</id>
-			<url>https://maven.winterhaven-mc.com/repository/public/</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+			<repositories>
+				<repository>
+					<id>spigot-repo</id>
+					<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+				</repository>
+				<repository>
+					<id>github</id>
+					<name>GitHub winterhavenmc Apache Maven Packages</name>
+					<url>https://maven.pkg.github.com/winterhavenmc/HomeStar/</url>
+				</repository>
+			</repositories>
+		</profile>
+	</profiles>
 
 	<dependencies>
 		<!-- Spigot API -->
