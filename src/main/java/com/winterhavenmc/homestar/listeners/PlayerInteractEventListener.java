@@ -161,7 +161,6 @@ public final class PlayerInteractEventListener implements Listener
 				&& plugin.teleportHandler.isWarmingUp(player)
 				&& (Action.LEFT_CLICK_BLOCK.equals(action) || Action.RIGHT_CLICK_BLOCK.equals(action)))
 		{
-
 			// if item used is in off_hand, do nothing and return
 			if (EquipmentSlot.OFF_HAND.equals(hand))
 			{
