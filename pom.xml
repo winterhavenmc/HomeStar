@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.winterhaven-mc</groupId>
 	<artifactId>HomeStar</artifactId>
-	<version>1.19.2-SNAPSHOT</version>
+	<version>1.21.0-SNAPSHOT</version>
 	<name>HomeStar</name>
 
 	<url>https://github.com/tim-savage/HomeStar</url>
@@ -60,36 +60,36 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.19.2-R0.1-SNAPSHOT</version>
+			<version>1.21.6-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
-		</dependency>
-
-		<!-- bStats -->
-		<dependency>
-			<groupId>org.bstats</groupId>
-			<artifactId>bstats-bukkit</artifactId>
-			<version>3.0.0</version>
 		</dependency>
 
 		<!-- MessageBuilderLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>message-builder-lib</artifactId>
-			<version>1.17.0</version>
+			<version>1.21.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- SoundConfigLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>sound-config-lib</artifactId>
-			<version>1.17.0</version>
+			<version>1.21.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- WorldManagerLib -->
 		<dependency>
 			<groupId>com.winterhaven-mc</groupId>
 			<artifactId>world-manager-lib</artifactId>
-			<version>1.17.0</version>
+			<version>1.21.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- bStats -->
+		<dependency>
+			<groupId>org.bstats</groupId>
+			<artifactId>bstats-bukkit</artifactId>
+			<version>3.0.1</version>
 		</dependency>
 
 		<!-- Unit Testing Framework -->
@@ -97,14 +97,6 @@
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 			<version>5.9.0</version>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- Mock Bukkit Framework -->
-		<dependency>
-			<groupId>com.github.seeseemelk</groupId>
-			<artifactId>MockBukkit-v1.18</artifactId>
-			<version>2.85.2</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -159,14 +151,14 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.9.0</version>
+				<version>3.13.0</version>
 			</plugin>
 
 			<!-- create shaded jar -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.6.0</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -222,7 +214,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>3.11.2</version>
 				<configuration>
 					<doclint>all,-missing</doclint>
 				</configuration>
@@ -240,7 +232,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>3.2.1</version>
+				<version>3.3.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -255,7 +247,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.22.2</version>
+				<version>3.5.1</version>
 
 				<configuration>
 					<junitArtifactName>org.junit.jupiter:junit-jupiter</junitArtifactName>
