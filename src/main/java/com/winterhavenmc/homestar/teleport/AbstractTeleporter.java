@@ -61,7 +61,7 @@ abstract class AbstractTeleporter {
 		}
 
 		// get player bed spawn location
-		Location location = player.getBedSpawnLocation();
+		Location location = player.getRespawnLocation();
 
 		// if location is null, return empty optional
 		if (location == null) {
