@@ -18,25 +18,26 @@
 package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.sounds.SoundId;
-
 import com.winterhavenmc.homestar.messages.MessageId;
+import com.winterhavenmc.homestar.sounds.SoundId;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
 import java.util.Objects;
 
 
-final class ReloadSubcommand extends AbstractSubcommand {
-
+final class ReloadSubcommand extends AbstractSubcommand
+{
 	private final PluginMain plugin;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to plugin main class instance
 	 */
-	ReloadSubcommand(final PluginMain plugin) {
+	ReloadSubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "reload";
 		this.permissionNode = "homestar.reload";
@@ -46,17 +47,19 @@ final class ReloadSubcommand extends AbstractSubcommand {
 
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> args) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> args)
+	{
 		// if sender does not have permission to reload config, send error message and return true
-		if (!sender.hasPermission(permissionNode)) {
+		if (!sender.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_RELOAD).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (args.size() > getMaxArgs()) {
+		if (args.size() > getMaxArgs())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
