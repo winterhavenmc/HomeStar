@@ -18,6 +18,7 @@
 package com.winterhavenmc.homestar.util;
 
 import com.winterhavenmc.homestar.PluginMain;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -34,8 +35,8 @@ import java.util.Set;
 /**
  * Factory class with methods for creating and using HomeStar item stacks
  */
-public final class HomeStarUtility {
-
+public final class HomeStarUtility
+{
 	// reference to main class
 	private final PluginMain plugin;
 
@@ -46,7 +47,7 @@ public final class HomeStarUtility {
 	private static final Set<ItemFlag> itemFlagSet = Set.of(
 			ItemFlag.HIDE_ATTRIBUTES,
 			ItemFlag.HIDE_ENCHANTS,
-			ItemFlag.HIDE_UNBREAKABLE );
+			ItemFlag.HIDE_UNBREAKABLE);
 
 
 	/**
@@ -54,7 +55,8 @@ public final class HomeStarUtility {
 	 *
 	 * @param plugin reference to plugin main class
 	 */
-	public HomeStarUtility(final PluginMain plugin) {
+	public HomeStarUtility(final PluginMain plugin)
+	{
 		this.plugin = plugin;
 		this.PERSISTENT_KEY = new NamespacedKey(plugin, "isHomeStar");
 	}
@@ -65,7 +67,8 @@ public final class HomeStarUtility {
 	 *
 	 * @return ItemStack of HomeStar items
 	 */
-	public ItemStack create() {
+	public ItemStack create()
+	{
 		return create(1);
 	}
 
@@ -76,14 +79,14 @@ public final class HomeStarUtility {
 	 * @param quantity number of HomeStar items in newly created stack
 	 * @return ItemStack of HomeStar items
 	 */
-	public ItemStack create(final int quantity) {
-
+	public ItemStack create(final int quantity)
+	{
 		// get default item stack
 		ItemStack itemStack = getDefaultItemStack();
 
 		// validate passed in quantity
 		int validatedQuantity = quantity;
- 		validatedQuantity = Math.max(1, validatedQuantity);
+		validatedQuantity = Math.max(1, validatedQuantity);
 		validatedQuantity = Math.min(validatedQuantity, itemStack.getType().getMaxStackSize());
 
 		// set quantity
@@ -103,15 +106,17 @@ public final class HomeStarUtility {
 	 * @param itemStack the ItemStack to check
 	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
 	 */
-	public boolean isItem(final ItemStack itemStack) {
-
+	public boolean isItem(final ItemStack itemStack)
+	{
 		// if item stack is empty (null or air) return false
-		if (itemStack == null || itemStack.getType().equals(Material.AIR)) {
+		if (itemStack == null || itemStack.getType().equals(Material.AIR))
+		{
 			return false;
 		}
 
 		// if item stack does not have metadata return false
-		if (!itemStack.hasItemMeta()) {
+		if (!itemStack.hasItemMeta())
+		{
 			return false;
 		}
 
@@ -126,13 +131,14 @@ public final class HomeStarUtility {
 	 *
 	 * @return ItemStack
 	 */
-	public ItemStack getDefaultItemStack() {
-
+	public ItemStack getDefaultItemStack()
+	{
 		// get configured material string
 		String configMaterialString = plugin.getConfig().getString("default-material");
 
 		// if string is null, use default
-		if (configMaterialString == null) {
+		if (configMaterialString == null)
+		{
 			configMaterialString = "NETHER_STAR";
 		}
 
@@ -140,7 +146,8 @@ public final class HomeStarUtility {
 		Material configMaterial = Material.matchMaterial(configMaterialString);
 
 		// if no match or unobtainable material, default to nether star
-		if (configMaterial == null || !configMaterial.isItem()) {
+		if (configMaterial == null || !configMaterial.isItem())
+		{
 			configMaterial = Material.NETHER_STAR;
 		}
 
@@ -155,8 +162,8 @@ public final class HomeStarUtility {
 	 *
 	 * @param itemStack the ItemStack on which to set HomeStar MetaData
 	 */
-	public void setMetaData(final ItemStack itemStack) {
-
+	public void setMetaData(final ItemStack itemStack)
+	{
 		// retrieve item name and lore from language file
 		String itemName = plugin.messageBuilder.getItemName().orElse("HomeStar");
 		List<String> configLore = plugin.messageBuilder.getItemLore();
@@ -166,7 +173,8 @@ public final class HomeStarUtility {
 
 		ArrayList<String> coloredLore = new ArrayList<>();
 
-		for (String line : configLore) {
+		for (String line : configLore)
+		{
 			coloredLore.add(ChatColor.translateAlternateColorCodes('&', line));
 		}
 
@@ -184,7 +192,8 @@ public final class HomeStarUtility {
 		itemMeta.getPersistentDataContainer().set(PERSISTENT_KEY, PersistentDataType.BYTE, (byte) 1);
 
 		// set item metadata flags
-		for (ItemFlag itemFlag : itemFlagSet) {
+		for (ItemFlag itemFlag : itemFlagSet)
+		{
 			itemMeta.addItemFlags(itemFlag);
 		}
 
