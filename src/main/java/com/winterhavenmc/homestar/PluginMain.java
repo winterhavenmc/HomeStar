@@ -51,7 +51,6 @@ public final class PluginMain extends JavaPlugin {
 	public TeleportHandler teleportHandler;
 	public WorldManager worldManager;
 	public CommandManager commandManager;
-	public PlayerEventListener playerEventListener;
 	public HomeStarUtility homeStarUtility;
 
 
