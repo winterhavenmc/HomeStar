@@ -18,20 +18,21 @@
 package com.winterhavenmc.homestar.teleport;
 
 import com.winterhavenmc.homestar.PluginMain;
-
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-final class HomeTeleporter extends AbstractTeleporter implements Teleporter {
-
+final class HomeTeleporter extends AbstractTeleporter implements Teleporter
+{
 	private final TeleportExecutor teleportExecutor;
 
 
-	HomeTeleporter(final PluginMain plugin, final TeleportExecutor teleportExecutor) {
+	HomeTeleporter(final PluginMain plugin, final TeleportExecutor teleportExecutor)
+	{
 		super(plugin);
 		this.teleportExecutor = teleportExecutor;
 	}
@@ -43,7 +44,8 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter {
 	 * @param player the player to teleport
 	 */
 	@Override
-	public void initiate(final Player player) {
+	public void initiate(final Player player)
+	{
 		getHomeDestination(player).ifPresentOrElse(
 				destination -> execute(player, destination, plugin.messageBuilder.getHomeDisplayName().orElse("Home"), player.getInventory().getItemInMainHand()),
 				() -> fallbackToSpawn(player)
@@ -52,7 +54,8 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter {
 
 
 	@Override
-	public void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem) {
+	public void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem)
+	{
 		teleportExecutor.execute(player, location, destinationName, playerItem);
 	}
 
@@ -62,14 +65,17 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter {
 	 *
 	 * @param player the player to teleport
 	 */
-	void fallbackToSpawn(final Player player) {
-		if (plugin.getConfig().getBoolean("bedspawn-fallback")) {
+	void fallbackToSpawn(final Player player)
+	{
+		if (plugin.getConfig().getBoolean("bedspawn-fallback"))
+		{
 			getSpawnDestination(player).ifPresentOrElse(
 					destination -> new SpawnTeleporter(plugin, teleportExecutor).initiate(player),
 					() -> sendInvalidDestinationMessage(player, plugin.messageBuilder.getHomeDisplayName().orElse("Home"))
 			);
 		}
-		else {
+		else
+		{
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN).send();
 			plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 		}
