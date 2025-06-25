@@ -24,12 +24,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-final class SpawnTeleporter extends AbstractTeleporter implements Teleporter {
-
+final class SpawnTeleporter extends AbstractTeleporter implements Teleporter
+{
 	private final TeleportExecutor teleportExecutor;
 
 
-	SpawnTeleporter(final PluginMain plugin, final TeleportExecutor teleportExecutor) {
+	SpawnTeleporter(final PluginMain plugin, final TeleportExecutor teleportExecutor)
+	{
 		super(plugin);
 		this.teleportExecutor = teleportExecutor;
 	}
@@ -41,7 +42,8 @@ final class SpawnTeleporter extends AbstractTeleporter implements Teleporter {
 	 * @param player the player to teleport
 	 */
 	@Override
-	public void initiate(final Player player) {
+	public void initiate(final Player player)
+	{
 		getSpawnDestination(player).ifPresentOrElse(
 				location -> execute(player, location, plugin.messageBuilder.getSpawnDisplayName().orElse("Spawn"), player.getInventory().getItemInMainHand()),
 				() -> sendInvalidDestinationMessage(player, plugin.messageBuilder.getSpawnDisplayName().orElse("Spawn"))
@@ -50,17 +52,19 @@ final class SpawnTeleporter extends AbstractTeleporter implements Teleporter {
 
 
 	@Override
-		public void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem) {
-
+	public void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem)
+	{
 		Location finalDestination = location;
 
 		// if from-nether is enabled in config and player is in nether, try to get overworld spawn location
-		if (plugin.getConfig().getBoolean("from-nether") && isInNetherWorld(player)) {
+		if (plugin.getConfig().getBoolean("from-nether") && isInNetherWorld(player))
+		{
 			finalDestination = getOverworldSpawnLocation(player).orElse(finalDestination);
 		}
 
 		// if from-end is enabled in config and player is in end, try to get overworld spawn location
-		else if (plugin.getConfig().getBoolean("from-end") && isInEndWorld(player)) {
+		else if (plugin.getConfig().getBoolean("from-end") && isInEndWorld(player))
+		{
 			finalDestination = getOverworldSpawnLocation(player).orElse(finalDestination);
 		}
 
