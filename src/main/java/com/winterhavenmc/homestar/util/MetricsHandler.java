@@ -21,10 +21,10 @@ import com.winterhavenmc.homestar.PluginMain;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SimplePie;
 
-public class MetricsHandler {
-
-	public MetricsHandler(final PluginMain plugin) {
-
+public class MetricsHandler
+{
+	public MetricsHandler(final PluginMain plugin)
+	{
 		Metrics metrics = new Metrics(plugin, 13928);
 
 		// pie chart of configured language
