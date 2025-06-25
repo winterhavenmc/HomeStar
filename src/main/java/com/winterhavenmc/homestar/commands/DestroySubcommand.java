@@ -18,10 +18,9 @@
 package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.sounds.SoundId;
-
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
+import com.winterhavenmc.homestar.sounds.SoundId;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,16 +29,19 @@ import java.util.List;
 import java.util.Objects;
 
 
-final class DestroySubcommand extends AbstractSubcommand {
+final class DestroySubcommand extends AbstractSubcommand
+{
 
 	private final PluginMain plugin;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to plugin main class instance
 	 */
-	DestroySubcommand(final PluginMain plugin) {
+	DestroySubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "destroy";
 		this.permissionNode = "homestar.destroy";
@@ -49,16 +51,18 @@ final class DestroySubcommand extends AbstractSubcommand {
 
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> args) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> args)
+	{
 		// sender must be in game player
-		if (!(sender instanceof Player player)) {
+		if (!(sender instanceof Player player))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_DESTROY_CONSOLE).send();
 			return true;
 		}
 
 		// if command sender does not have permission to destroy HomeStars, output error message and return true
-		if (!sender.hasPermission(permissionNode)) {
+		if (!sender.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_DESTROY).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
@@ -67,11 +71,13 @@ final class DestroySubcommand extends AbstractSubcommand {
 		ItemStack playerItem = player.getInventory().getItemInMainHand();
 
 		// check that player is holding a homestar stack
-		if (!plugin.homeStarUtility.isItem(playerItem)) {
+		if (!plugin.homeStarUtility.isItem(playerItem))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_DESTROY_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
+
 		int quantity = playerItem.getAmount();
 		playerItem.setAmount(0);
 		player.getInventory().setItemInMainHand(playerItem);
