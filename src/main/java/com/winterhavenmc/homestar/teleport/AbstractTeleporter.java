@@ -38,11 +38,12 @@ import java.util.Optional;
  * prevent them being overridden, and the class and methods are declared package-private
  * to prevent their use outside this package.
  */
-abstract class AbstractTeleporter {
-
+abstract class AbstractTeleporter
+{
 	final protected PluginMain plugin;
 
-	public AbstractTeleporter(final PluginMain plugin) {
+	public AbstractTeleporter(final PluginMain plugin)
+	{
 		this.plugin = plugin;
 	}
 
@@ -53,10 +54,11 @@ abstract class AbstractTeleporter {
 	 * @param player the player
 	 * @return the player bedspawn destination wrapped in an {@link Optional}
 	 */
-	final Optional<Location> getHomeDestination(final Player player) {
-
+	final Optional<Location> getHomeDestination(final Player player)
+	{
 		// if player is null, return empty optional
-		if (player == null) {
+		if (player == null)
+		{
 			return Optional.empty();
 		}
 
@@ -64,7 +66,8 @@ abstract class AbstractTeleporter {
 		Location location = player.getRespawnLocation();
 
 		// if location is null, return empty optional
-		if (location == null) {
+		if (location == null)
+		{
 			return Optional.empty();
 		}
 
@@ -79,10 +82,11 @@ abstract class AbstractTeleporter {
 	 * @param player the player
 	 * @return the player spawn destination wrapped in an {@link Optional}
 	 */
-	final Optional<Location> getSpawnDestination(final Player player) {
-
+	final Optional<Location> getSpawnDestination(final Player player)
+	{
 		// if player is null, return empty optional
-		if (player == null) {
+		if (player == null)
+		{
 			return Optional.empty();
 		}
 
@@ -90,7 +94,8 @@ abstract class AbstractTeleporter {
 		Location location = plugin.worldManager.getSpawnLocation(player);
 
 		// if location is null, return empty optional
-		if (location == null) {
+		if (location == null)
+		{
 			return Optional.empty();
 		}
 
@@ -102,10 +107,11 @@ abstract class AbstractTeleporter {
 	/**
 	 * Send invalid destination message to player
 	 *
-	 * @param player the player
+	 * @param player          the player
 	 * @param destinationName the destination name
 	 */
-	void sendInvalidDestinationMessage(final Player player, final String destinationName) {
+	void sendInvalidDestinationMessage(final Player player, final String destinationName)
+	{
 		plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN)
 				.setMacro(Macro.DESTINATION, destinationName)
 				.send();
@@ -120,10 +126,11 @@ abstract class AbstractTeleporter {
 	 * @return {@link Optional} wrapped spawn location of the normal world associated with the passed player
 	 * nether or end world, or the current player world spawn location if no matching normal world found
 	 */
-	Optional<Location> getOverworldSpawnLocation(final Player player) {
-
+	Optional<Location> getOverworldSpawnLocation(final Player player)
+	{
 		// check for null parameter
-		if (player == null) {
+		if (player == null)
+		{
 			return Optional.empty();
 		}
 
@@ -131,13 +138,14 @@ abstract class AbstractTeleporter {
 		List<World> normalWorlds = new ArrayList<>();
 
 		// iterate through all server worlds
-		for (World checkWorld : plugin.getServer().getWorlds()) {
-
+		for (World checkWorld : plugin.getServer().getWorlds())
+		{
 			// if world is normal environment, try to match name to passed world
-			if (checkWorld.getEnvironment().equals(World.Environment.NORMAL)) {
-
+			if (checkWorld.getEnvironment().equals(World.Environment.NORMAL))
+			{
 				// check if normal world matches passed world minus nether/end suffix
-				if (checkWorld.getName().equals(player.getWorld().getName().replaceFirst("(_nether$|_the_end$)", ""))) {
+				if (checkWorld.getName().equals(player.getWorld().getName().replaceFirst("(_nether$|_the_end$)", "")))
+				{
 					return Optional.of(plugin.worldManager.getSpawnLocation(checkWorld));
 				}
 
@@ -147,7 +155,8 @@ abstract class AbstractTeleporter {
 		}
 
 		// if only one normal world exists, return that world
-		if (normalWorlds.size() == 1) {
+		if (normalWorlds.size() == 1)
+		{
 			return Optional.of(plugin.worldManager.getSpawnLocation(normalWorlds.get(0)));
 		}
 
@@ -162,7 +171,8 @@ abstract class AbstractTeleporter {
 	 * @param player the player
 	 * @return true if player is in a nether world, false if not
 	 */
-	boolean isInNetherWorld(final Player player) {
+	boolean isInNetherWorld(final Player player)
+	{
 		return player.getWorld().getEnvironment().equals(World.Environment.NETHER);
 	}
 
@@ -173,7 +183,8 @@ abstract class AbstractTeleporter {
 	 * @param player the player
 	 * @return true if player is in an end world, false if not
 	 */
-	boolean isInEndWorld(final Player player) {
+	boolean isInEndWorld(final Player player)
+	{
 		return player.getWorld().getEnvironment().equals(World.Environment.THE_END);
 	}
 
