@@ -33,15 +33,16 @@ import java.util.List;
  * @version 1.0
  */
 @SuppressWarnings("unused")
-public final class SimpleAPI {
-
+public final class SimpleAPI
+{
 	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
 
 
 	/**
 	 * Private class constructor to prevent instantiation
 	 */
-	private SimpleAPI() {
+	private SimpleAPI()
+	{
 		throw new AssertionError();
 	}
 
@@ -52,7 +53,8 @@ public final class SimpleAPI {
 	 * @param quantity number of HomeStar items in newly created stack
 	 * @return ItemStack of HomeStar items
 	 */
-	public static ItemStack createItem(final int quantity) {
+	public static ItemStack createItem(final int quantity)
+	{
 		return plugin.homeStarUtility.create(quantity);
 	}
 
@@ -63,7 +65,8 @@ public final class SimpleAPI {
 	 * @param itemStack the ItemStack to check
 	 * @return {@code true} if itemStack is a HomeStar item, {@code false} if not
 	 */
-	public static boolean isHomeStar(final ItemStack itemStack) {
+	public static boolean isHomeStar(final ItemStack itemStack)
+	{
 		return plugin.homeStarUtility.isItem(itemStack);
 	}
 
@@ -74,7 +77,8 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static boolean isValidIngredient() {
+	public static boolean isValidIngredient()
+	{
 		return plugin.getConfig().getBoolean("allow-in-recipes");
 	}
 
@@ -85,7 +89,8 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static int getCooldownTime() {
+	public static int getCooldownTime()
+	{
 		return plugin.getConfig().getInt("cooldown-time");
 	}
 
@@ -96,7 +101,8 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static int getWarmupTime() {
+	public static int getWarmupTime()
+	{
 		return plugin.getConfig().getInt("warmup-time");
 	}
 
@@ -107,7 +113,8 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static int getMinSpawnDistance() {
+	public static int getMinSpawnDistance()
+	{
 		return plugin.getConfig().getInt("minimum-distance");
 	}
 
@@ -118,7 +125,8 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static boolean isCancelledOnDamage() {
+	public static boolean isCancelledOnDamage()
+	{
 		return plugin.getConfig().getBoolean("cancel-on-damage");
 	}
 
@@ -129,7 +137,8 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static boolean isCancelledOnMovement() {
+	public static boolean isCancelledOnMovement()
+	{
 		return plugin.getConfig().getBoolean("cancel-on-movement");
 	}
 
@@ -140,7 +149,8 @@ public final class SimpleAPI {
 	 * @return boolean configuration setting
 	 * @deprecated configuration settings can be accessed through plugin manager
 	 */
-	public static boolean isCancelledOnInteraction() {
+	public static boolean isCancelledOnInteraction()
+	{
 		return plugin.getConfig().getBoolean("cancel-on-interaction");
 	}
 
@@ -151,7 +161,8 @@ public final class SimpleAPI {
 	 * @param player the player to check if warming up
 	 * @return boolean {@code true} if player is currently warming up, {@code false} if not
 	 */
-	public static boolean isWarmingUp(final Player player) {
+	public static boolean isWarmingUp(final Player player)
+	{
 		return plugin.teleportHandler.isWarmingUp(player);
 	}
 
@@ -162,7 +173,8 @@ public final class SimpleAPI {
 	 * @param player the player to check if cooling down
 	 * @return boolean {@code true} if player is currently cooling down, {@code false} if not
 	 */
-	public static boolean isCoolingDown(final Player player) {
+	public static boolean isCoolingDown(final Player player)
+	{
 		return plugin.teleportHandler.getCooldownTimeRemaining(player) > 0;
 	}
 
@@ -173,7 +185,8 @@ public final class SimpleAPI {
 	 * @param player the player to check cooldown time remaining
 	 * @return remaining time
 	 */
-	public static long cooldownTimeRemaining(final Player player) {
+	public static long cooldownTimeRemaining(final Player player)
+	{
 		return plugin.teleportHandler.getCooldownTimeRemaining(player);
 	}
 
@@ -183,7 +196,8 @@ public final class SimpleAPI {
 	 *
 	 * @return List of world names
 	 */
-	public static List<String> getEnabledWorldNames() {
+	public static List<String> getEnabledWorldNames()
+	{
 		return getEnabledWorldNamesList();
 	}
 
@@ -193,7 +207,8 @@ public final class SimpleAPI {
 	 *
 	 * @return List of world names
 	 */
-	public static List<String> getEnabledWorldNamesList() {
+	public static List<String> getEnabledWorldNamesList()
+	{
 		return new ArrayList<>(plugin.worldManager.getEnabledWorldNames());
 	}
 
@@ -203,7 +218,8 @@ public final class SimpleAPI {
 	 *
 	 * @return List of world names
 	 */
-	public static Collection<String> getEnabledWorldNamesCollection() {
+	public static Collection<String> getEnabledWorldNamesCollection()
+	{
 		return plugin.worldManager.getEnabledWorldNames();
 	}
 
@@ -213,7 +229,8 @@ public final class SimpleAPI {
 	 *
 	 * @param player the player to cancel teleporting
 	 */
-	public static void cancelTeleport(final Player player) {
+	public static void cancelTeleport(final Player player)
+	{
 		plugin.teleportHandler.cancelTeleport(player);
 	}
 
@@ -224,7 +241,8 @@ public final class SimpleAPI {
 	 * @return ItemStack
 	 * @deprecated use HomeStar.getDefaultItem()
 	 */
-	public static ItemStack getDefaultItem() {
+	public static ItemStack getDefaultItem()
+	{
 		return plugin.homeStarUtility.getDefaultItemStack();
 	}
 
@@ -235,7 +253,8 @@ public final class SimpleAPI {
 	 * @return String - configured item display name
 	 * @deprecated use HomeStar.getItemName()
 	 */
-	public static String getItemName() {
+	public static String getItemName()
+	{
 		return plugin.messageBuilder.getItemName().orElse("HomeStar");
 	}
 
@@ -247,7 +266,8 @@ public final class SimpleAPI {
 	 * @param itemStack the ItemStack on which to set HomeStar MetaData
 	 * @deprecated use HomeStar.setMetaData()
 	 */
-	private static void setMetaData(final ItemStack itemStack) {
+	private static void setMetaData(final ItemStack itemStack)
+	{
 		plugin.homeStarUtility.setMetaData(itemStack);
 	}
 
