@@ -20,15 +20,14 @@ package com.winterhavenmc.homestar.teleport;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
-
 import org.bukkit.entity.Player;
 
 
 /**
  * Class that manages player teleportation, including warmup and cooldown.
  */
-public final class TeleportHandler {
-
+public final class TeleportHandler
+{
 	// reference to main class
 	private final PluginMain plugin;
 
@@ -47,7 +46,8 @@ public final class TeleportHandler {
 	 *
 	 * @param plugin reference to main class
 	 */
-	public TeleportHandler(final PluginMain plugin) {
+	public TeleportHandler(final PluginMain plugin)
+	{
 		this.plugin = plugin;
 		this.cooldownMap = new CooldownMap(plugin);
 		this.warmupMap = new WarmupMap(plugin);
@@ -60,15 +60,17 @@ public final class TeleportHandler {
 	 *
 	 * @param player the player being teleported
 	 */
-	public void initiateTeleport(final Player player) {
-
+	public void initiateTeleport(final Player player)
+	{
 		// if player is warming up, do nothing and return
-		if (plugin.teleportHandler.isWarmingUp(player)) {
+		if (plugin.teleportHandler.isWarmingUp(player))
+		{
 			return;
 		}
 
 		// if player cooldown has not expired, send player cooldown message and return
-		if (cooldownMap.isCoolingDown(player)) {
+		if (cooldownMap.isCoolingDown(player))
+		{
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_COOLDOWN)
 					.setMacro(Macro.DURATION, cooldownMap.getCooldownTimeRemaining(player))
 					.send();
@@ -84,16 +86,17 @@ public final class TeleportHandler {
 	 *
 	 * @param player the player whose teleport will be cancelled
 	 */
-	public void cancelTeleport(final Player player) {
-
+	public void cancelTeleport(final Player player)
+	{
 		// check for null parameter
-		if (player == null) {
+		if (player == null)
+		{
 			return;
 		}
 
 		// if player is in warmup hashmap, cancel delayed teleport task and remove player from warmup hashmap
-		if (isWarmingUp(player)) {
-
+		if (isWarmingUp(player))
+		{
 			// get delayed teleport task id
 			int taskId = warmupMap.getTaskId(player);
 
@@ -111,7 +114,8 @@ public final class TeleportHandler {
 	 *
 	 * @param player the player being inserted into the cooldown map
 	 */
-	void startPlayerCooldown(final Player player) {
+	void startPlayerCooldown(final Player player)
+	{
 		cooldownMap.startPlayerCooldown(player);
 	}
 
@@ -122,7 +126,8 @@ public final class TeleportHandler {
 	 * @param player the player whose cooldown time remaining to retrieve
 	 * @return long remainingTime
 	 */
-	public long getCooldownTimeRemaining(final Player player) {
+	public long getCooldownTimeRemaining(final Player player)
+	{
 		return cooldownMap.getCooldownTimeRemaining(player);
 	}
 
@@ -133,7 +138,8 @@ public final class TeleportHandler {
 	 * @param player the player to check if teleport is initiated
 	 * @return {@code true} if teleport been initiated, {@code false} if it has not
 	 */
-	public boolean isInitiated(final Player player) {
+	public boolean isInitiated(final Player player)
+	{
 		return warmupMap.isInitiated(player);
 	}
 
@@ -144,7 +150,8 @@ public final class TeleportHandler {
 	 * @param player the player to test if in warmup map
 	 * @return {@code true} if player is in warmup map, {@code false} if not
 	 */
-	public boolean isWarmingUp(final Player player) {
+	public boolean isWarmingUp(final Player player)
+	{
 		return warmupMap.containsPlayer(player);
 	}
 
@@ -154,7 +161,8 @@ public final class TeleportHandler {
 	 *
 	 * @param player the player to remove from the warmup map
 	 */
-	public void removeWarmingUpPlayer(final Player player) {
+	public void removeWarmingUpPlayer(final Player player)
+	{
 		warmupMap.removePlayer(player);
 	}
 
