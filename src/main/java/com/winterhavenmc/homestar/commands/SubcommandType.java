@@ -22,30 +22,38 @@ import com.winterhavenmc.homestar.PluginMain;
 
 enum SubcommandType {
 
-	DESTROY() {
+	DESTROY()
+	{
 		@Override
-		Subcommand create(final PluginMain plugin) {
+		Subcommand create(final PluginMain plugin)
+		{
 			return new DestroySubcommand(plugin);
 		}
 	},
 
-	GIVE() {
+	GIVE()
+	{
 		@Override
-		Subcommand create(final PluginMain plugin) {
+		Subcommand create(final PluginMain plugin)
+		{
 			return new GiveSubcommand(plugin);
 		}
 	},
 
-	RELOAD() {
+	RELOAD()
+	{
 		@Override
-		Subcommand create(final PluginMain plugin) {
+		Subcommand create(final PluginMain plugin)
+		{
 			return new ReloadSubcommand(plugin);
 		}
 	},
 
-	STATUS() {
+	STATUS()
+	{
 		@Override
-		Subcommand create(final PluginMain plugin) {
+		Subcommand create(final PluginMain plugin)
+		{
 			return new StatusSubcommand(plugin);
 		}
 	};
