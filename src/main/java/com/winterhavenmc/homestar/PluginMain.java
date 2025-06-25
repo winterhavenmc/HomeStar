@@ -17,14 +17,13 @@
 
 package com.winterhavenmc.homestar;
 
+import com.winterhavenmc.homestar.commands.CommandManager;
+import com.winterhavenmc.homestar.listeners.PlayerEventListener;
 import com.winterhavenmc.homestar.listeners.PlayerInteractEventListener;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.commands.CommandManager;
 import com.winterhavenmc.homestar.teleport.TeleportHandler;
-import com.winterhavenmc.homestar.listeners.PlayerEventListener;
 import com.winterhavenmc.homestar.util.HomeStarUtility;
-
 import com.winterhavenmc.homestar.util.MetricsHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
@@ -44,8 +43,8 @@ import java.io.File;
  *
  * @author Tim Savage
  */
-public final class PluginMain extends JavaPlugin {
-
+public final class PluginMain extends JavaPlugin
+{
 	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public SoundConfiguration soundConfig;
 	public TeleportHandler teleportHandler;
@@ -58,7 +57,8 @@ public final class PluginMain extends JavaPlugin {
 	 * Constructor for testing
 	 */
 	@SuppressWarnings("unused")
-	public PluginMain() {
+	public PluginMain()
+	{
 		super();
 	}
 
@@ -70,14 +70,15 @@ public final class PluginMain extends JavaPlugin {
 	PluginMain(final JavaPluginLoader loader,
 	           final PluginDescriptionFile descriptionFile,
 	           final File dataFolder,
-	           final File file) {
+	           final File file)
+	{
 		super(loader, descriptionFile, dataFolder, file);
 	}
 
 
 	@Override
-	public void onEnable() {
-
+	public void onEnable()
+	{
 		// install default configuration file if not already present
 		saveDefaultConfig();
 
@@ -99,7 +100,7 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate player event listener
 		new PlayerEventListener(this);
 		new PlayerInteractEventListener(this);
-		
+
 		// instantiate homestar factory
 		homeStarUtility = new HomeStarUtility(this);
 
