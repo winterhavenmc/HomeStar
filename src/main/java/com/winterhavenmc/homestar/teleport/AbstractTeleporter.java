@@ -157,7 +157,7 @@ abstract class AbstractTeleporter
 		// if only one normal world exists, return that world
 		if (normalWorlds.size() == 1)
 		{
-			return Optional.of(plugin.worldManager.getSpawnLocation(normalWorlds.get(0)));
+			return Optional.of(plugin.worldManager.getSpawnLocation(normalWorlds.getFirst()));
 		}
 
 		// if no matching normal world found and more than one normal world exists, return passed world spawn location
