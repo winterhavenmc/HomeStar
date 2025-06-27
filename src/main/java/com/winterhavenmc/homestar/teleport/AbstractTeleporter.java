@@ -91,7 +91,7 @@ abstract class AbstractTeleporter
 		}
 
 		// get spawn location for player
-		Location location = plugin.worldManager.getSpawnLocation(player);
+		Location location = plugin.worldManager.getSpawnLocation(player.getWorld());
 
 		// if location is null, return empty optional
 		if (location == null)
