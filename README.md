@@ -1,4 +1,6 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2b4783ba190c481ea339faad8ba19574)](https://app.codacy.com/gh/winterhavenmc/HomeStar/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+[![Spigot Version](https://badgen.net/static/spigot-api/1.21.6?color=yellow)](https://spigotmc.org)
+&nbsp;[![License](https://badgen.net/static/license/GPLv3)](https://www.gnu.org/licenses/gpl-3.0)
 
 # HomeStar
 

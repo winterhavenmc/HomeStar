@@ -22,10 +22,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 
-interface Teleporter {
-
+interface Teleporter
+{
 	void initiate(final Player player);
-
 	void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem);
-
 }

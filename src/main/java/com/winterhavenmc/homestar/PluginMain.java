@@ -17,20 +17,24 @@
 
 package com.winterhavenmc.homestar;
 
+import com.winterhavenmc.homestar.commands.CommandManager;
+import com.winterhavenmc.homestar.listeners.PlayerEventListener;
+import com.winterhavenmc.homestar.listeners.PlayerInteractEventListener;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.commands.CommandManager;
 import com.winterhavenmc.homestar.teleport.TeleportHandler;
-import com.winterhavenmc.homestar.listeners.PlayerEventListener;
-import com.winterhavenmc.homestar.util.HomeStarFactory;
-
+import com.winterhavenmc.homestar.util.HomeStarUtility;
 import com.winterhavenmc.homestar.util.MetricsHandler;
 import com.winterhavenmc.util.messagebuilder.MessageBuilder;
 import com.winterhavenmc.util.soundconfig.SoundConfiguration;
 import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.util.worldmanager.WorldManager;
 
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.plugin.java.JavaPluginLoader;
+
+import java.io.File;
 
 
 /**
@@ -39,20 +43,42 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author Tim Savage
  */
-public final class PluginMain extends JavaPlugin {
-
+public final class PluginMain extends JavaPlugin
+{
 	public MessageBuilder<MessageId, Macro> messageBuilder;
 	public SoundConfiguration soundConfig;
 	public TeleportHandler teleportHandler;
 	public WorldManager worldManager;
 	public CommandManager commandManager;
-	public PlayerEventListener playerEventListener;
-	public HomeStarFactory homeStarFactory;
+	public HomeStarUtility homeStarUtility;
+
+
+	/**
+	 * Constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	public PluginMain()
+	{
+		super();
+	}
+
+
+	/**
+	 * Constructor for testing
+	 */
+	@SuppressWarnings("unused")
+	PluginMain(final JavaPluginLoader loader,
+	           final PluginDescriptionFile descriptionFile,
+	           final File dataFolder,
+	           final File file)
+	{
+		super(loader, descriptionFile, dataFolder, file);
+	}
 
 
 	@Override
-	public void onEnable() {
-
+	public void onEnable()
+	{
 		// install default configuration file if not already present
 		saveDefaultConfig();
 
@@ -62,20 +88,21 @@ public final class PluginMain extends JavaPlugin {
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
 
-		// instantiate teleport manager
-		teleportHandler = new TeleportHandler(this);
-
 		// instantiate world manager
 		worldManager = new WorldManager(this);
+
+		// instantiate teleport manager
+		teleportHandler = new TeleportHandler(this);
 
 		// instantiate command manager
 		commandManager = new CommandManager(this);
 
 		// instantiate player event listener
-		playerEventListener = new PlayerEventListener(this);
-		
+		new PlayerEventListener(this);
+		new PlayerInteractEventListener(this);
+
 		// instantiate homestar factory
-		homeStarFactory = new HomeStarFactory(this);
+		homeStarUtility = new HomeStarUtility(this);
 
 		// instantiate metrics handler
 		new MetricsHandler(this);

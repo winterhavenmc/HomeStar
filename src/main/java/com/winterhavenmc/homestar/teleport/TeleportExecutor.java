@@ -18,11 +18,9 @@
 package com.winterhavenmc.homestar.teleport;
 
 import com.winterhavenmc.homestar.PluginMain;
-
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
-
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,18 +29,20 @@ import org.bukkit.scheduler.BukkitTask;
 import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
-class TeleportExecutor {
-
+class TeleportExecutor
+{
 	protected final PluginMain plugin;
 	protected final WarmupMap warmupMap;
 
 
 	/**
 	 * Class constructor
-	 * @param plugin reference to plugin main class
+	 *
+	 * @param plugin    reference to plugin main class
 	 * @param warmupMap player warmup map
 	 */
-	TeleportExecutor(final PluginMain plugin, final WarmupMap warmupMap) {
+	TeleportExecutor(final PluginMain plugin, final WarmupMap warmupMap)
+	{
 		this.plugin = plugin;
 		this.warmupMap = warmupMap;
 	}
@@ -51,15 +51,16 @@ class TeleportExecutor {
 	/**
 	 * Execute the teleport to destination
 	 *
-	 * @param player      the player to teleport
-	 * @param location    the destination location
+	 * @param player          the player to teleport
+	 * @param location        the destination location
 	 * @param destinationName the destination name
-	 * @param playerItem  the LodeStar item used to initiate teleport
+	 * @param playerItem      the LodeStar item used to initiate teleport
 	 */
-	void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem) {
-
+	void execute(final Player player, final Location location, final String destinationName, final ItemStack playerItem)
+	{
 		// if destination location is null, send invalid destination message and return
-		if (location == null) {
+		if (location == null)
+		{
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN)
 					.setMacro(Macro.DESTINATION, destinationName)
 					.send();
@@ -67,7 +68,8 @@ class TeleportExecutor {
 		}
 
 		// if player is less than configured minimum distance from destination, send player proximity message and return
-		if (isUnderMinimumDistance(player, location)) {
+		if (isUnderMinimumDistance(player, location))
+		{
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_MIN_DISTANCE)
 					.setMacro(Macro.DESTINATION, destinationName)
 					.send();
@@ -98,16 +100,17 @@ class TeleportExecutor {
 	/**
 	 * Send teleport warmup message if warmup time is greater than zero
 	 *
-	 * @param player the teleporting player
+	 * @param player          the teleporting player
 	 * @param destinationName string containing the destination name
 	 */
-	private void sendWarmupMessage(final Player player, final String destinationName) {
-
+	private void sendWarmupMessage(final Player player, final String destinationName)
+	{
 		// get configured warmup time
 		long warmupTime = plugin.getConfig().getLong("teleport-warmup");
 
 		// if warmup time is greater than zero, send player warmup message
-		if (warmupTime > 0) {
+		if (warmupTime > 0)
+		{
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_WARMUP)
 					.setMacro(Macro.DESTINATION, destinationName)
 					.setMacro(Macro.DURATION, SECONDS.toMillis(warmupTime))
@@ -124,10 +127,12 @@ class TeleportExecutor {
 	 *
 	 * @param location the destination location
 	 */
-	private void loadDestinationChunk(final Location location) {
-
-		if (location != null && location.getWorld() != null) {
-			if (!location.getWorld().getChunkAt(location).isLoaded()) {
+	private void loadDestinationChunk(final Location location)
+	{
+		if (location != null && location.getWorld() != null)
+		{
+			if (!location.getWorld().getChunkAt(location).isLoaded())
+			{
 				location.getWorld().getChunkAt(location).load();
 			}
 		}
@@ -141,7 +146,8 @@ class TeleportExecutor {
 	 * @param location the destination location
 	 * @return true if under minimum distance, false if not
 	 */
-	private boolean isUnderMinimumDistance(final Player player, final Location location) {
+	private boolean isUnderMinimumDistance(final Player player, final Location location)
+	{
 		return location != null
 				&& location.getWorld() != null
 				&& player.getWorld().equals(location.getWorld())
@@ -151,13 +157,16 @@ class TeleportExecutor {
 
 	/**
 	 * remove one lode star item from player inventory
+	 *
 	 * @param player     the player
 	 * @param playerItem the item
 	 */
-	final void removeFromInventoryOnUse(final Player player, final ItemStack playerItem) {
+	final void removeFromInventoryOnUse(final Player player, final ItemStack playerItem)
+	{
 		// if remove-from-inventory is configured on-use, take one LodeStar item from inventory now
 		String removeItem = plugin.getConfig().getString("remove-from-inventory");
-		if (removeItem != null && removeItem.equalsIgnoreCase("on-use")) {
+		if (removeItem != null && removeItem.equalsIgnoreCase("on-use"))
+		{
 			playerItem.setAmount(playerItem.getAmount() - 1);
 			player.getInventory().setItemInMainHand(playerItem);
 		}
@@ -169,10 +178,11 @@ class TeleportExecutor {
 	 *
 	 * @param player the player being logged
 	 */
-	private void logUsage(final Player player) {
-
+	private void logUsage(final Player player)
+	{
 		// if log-use is enabled in config, write log entry
-		if (plugin.getConfig().getBoolean("log-use")) {
+		if (plugin.getConfig().getBoolean("log-use"))
+		{
 
 			// send message to console
 			plugin.messageBuilder.compose(plugin.getServer().getConsoleSender(), MessageId.LOG_USAGE)

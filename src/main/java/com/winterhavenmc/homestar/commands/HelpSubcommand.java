@@ -20,11 +20,13 @@ package com.winterhavenmc.homestar.commands;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -32,20 +34,22 @@ import java.util.stream.Collectors;
  * Help command implementation<br>
  * displays help and usage messages for plugin commands
  */
-final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
-
+final class HelpSubcommand extends AbstractSubcommand implements Subcommand
+{
 	private final PluginMain plugin;
 	private final SubcommandRegistry subcommandRegistry;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to plugin main class instance
 	 */
-	HelpSubcommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry) {
+	HelpSubcommand(final PluginMain plugin, final SubcommandRegistry subcommandRegistry)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.subcommandRegistry = Objects.requireNonNull(subcommandRegistry);
-		this.name ="help";
+		this.name = "help";
 		this.permissionNode = "homestar.help";
 		this.usageString = "/homestar help [command]";
 		this.description = MessageId.COMMAND_HELP_HELP;
@@ -55,9 +59,10 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
-									  final String alias, final String[] args) {
-
-		if (args.length == 2 && args[0].equalsIgnoreCase(this.name)) {
+	                                  final String alias, final String[] args)
+	{
+		if (args.length == 2 && args[0].equalsIgnoreCase(this.name))
+		{
 			return subcommandRegistry.getKeys().stream()
 					.map(subcommandRegistry::getSubcommand)
 					.filter(Optional::isPresent)
@@ -72,17 +77,19 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> args) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> args)
+	{
 		// if command sender does not have permission to display help, output error message and return true
-		if (!sender.hasPermission(permissionNode)) {
+		if (!sender.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_HELP).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (args.size() > getMaxArgs()) {
+		if (args.size() > getMaxArgs())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
@@ -90,7 +97,8 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 		}
 
 		// if no arguments, display usage for all commands
-		if (args.size() == 0) {
+		if (args.isEmpty())
+		{
 			displayUsageAll(sender);
 			return true;
 		}
@@ -109,15 +117,18 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	 * Send help description for subcommand to command sender with subcommand permission node,
 	 * otherwise send invalid command message
 	 *
-	 * @param sender the command sender
+	 * @param sender     the command sender
 	 * @param subcommand the subcommand to display help description
 	 */
-	private void sendCommandHelpMessage(CommandSender sender, Subcommand subcommand) {
-		if (sender.hasPermission(subcommand.getPermissionNode())) {
+	private void sendCommandHelpMessage(CommandSender sender, Subcommand subcommand)
+	{
+		if (sender.hasPermission(subcommand.getPermissionNode()))
+		{
 			plugin.messageBuilder.compose(sender, subcommand.getDescription()).send();
 			subcommand.displayUsage(sender);
 		}
-		else {
+		else
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 		}
@@ -129,7 +140,8 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	 *
 	 * @param sender the command sender
 	 */
-	private void sendCommandInvalidMessage(CommandSender sender) {
+	private void sendCommandInvalidMessage(CommandSender sender)
+	{
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
 		plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
 		displayUsageAll(sender);
@@ -141,8 +153,8 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand {
 	 *
 	 * @param sender the command sender
 	 */
-	void displayUsageAll(final CommandSender sender) {
-
+	void displayUsageAll(final CommandSender sender)
+	{
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
 		subcommandRegistry.getKeys().stream()

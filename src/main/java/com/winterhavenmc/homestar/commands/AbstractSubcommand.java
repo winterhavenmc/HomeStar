@@ -25,8 +25,8 @@ import java.util.Collections;
 import java.util.List;
 
 
-abstract class AbstractSubcommand implements Subcommand {
-
+abstract class AbstractSubcommand implements Subcommand
+{
 	protected String name;
 	protected String usageString = "";
 	protected String permissionNode = "";
@@ -36,44 +36,56 @@ abstract class AbstractSubcommand implements Subcommand {
 
 
 	@Override
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
 
 	@Override
-	public String getUsage() {
+	public String getUsage()
+	{
 		return usageString;
 	}
 
 	@Override
-	public void displayUsage(final CommandSender sender) {
+	public void displayUsage(final CommandSender sender)
+	{
 		sender.sendMessage(usageString);
 	}
 
 	@Override
-	public MessageId getDescription() {
+	public MessageId getDescription()
+	{
 		return description;
 	}
 
 	@Override
-	public int getMinArgs() { return minArgs; }
+	public int getMinArgs()
+	{
+		return minArgs;
+	}
 
 	@Override
-	public int getMaxArgs() { return maxArgs; }
+	public int getMaxArgs()
+	{
+		return maxArgs;
+	}
 
 	@Override
-	public String getPermissionNode() {
+	public String getPermissionNode()
+	{
 		return permissionNode;
 	}
 
 	@Override
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
-									  final String alias, final String[] args) {
-
+	                                  final String alias, final String[] args)
+	{
 		return Collections.emptyList();
 	}
 
-	protected boolean matchPrefix(String string1, String string2) {
+	protected boolean matchPrefix(String string1, String string2)
+	{
 		return string1.toLowerCase().startsWith(string2.toLowerCase());
 	}
 

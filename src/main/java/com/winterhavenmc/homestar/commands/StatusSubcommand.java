@@ -18,9 +18,8 @@
 package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.sounds.SoundId;
-
 import com.winterhavenmc.homestar.messages.MessageId;
+import com.winterhavenmc.homestar.sounds.SoundId;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -30,16 +29,18 @@ import java.util.Objects;
 import static com.winterhavenmc.util.TimeUnit.SECONDS;
 
 
-final class StatusSubcommand extends AbstractSubcommand {
-
+final class StatusSubcommand extends AbstractSubcommand
+{
 	private final PluginMain plugin;
 
 
 	/**
 	 * Class constructor
+	 *
 	 * @param plugin reference to plugin main class instance
 	 */
-	StatusSubcommand(final PluginMain plugin) {
+	StatusSubcommand(final PluginMain plugin)
+	{
 		this.plugin = Objects.requireNonNull(plugin);
 		this.name = "status";
 		this.permissionNode = "homestar.status";
@@ -49,17 +50,19 @@ final class StatusSubcommand extends AbstractSubcommand {
 
 
 	@Override
-	public boolean onCommand(final CommandSender sender, final List<String> args) {
-
+	public boolean onCommand(final CommandSender sender, final List<String> args)
+	{
 		// if sender does not have permission to reload config, send error message and return true
-		if (!sender.hasPermission(permissionNode)) {
+		if (!sender.hasPermission(permissionNode))
+		{
 			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_STATUS).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
 		// check max arguments
-		if (args.size() > getMaxArgs()) {
+		if (args.size() > getMaxArgs())
+		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
@@ -87,68 +90,80 @@ final class StatusSubcommand extends AbstractSubcommand {
 	}
 
 
-	private void showPluginVersion(final CommandSender sender) {
+	private void showPluginVersion(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.DARK_AQUA + "[HomeStar] "
 				+ ChatColor.AQUA + "Version: " + ChatColor.RESET + this.plugin.getDescription().getVersion());
 	}
 
 
-	private void showDebugSetting(final CommandSender sender) {
-		if (plugin.getConfig().getBoolean("debug")) {
+	private void showDebugSetting(final CommandSender sender)
+	{
+		if (plugin.getConfig().getBoolean("debug"))
+		{
 			sender.sendMessage(ChatColor.DARK_RED + "DEBUG: true");
 		}
 	}
 
 
-	private void showLanguageSetting(final CommandSender sender) {
+	private void showLanguageSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Language: "
 				+ ChatColor.RESET + plugin.getConfig().getString("language"));
 	}
 
 
-	private void showDefaultMaterialSetting(final CommandSender sender) {
+	private void showDefaultMaterialSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Default material: "
 				+ ChatColor.RESET + plugin.getConfig().getString("item-material"));
 	}
 
 
-	private void showMinimumDistanceSetting(final CommandSender sender) {
+	private void showMinimumDistanceSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Minimum distance: "
 				+ ChatColor.RESET + plugin.getConfig().getInt("minimum-distance"));
 	}
 
 
-	private void showTeleportWarmupSetting(final CommandSender sender) {
+	private void showTeleportWarmupSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Warmup: " + ChatColor.RESET
 				+ plugin.messageBuilder.getTimeString(SECONDS.toMillis(plugin.getConfig().getInt("teleport-warmup"))));
 	}
 
 
-	private void showTeleportCooldownSetting(final CommandSender sender) {
+	private void showTeleportCooldownSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Cooldown: " + ChatColor.RESET
 				+ plugin.messageBuilder.getTimeString(SECONDS.toMillis(plugin.getConfig().getInt("teleport-cooldown"))));
 	}
 
 
-	private void showLeftClickAllowedSetting(final CommandSender sender) {
+	private void showLeftClickAllowedSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Left-click allowed: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("left-click"));
 	}
 
 
-	private void showShiftClickRequiredSetting(final CommandSender sender) {
+	private void showShiftClickRequiredSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Shift-click required: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("shift-click"));
 	}
 
 
-	private void showBedspawnFallback(final CommandSender sender) {
+	private void showBedspawnFallback(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Bedspawn fallback enabled: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("bedspawn-fallback"));
 	}
 
 
-	private void showCancelOnMovementSetting(final CommandSender sender) {
+	private void showCancelOnMovementSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN
 				+ "Cancel on damage/movement/interaction: " + ChatColor.RESET + "[ "
 				+ plugin.getConfig().getBoolean("cancel-on-damage") + "/"
@@ -157,25 +172,29 @@ final class StatusSubcommand extends AbstractSubcommand {
 	}
 
 
-	private void showRemoveFromInventorySetting(final CommandSender sender) {
+	private void showRemoveFromInventorySetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Remove from inventory: "
 				+ ChatColor.RESET + plugin.getConfig().getString("remove-from-inventory"));
 	}
 
 
-	private void showAllowInRecipesSetting(final CommandSender sender) {
+	private void showAllowInRecipesSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Allow in recipes: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("allow-in-recipes"));
 	}
 
 
-	private void showLightningSetting(final CommandSender sender) {
+	private void showLightningSetting(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Lightning: "
 				+ ChatColor.RESET + plugin.getConfig().getBoolean("lightning"));
 	}
 
 
-	private void showEnabledWorlds(final CommandSender sender) {
+	private void showEnabledWorlds(final CommandSender sender)
+	{
 		sender.sendMessage(ChatColor.GREEN + "Enabled Words: "
 				+ ChatColor.RESET + plugin.worldManager.getEnabledWorldNames().toString());
 	}
