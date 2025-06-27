@@ -45,8 +45,10 @@ final class SpawnTeleporter extends AbstractTeleporter implements Teleporter
 	public void initiate(final Player player)
 	{
 		getSpawnDestination(player).ifPresentOrElse(
-				location -> execute(player, location, plugin.messageBuilder.getSpawnDisplayName().orElse("Spawn"), player.getInventory().getItemInMainHand()),
-				() -> sendInvalidDestinationMessage(player, plugin.messageBuilder.getSpawnDisplayName().orElse("Spawn"))
+				location -> execute(player, location, plugin.messageBuilder.getSpawnDisplayName()
+						.orElse("Spawn"), player.getInventory().getItemInMainHand()),
+				() -> sendInvalidDestinationMessage(player, plugin.messageBuilder.getSpawnDisplayName()
+						.orElse("Spawn"))
 		);
 	}
 
