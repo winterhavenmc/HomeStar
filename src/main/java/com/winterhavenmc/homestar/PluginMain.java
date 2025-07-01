@@ -25,10 +25,10 @@ import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.teleport.TeleportHandler;
 import com.winterhavenmc.homestar.util.HomeStarUtility;
 import com.winterhavenmc.homestar.util.MetricsHandler;
-import com.winterhavenmc.util.messagebuilder.MessageBuilder;
-import com.winterhavenmc.util.soundconfig.SoundConfiguration;
-import com.winterhavenmc.util.soundconfig.YamlSoundConfiguration;
-import com.winterhavenmc.util.worldmanager.WorldManager;
+import com.winterhavenmc.library.messagebuilder.MessageBuilder;
+import com.winterhavenmc.library.soundconfig.SoundConfiguration;
+import com.winterhavenmc.library.soundconfig.YamlSoundConfiguration;
+import com.winterhavenmc.library.worldmanager.WorldManager;
 
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
