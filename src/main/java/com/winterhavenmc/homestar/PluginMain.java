@@ -30,11 +30,7 @@ import com.winterhavenmc.library.soundconfig.SoundConfiguration;
 import com.winterhavenmc.library.soundconfig.YamlSoundConfiguration;
 import com.winterhavenmc.library.worldmanager.WorldManager;
 
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.plugin.java.JavaPluginLoader;
-
-import java.io.File;
 
 
 /**
@@ -51,29 +47,6 @@ public final class PluginMain extends JavaPlugin
 	public WorldManager worldManager;
 	public CommandManager commandManager;
 	public HomeStarUtility homeStarUtility;
-
-
-	/**
-	 * Constructor for testing
-	 */
-	@SuppressWarnings("unused")
-	public PluginMain()
-	{
-		super();
-	}
-
-
-	/**
-	 * Constructor for testing
-	 */
-	@SuppressWarnings("unused")
-	PluginMain(final JavaPluginLoader loader,
-	           final PluginDescriptionFile descriptionFile,
-	           final File dataFolder,
-	           final File file)
-	{
-		super(loader, descriptionFile, dataFolder, file);
-	}
 
 
 	@Override
