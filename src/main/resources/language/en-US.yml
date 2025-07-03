@@ -205,4 +205,4 @@ MESSAGES:
 
   LOG_USAGE:
     enabled: true
-    message: "&b%TARGET_PLAYER%&r used a %ITEM%&r in &3%WORLD%&r."
+    message: "&b%TARGET_PLAYER%&r used a %ITEM%&r in &3%DESTINATION_WORLD%&r."
