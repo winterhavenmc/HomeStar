@@ -187,6 +187,7 @@ class TeleportExecutor
 			// send message to console
 			plugin.messageBuilder.compose(plugin.getServer().getConsoleSender(), MessageId.LOG_USAGE)
 					.setMacro(Macro.TARGET_PLAYER, player)
+					.setMacro(Macro.DESTINATION_WORLD, plugin.worldManager.getAliasOrName(player.getWorld().getName()))
 					.send();
 		}
 	}
