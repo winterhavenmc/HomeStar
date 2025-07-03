@@ -26,7 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
-import static com.winterhavenmc.util.TimeUnit.SECONDS;
+import static com.winterhavenmc.library.TimeUnit.SECONDS;
 
 
 class TeleportExecutor
@@ -187,6 +187,7 @@ class TeleportExecutor
 			// send message to console
 			plugin.messageBuilder.compose(plugin.getServer().getConsoleSender(), MessageId.LOG_USAGE)
 					.setMacro(Macro.TARGET_PLAYER, player)
+					.setMacro(Macro.DESTINATION_WORLD, plugin.worldManager.getAliasOrName(player.getWorld().getName()))
 					.send();
 		}
 	}
