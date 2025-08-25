@@ -93,4 +93,19 @@ class CooldownMap
 		return getCooldownTimeRemaining(player) > 0;
 	}
 
+
+	private class CooldownExpireTask extends BukkitRunnable
+	{
+		private final Player player;
+
+		public CooldownExpireTask(Player player)
+		{
+			this.player = player;
+		}
+
+		public void run()
+		{
+			cooldownMap.remove(player.getUniqueId());
+		}
+	}
 }
