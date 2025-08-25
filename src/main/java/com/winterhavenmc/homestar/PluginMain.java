@@ -20,8 +20,6 @@ package com.winterhavenmc.homestar;
 import com.winterhavenmc.homestar.commands.CommandManager;
 import com.winterhavenmc.homestar.listeners.PlayerEventListener;
 import com.winterhavenmc.homestar.listeners.PlayerInteractEventListener;
-import com.winterhavenmc.homestar.messages.Macro;
-import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.teleport.TeleportHandler;
 import com.winterhavenmc.homestar.util.HomeStarUtility;
 import com.winterhavenmc.homestar.util.MetricsHandler;
@@ -41,7 +39,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public final class PluginMain extends JavaPlugin
 {
-	public MessageBuilder<MessageId, Macro> messageBuilder;
+	public MessageBuilder messageBuilder;
 	public SoundConfiguration soundConfig;
 	public TeleportHandler teleportHandler;
 	public WorldManager worldManager;
@@ -56,7 +54,7 @@ public final class PluginMain extends JavaPlugin
 		saveDefaultConfig();
 
 		// instantiate message builder
-		messageBuilder = new MessageBuilder<>(this);
+		messageBuilder = MessageBuilder.create(this);
 
 		// instantiate sound configuration
 		soundConfig = new YamlSoundConfiguration(this);
