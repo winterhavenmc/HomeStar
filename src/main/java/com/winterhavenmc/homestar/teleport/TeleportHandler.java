@@ -22,6 +22,8 @@ import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import org.bukkit.entity.Player;
 
+import java.time.Duration;
+
 
 /**
  * Class that manages player teleportation, including warmup and cooldown.
@@ -126,7 +128,7 @@ public final class TeleportHandler
 	 * @param player the player whose cooldown time remaining to retrieve
 	 * @return long remainingTime
 	 */
-	public long getCooldownTimeRemaining(final Player player)
+	public Duration getCooldownTimeRemaining(final Player player)
 	{
 		return cooldownMap.getCooldownTimeRemaining(player);
 	}

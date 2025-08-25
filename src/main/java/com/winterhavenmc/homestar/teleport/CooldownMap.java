@@ -21,6 +21,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -32,7 +34,7 @@ class CooldownMap
 	private final JavaPlugin plugin;
 
 	// hashmap to store player UUID and cooldown expire time in milliseconds
-	private final ConcurrentHashMap<UUID, Long> cooldownMap;
+	private final ConcurrentHashMap<UUID, Instant> cooldownMap;
 
 
 	CooldownMap(final JavaPlugin plugin)
@@ -51,17 +53,10 @@ class CooldownMap
 	void startPlayerCooldown(final Player player)
 	{
 		int cooldownSeconds = plugin.getConfig().getInt("teleport-cooldown");
+		Instant expireInstant = Instant.now().plus(Duration.ofSeconds(cooldownSeconds));
+		cooldownMap.put(player.getUniqueId(), expireInstant);
 
-		Long expireTime = System.currentTimeMillis() + (SECONDS.toMillis(cooldownSeconds));
-		cooldownMap.put(player.getUniqueId(), expireTime);
-
-		new BukkitRunnable()
-		{
-			public void run()
-			{
-				cooldownMap.remove(player.getUniqueId());
-			}
-		}.runTaskLater(plugin, SECONDS.toTicks(cooldownSeconds));
+		new CooldownExpireTask(player).runTaskLater(plugin, SECONDS.toTicks(cooldownSeconds));
 	}
 
 
@@ -69,16 +64,20 @@ class CooldownMap
 	 * Get time remaining for player cooldown
 	 *
 	 * @param player the player whose cooldown time remaining is being retrieved
-	 * @return long remaining time in milliseconds
+	 * @return remaining time as {@link Duration}
 	 */
-	long getCooldownTimeRemaining(final Player player)
+	Duration getCooldownTimeRemaining(final Player player)
 	{
-		long remainingTime = 0;
 		if (cooldownMap.containsKey(player.getUniqueId()))
 		{
-			remainingTime = (cooldownMap.get(player.getUniqueId()) - System.currentTimeMillis());
+			Instant expInstant = cooldownMap.get(player.getUniqueId());
+			if (expInstant.isAfter(Instant.now()))
+			{
+				return Duration.between(Instant.now(), expInstant);
+			}
 		}
-		return remainingTime;
+
+		return Duration.ZERO;
 	}
 
 
@@ -90,7 +89,7 @@ class CooldownMap
 	 */
 	boolean isCoolingDown(final Player player)
 	{
-		return getCooldownTimeRemaining(player) > 0;
+		return getCooldownTimeRemaining(player).isPositive();
 	}
 
 

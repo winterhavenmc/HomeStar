@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -175,7 +176,7 @@ public final class SimpleAPI
 	 */
 	public static boolean isCoolingDown(final Player player)
 	{
-		return plugin.teleportHandler.getCooldownTimeRemaining(player) > 0;
+		return plugin.teleportHandler.getCooldownTimeRemaining(player).isPositive();
 	}
 
 
@@ -185,7 +186,7 @@ public final class SimpleAPI
 	 * @param player the player to check cooldown time remaining
 	 * @return remaining time
 	 */
-	public static long cooldownTimeRemaining(final Player player)
+	public static Duration cooldownTimeRemaining(final Player player)
 	{
 		return plugin.teleportHandler.getCooldownTimeRemaining(player);
 	}
