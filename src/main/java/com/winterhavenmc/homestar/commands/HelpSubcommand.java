@@ -104,7 +104,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		}
 
 		// display subcommand help message or invalid command message
-		subcommandRegistry.getSubcommand(args.get(0)).ifPresentOrElse(
+		subcommandRegistry.getSubcommand(args.getFirst()).ifPresentOrElse(
 				subcommand -> sendCommandHelpMessage(sender, subcommand),
 				() -> sendCommandInvalidMessage(sender)
 		);
