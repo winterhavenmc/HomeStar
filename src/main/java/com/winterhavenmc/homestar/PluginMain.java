@@ -68,7 +68,7 @@ public final class PluginMain extends JavaPlugin
 		// instantiate command manager
 		commandManager = new CommandManager(this);
 
-		// instantiate player event listener
+		// instantiate player event listeners
 		new PlayerEventListener(this);
 		new PlayerInteractEventListener(this);
 
