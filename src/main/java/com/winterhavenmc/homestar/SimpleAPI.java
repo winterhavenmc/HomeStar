@@ -17,6 +17,7 @@
 
 package com.winterhavenmc.homestar;
 
+import com.winterhavenmc.library.messagebuilder.ItemForge;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
@@ -242,9 +244,9 @@ public final class SimpleAPI
 	 * @return ItemStack
 	 * @deprecated use HomeStar.getDefaultItem()
 	 */
-	public static ItemStack getDefaultItem()
+	public static Optional<ItemStack> getDefaultItem()
 	{
-		return plugin.homeStarUtility.getDefaultItemStack();
+		return plugin.messageBuilder.itemForge().createItem("HOMESTAR");
 	}
 
 
@@ -256,7 +258,7 @@ public final class SimpleAPI
 	 */
 	public static String getItemName()
 	{
-		return plugin.messageBuilder.getItemName().orElse("HomeStar");
+		return plugin.messageBuilder.itemForge().getItemName("HOMESTAR").orElse("HomeStar");
 	}
 
 }
