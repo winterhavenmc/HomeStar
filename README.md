@@ -32,10 +32,10 @@ A configurable item that serves as a physical replacement for the /home command.
 
 # Permissions
 
-| Permission        | Description                                             | Default |
-|-------------------|---------------------------------------------------------|---------|
-| `homestar.use`    | gives a player the ability to use a HomeStar.           | true    |
-| `homestar.admin`  | gives a player access to the following admin commands:  | op      |
-| `homestar.give`   | allows players to give HomeStar items to other players. | op      |
-| `homestar.reload` | allows reloading of configuration files.                | op      |
-| `homestar.status` | allows viewing configuration settings.                  | op      |
+| Permission        | Description                                               | Default |
+|-------------------|-----------------------------------------------------------|---------|
+| `homestar.use`    | gives a player the ability to use a HomeStar.             | true    |
+| `homestar.admin`  | gives a player access to the following admin permissions: | op      |
+| `homestar.give`   | allows players to give HomeStar items to other players.   | op      |
+| `homestar.reload` | allows reloading of configuration files.                  | op      |
+| `homestar.status` | allows viewing configuration settings.                    | op      |
