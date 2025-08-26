@@ -24,18 +24,18 @@ A configurable item that serves as a physical replacement for the /home command.
 
 # Commands
 
-Command | Description
-------- | -----------
-`/homestar reload` | reloads the configuration without needing to restart the server.
-`/homestar status` | displays configuration settings.
-`/homestar give <playername> [quantity]` | allows admins or others with permission to give HomeStars directly to players.
+| Command                                  | Description                                                                    |
+|------------------------------------------|--------------------------------------------------------------------------------|
+| `/homestar reload`                       | reloads the configuration without needing to restart the server.               |
+| `/homestar status`                       | displays configuration settings.                                               |
+| `/homestar give <playername> [quantity]` | allows admins or others with permission to give HomeStars directly to players. |
 
 # Permissions
 
-Permission | Description | Default
----------- | ----------- | -------
-`homestar.use` | gives a player the ability to use a HomeStar. | true
-`homestar.admin` | gives a player access to the following admin commands: | op
-`homestar.give` | allows players to give HomeStar items to other players. | op
-`homestar.reload` | allows reloading of configuration files. | op
-`homestar.status` | allows viewing configuration settings. | op
+| Permission        | Description                                             | Default |
+|-------------------|---------------------------------------------------------|---------|
+| `homestar.use`    | gives a player the ability to use a HomeStar.           | true    |
+| `homestar.admin`  | gives a player access to the following admin commands:  | op      |
+| `homestar.give`   | allows players to give HomeStar items to other players. | op      |
+| `homestar.reload` | allows reloading of configuration files.                | op      |
+| `homestar.status` | allows viewing configuration settings.                  | op      |
