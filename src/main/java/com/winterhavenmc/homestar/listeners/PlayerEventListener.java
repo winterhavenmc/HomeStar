@@ -160,17 +160,12 @@ public final class PlayerEventListener implements Listener
 			return;
 		}
 
-		Player player = event.getPlayer();
-
-		// if player is in warmup hashmap, cancel teleport and send player message
-		if (plugin.teleportHandler.isWarmingUp(player))
+		// if player is in warmup hashmap, check for player movement other than head turning
+		// and cancel teleport and send player message if movement detected
+		if (plugin.teleportHandler.isWarmingUp(event.getPlayer())
+				&& event.getFrom().distance(Objects.requireNonNull(event.getTo())) > 0)
 		{
-
-			// check for player movement other than head turning
-			if (event.getFrom().distance(Objects.requireNonNull(event.getTo())) > 0)
-			{
-				cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_MOVEMENT);
-			}
+			cancelTeleportWithMessage(event.getPlayer(), MessageId.TELEPORT_CANCELLED_MOVEMENT);
 		}
 	}
 
