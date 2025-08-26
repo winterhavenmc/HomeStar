@@ -132,12 +132,11 @@ class TeleportExecutor
 	 */
 	private void loadDestinationChunk(final Location location)
 	{
-		if (location != null && location.getWorld() != null)
+		if (location != null
+				&& location.getWorld() != null
+				&& !location.getWorld().getChunkAt(location).isLoaded())
 		{
-			if (!location.getWorld().getChunkAt(location).isLoaded())
-			{
-				location.getWorld().getChunkAt(location).load();
-			}
+			location.getWorld().getChunkAt(location).load();
 		}
 	}
 

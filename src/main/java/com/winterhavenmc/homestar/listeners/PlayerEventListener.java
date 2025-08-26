@@ -21,7 +21,7 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
 import com.winterhavenmc.library.messagebuilder.ItemForge;
-import org.bukkit.entity.Entity;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -129,17 +129,11 @@ public final class PlayerEventListener implements Listener
 		if (plugin.getConfig().getBoolean("cancel-on-damage"))
 		{
 
-			Entity entity = event.getEntity();
-
-			// if damaged entity is player, check for pending teleport
-			if (entity instanceof Player player)
+			// if damaged entity is player, check for pending teleport and
+			// if player is in warmup hashmap, cancel teleport and send player message
+			if (event.getEntity() instanceof Player player && plugin.teleportHandler.isWarmingUp(player))
 			{
-
-				// if player is in warmup hashmap, cancel teleport and send player message
-				if (plugin.teleportHandler.isWarmingUp(player))
-				{
-					cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_DAMAGE);
-				}
+				cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_DAMAGE);
 			}
 		}
 	}
@@ -160,17 +154,12 @@ public final class PlayerEventListener implements Listener
 			return;
 		}
 
-		Player player = event.getPlayer();
-
-		// if player is in warmup hashmap, cancel teleport and send player message
-		if (plugin.teleportHandler.isWarmingUp(player))
+		// if player is in warmup hashmap, check for player movement other than head turning
+		// and cancel teleport and send player message if movement detected
+		if (plugin.teleportHandler.isWarmingUp(event.getPlayer())
+				&& event.getFrom().distance(Objects.requireNonNull(event.getTo())) > 0)
 		{
-
-			// check for player movement other than head turning
-			if (event.getFrom().distance(Objects.requireNonNull(event.getTo())) > 0)
-			{
-				cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_MOVEMENT);
-			}
+			cancelTeleportWithMessage(event.getPlayer(), MessageId.TELEPORT_CANCELLED_MOVEMENT);
 		}
 	}
 
