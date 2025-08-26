@@ -77,14 +77,10 @@ public final class CommandManager implements TabExecutor
 			// get subcommand from map
 			Optional<Subcommand> subcommand = subcommandRegistry.getSubcommand(args[0]);
 
-			// if no subcommand returned from map, return empty list
-			if (subcommand.isEmpty())
-			{
-				return Collections.emptyList();
-			}
-
-			// return subcommand tab completer output
-			return subcommand.get().onTabComplete(sender, command, alias, args);
+			// if subcommand returned from map, return subcommand tab completer list, else empty list
+			return (subcommand.isPresent())
+					? subcommand.get().onTabComplete(sender, command, alias, args)
+					: List.of();
 		}
 
 		// return list of subcommands for which sender has permission
