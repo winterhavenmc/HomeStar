@@ -57,7 +57,7 @@ final class SubcommandRegistry
 	 *
 	 * @return List of String - keys of the subcommand map
 	 */
-	Collection<String> getKeys()
+	Collection<String> getSubcommandNames()
 	{
 		return new LinkedHashSet<>(subcommandMap.keySet());
 	}
