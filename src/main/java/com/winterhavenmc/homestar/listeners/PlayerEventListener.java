@@ -129,17 +129,11 @@ public final class PlayerEventListener implements Listener
 		if (plugin.getConfig().getBoolean("cancel-on-damage"))
 		{
 
-			Entity entity = event.getEntity();
-
-			// if damaged entity is player, check for pending teleport
-			if (entity instanceof Player player)
+			// if damaged entity is player, check for pending teleport and
+			// if player is in warmup hashmap, cancel teleport and send player message
+			if (event.getEntity() instanceof Player player && plugin.teleportHandler.isWarmingUp(player))
 			{
-
-				// if player is in warmup hashmap, cancel teleport and send player message
-				if (plugin.teleportHandler.isWarmingUp(player))
-				{
-					cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_DAMAGE);
-				}
+				cancelTeleportWithMessage(player, MessageId.TELEPORT_CANCELLED_DAMAGE);
 			}
 		}
 	}
