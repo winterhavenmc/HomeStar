@@ -20,6 +20,7 @@ package com.winterhavenmc.homestar.listeners;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+import com.winterhavenmc.library.messagebuilder.ItemForge;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.TileState;
@@ -86,7 +87,7 @@ public final class PlayerInteractEventListener implements Listener
 		}
 
 		// if item used is not a HomeStar, do nothing and return
-		if (!plugin.homeStarUtility.isItem(event.getItem()))
+		if (!ItemForge.isCustomItem(event.getItem()))
 		{
 			return;
 		}
