@@ -46,8 +46,10 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter
 	@Override
 	public void initiate(final Player player)
 	{
+		String homeName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.HOME").orElse("Home");
+
 		getHomeDestination(player).ifPresentOrElse(
-				destination -> execute(player, destination, plugin.messageBuilder.getHomeDisplayName().orElse("Home"), player.getInventory().getItemInMainHand()),
+				destination -> execute(player, destination, homeName, player.getInventory().getItemInMainHand()),
 				() -> fallbackToSpawn(player)
 		);
 	}
@@ -67,11 +69,13 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter
 	 */
 	void fallbackToSpawn(final Player player)
 	{
+		String spawnName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.SPAWN").orElse("Spawn");
+
 		if (plugin.getConfig().getBoolean("bedspawn-fallback"))
 		{
 			getSpawnDestination(player).ifPresentOrElse(
 					destination -> new SpawnTeleporter(plugin, teleportExecutor).initiate(player),
-					() -> sendInvalidDestinationMessage(player, plugin.messageBuilder.getHomeDisplayName().orElse("Home"))
+					() -> sendInvalidDestinationMessage(player, spawnName)
 			);
 		}
 		else

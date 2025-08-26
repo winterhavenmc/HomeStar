@@ -18,8 +18,10 @@
 package com.winterhavenmc.homestar.listeners;
 
 import com.winterhavenmc.homestar.PluginMain;
+import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+import com.winterhavenmc.library.messagebuilder.ItemForge;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.TileState;
@@ -86,7 +88,7 @@ public final class PlayerInteractEventListener implements Listener
 		}
 
 		// if item used is not a HomeStar, do nothing and return
-		if (!plugin.homeStarUtility.isItem(event.getItem()))
+		if (!ItemForge.isCustomItem(event.getItem()))
 		{
 			return;
 		}
@@ -115,7 +117,9 @@ public final class PlayerInteractEventListener implements Listener
 			// if players current world is not enabled in config, do nothing and return
 			if (!plugin.worldManager.isEnabled(player.getWorld()))
 			{
-				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_WORLD_DISABLED).send();
+				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_WORLD_DISABLED)
+						.setMacro(Macro.ITEM, event.getItem())
+						.send();
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_DENIED_WORLD_DISABLED);
 				return;
 			}
@@ -123,7 +127,7 @@ public final class PlayerInteractEventListener implements Listener
 			// if player does not have homestar.use permission, send message and return
 			if (!player.hasPermission("homestar.use"))
 			{
-				plugin.messageBuilder.compose(player, MessageId.PERMISSION_DENIED_USE).send();
+				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_PERMISSION).send();
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_DENIED_PERMISSION);
 				return;
 			}

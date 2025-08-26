@@ -20,8 +20,8 @@ package com.winterhavenmc.homestar.commands;
 import com.winterhavenmc.homestar.PluginMain;
 
 
-enum SubcommandType {
-
+enum SubcommandType
+{
 	DESTROY()
 	{
 		@Override

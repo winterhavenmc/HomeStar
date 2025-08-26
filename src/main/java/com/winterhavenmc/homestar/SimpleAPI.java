@@ -17,20 +17,23 @@
 
 package com.winterhavenmc.homestar;
 
+import com.winterhavenmc.library.messagebuilder.ItemForge;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 
 /**
  * A simple static API for HomeStar
  *
  * @author Tim Savage
- * @version 1.0
+ * @version 2.0
  */
 @SuppressWarnings("unused")
 public final class SimpleAPI
@@ -67,7 +70,7 @@ public final class SimpleAPI
 	 */
 	public static boolean isHomeStar(final ItemStack itemStack)
 	{
-		return plugin.homeStarUtility.isItem(itemStack);
+		return ItemForge.isCustomItem(itemStack);
 	}
 
 
@@ -175,7 +178,7 @@ public final class SimpleAPI
 	 */
 	public static boolean isCoolingDown(final Player player)
 	{
-		return plugin.teleportHandler.getCooldownTimeRemaining(player) > 0;
+		return plugin.teleportHandler.getCooldownTimeRemaining(player).isPositive();
 	}
 
 
@@ -185,7 +188,7 @@ public final class SimpleAPI
 	 * @param player the player to check cooldown time remaining
 	 * @return remaining time
 	 */
-	public static long cooldownTimeRemaining(final Player player)
+	public static Duration cooldownTimeRemaining(final Player player)
 	{
 		return plugin.teleportHandler.getCooldownTimeRemaining(player);
 	}
@@ -241,9 +244,9 @@ public final class SimpleAPI
 	 * @return ItemStack
 	 * @deprecated use HomeStar.getDefaultItem()
 	 */
-	public static ItemStack getDefaultItem()
+	public static Optional<ItemStack> getDefaultItem()
 	{
-		return plugin.homeStarUtility.getDefaultItemStack();
+		return plugin.messageBuilder.itemForge().createItem("HOMESTAR");
 	}
 
 
@@ -255,20 +258,7 @@ public final class SimpleAPI
 	 */
 	public static String getItemName()
 	{
-		return plugin.messageBuilder.getItemName().orElse("HomeStar");
-	}
-
-
-	/**
-	 * Set MetaData on ItemStack using custom display name and lore from language file.<br>
-	 * Display name additionally has hidden itemTag to make it identifiable as a HomeStar item.
-	 *
-	 * @param itemStack the ItemStack on which to set HomeStar MetaData
-	 * @deprecated use HomeStar.setMetaData()
-	 */
-	private static void setMetaData(final ItemStack itemStack)
-	{
-		plugin.homeStarUtility.setMetaData(itemStack);
+		return plugin.messageBuilder.itemForge().getItemName("HOMESTAR").orElse("HomeStar");
 	}
 
 }

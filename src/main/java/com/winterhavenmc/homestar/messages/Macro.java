@@ -22,9 +22,12 @@ package com.winterhavenmc.homestar.messages;
  */
 public enum Macro
 {
-	DESTINATION,
-	DESTINATION_WORLD,
 	DURATION,
-	ITEM_QUANTITY,
-	TARGET_PLAYER,
+	DESTINATION,
+	ITEM,
+	QUANTITY,
+	PLAYER,
+	PLUGIN,
+	SETTING,
+	URL,
 }

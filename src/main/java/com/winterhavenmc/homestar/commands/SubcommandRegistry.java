@@ -17,7 +17,10 @@
 
 package com.winterhavenmc.homestar.commands;
 
+import org.bukkit.command.CommandSender;
+
 import java.util.*;
+import java.util.function.Predicate;
 
 
 final class SubcommandRegistry
@@ -54,9 +57,39 @@ final class SubcommandRegistry
 	 *
 	 * @return List of String - keys of the subcommand map
 	 */
-	Collection<String> getKeys()
+	Collection<String> getSubcommandNames()
 	{
 		return new LinkedHashSet<>(subcommandMap.keySet());
+	}
+
+
+	/**
+	 * Get matching list of subcommand names for which sender has permission
+	 *
+	 * @param sender the command sender
+	 * @param matchString the string prefix to match against command names
+	 * @return List of String - command names that match prefix and sender permission
+	 */
+	List<String> matchingNames(final CommandSender sender, final String matchString)
+	{
+		return this.getSubcommandNames().stream()
+				.filter(hasPermission(sender))
+				.filter(matchesPrefix(matchString))
+				.toList();
+	}
+
+
+	private Predicate<String> hasPermission(final CommandSender sender)
+	{
+		return subcommandName -> this.getSubcommand(subcommandName)
+				.map(subcommand -> sender.hasPermission(subcommand.getPermissionNode()))
+				.orElse(false);
+	}
+
+
+	private Predicate<String> matchesPrefix(final String prefix)
+	{
+		return subcommandName -> subcommandName.startsWith(prefix.toLowerCase());
 	}
 
 }

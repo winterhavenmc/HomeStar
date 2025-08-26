@@ -21,6 +21,7 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+import com.winterhavenmc.library.messagebuilder.ItemForge;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -63,7 +64,7 @@ final class DestroySubcommand extends AbstractSubcommand
 		// if command sender does not have permission to destroy HomeStars, output error message and return true
 		if (!sender.hasPermission(permissionNode))
 		{
-			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_DESTROY).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_DESTROY_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -71,18 +72,19 @@ final class DestroySubcommand extends AbstractSubcommand
 		ItemStack playerItem = player.getInventory().getItemInMainHand();
 
 		// check that player is holding a homestar stack
-		if (!plugin.homeStarUtility.isItem(playerItem))
+		if (!ItemForge.isCustomItem(playerItem))
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_DESTROY_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
-		int quantity = playerItem.getAmount();
+		ItemStack originalItem = playerItem.clone();
 		playerItem.setAmount(0);
 		player.getInventory().setItemInMainHand(playerItem);
+
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_DESTROY)
-				.setMacro(Macro.ITEM_QUANTITY, quantity)
+				.setMacro(Macro.ITEM, originalItem)
 				.send();
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_DESTROY);
 		return true;

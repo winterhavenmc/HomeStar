@@ -22,22 +22,17 @@ import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import org.bukkit.entity.Player;
 
+import java.time.Duration;
+
 
 /**
  * Class that manages player teleportation, including warmup and cooldown.
  */
 public final class TeleportHandler
 {
-	// reference to main class
 	private final PluginMain plugin;
-
-	// Map containing player UUID as key and cooldown expire time in milliseconds as value
 	private final CooldownMap cooldownMap;
-
-	// Map containing player UUID as key and warmup task id as value
 	private final WarmupMap warmupMap;
-
-	// teleport executor instance that serves all teleporters
 	private final TeleportExecutor teleportExecutor;
 
 
@@ -72,6 +67,7 @@ public final class TeleportHandler
 		if (cooldownMap.isCoolingDown(player))
 		{
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_COOLDOWN)
+					.setMacro(Macro.ITEM, player.getInventory().getItemInMainHand())
 					.setMacro(Macro.DURATION, cooldownMap.getCooldownTimeRemaining(player))
 					.send();
 			return;
@@ -126,7 +122,7 @@ public final class TeleportHandler
 	 * @param player the player whose cooldown time remaining to retrieve
 	 * @return long remainingTime
 	 */
-	public long getCooldownTimeRemaining(final Player player)
+	public Duration getCooldownTimeRemaining(final Player player)
 	{
 		return cooldownMap.getCooldownTimeRemaining(player);
 	}

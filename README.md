@@ -1,5 +1,5 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/2b4783ba190c481ea339faad8ba19574)](https://app.codacy.com/gh/winterhavenmc/HomeStar/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
-[![Spigot Version](https://badgen.net/static/spigot-api/1.21.7?color=yellow)](https://spigotmc.org)
+[![Spigot Version](https://badgen.net/static/spigot-api/1.21.8?color=yellow)](https://spigotmc.org)
 &nbsp;[![License](https://badgen.net/static/license/GPLv3)](https://www.gnu.org/licenses/gpl-3.0)
 
 # HomeStar
@@ -24,18 +24,18 @@ A configurable item that serves as a physical replacement for the /home command.
 
 # Commands
 
-Command | Description
-------- | -----------
-`/homestar reload` | reloads the configuration without needing to restart the server.
-`/homestar status` | displays configuration settings.
-`/homestar give <playername> [quantity]` | allows admins or others with permission to give HomeStars directly to players.
+| Command                                  | Description                                                                    |
+|------------------------------------------|--------------------------------------------------------------------------------|
+| `/homestar reload`                       | reloads the configuration without needing to restart the server.               |
+| `/homestar status`                       | displays configuration settings.                                               |
+| `/homestar give <playername> [quantity]` | allows admins or others with permission to give HomeStars directly to players. |
 
 # Permissions
 
-Permission | Description | Default
----------- | ----------- | -------
-`homestar.use` | gives a player the ability to use a HomeStar. | true
-`homestar.admin` | gives a player access to the following admin commands: | op
-`homestar.give` | allows players to give HomeStar items to other players. | op
-`homestar.reload` | allows reloading of configuration files. | op
-`homestar.status` | allows viewing configuration settings. | op
+| Permission        | Description                                             | Default |
+|-------------------|---------------------------------------------------------|---------|
+| `homestar.use`    | gives a player the ability to use a HomeStar.           | true    |
+| `homestar.admin`  | gives a player access to the following admin commands:  | op      |
+| `homestar.give`   | allows players to give HomeStar items to other players. | op      |
+| `homestar.reload` | allows reloading of configuration files.                | op      |
+| `homestar.status` | allows viewing configuration settings.                  | op      |

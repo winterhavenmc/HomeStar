@@ -20,13 +20,13 @@ package com.winterhavenmc.homestar.commands;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 
 import javax.annotation.Nonnull;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 /**
@@ -48,7 +48,6 @@ public final class CommandManager implements TabExecutor
 	 */
 	public CommandManager(final PluginMain plugin)
 	{
-		// set reference to main class
 		this.plugin = plugin;
 
 		// register this class as command executor
@@ -78,18 +77,14 @@ public final class CommandManager implements TabExecutor
 			// get subcommand from map
 			Optional<Subcommand> subcommand = subcommandRegistry.getSubcommand(args[0]);
 
-			// if no subcommand returned from map, return empty list
-			if (subcommand.isEmpty())
-			{
-				return Collections.emptyList();
-			}
-
-			// return subcommand tab completer output
-			return subcommand.get().onTabComplete(sender, command, alias, args);
+			// if subcommand returned from map, return subcommand tab completer list, else empty list
+			return (subcommand.isPresent())
+					? subcommand.get().onTabComplete(sender, command, alias, args)
+					: List.of();
 		}
 
 		// return list of subcommands for which sender has permission
-		return getMatchingSubcommandNames(sender, args[0]);
+		return subcommandRegistry.matchingNames(sender, args[0]);
 	}
 
 
@@ -103,19 +98,9 @@ public final class CommandManager implements TabExecutor
 		// convert args array to list
 		List<String> argsList = new ArrayList<>(Arrays.asList(args));
 
-		String subcommandName;
-
-		// get subcommand, remove from front of list
-		if (!argsList.isEmpty())
-		{
-			subcommandName = argsList.remove(0);
-		}
-
-		// if no arguments, set command to help
-		else
-		{
-			subcommandName = "help";
-		}
+		String subcommandName = (!argsList.isEmpty())
+				? argsList.removeFirst()
+				: "help";
 
 		// get subcommand from map by name
 		Optional<Subcommand> optionalSubcommand = subcommandRegistry.getSubcommand(subcommandName);
@@ -132,25 +117,6 @@ public final class CommandManager implements TabExecutor
 		optionalSubcommand.ifPresent(subcommand -> subcommand.onCommand(sender, argsList));
 
 		return true;
-	}
-
-
-	/**
-	 * Get matching list of subcommands for which sender has permission
-	 *
-	 * @param sender      the command sender
-	 * @param matchString the string prefix to match against command names
-	 * @return List of String - command names that match prefix and sender has permission
-	 */
-	private List<String> getMatchingSubcommandNames(final CommandSender sender, final String matchString)
-	{
-		return subcommandRegistry.getKeys().stream()
-				.map(subcommandRegistry::getSubcommand)
-				.filter(Optional::isPresent)
-				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
-				.map(subcommand -> subcommand.get().getName())
-				.filter(name -> name.toLowerCase().startsWith(matchString.toLowerCase()))
-				.collect(Collectors.toList());
 	}
 
 }

@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 /**
@@ -61,18 +60,9 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
 	                                  final String alias, final String[] args)
 	{
-		if (args.length == 2 && args[0].equalsIgnoreCase(this.name))
-		{
-			return subcommandRegistry.getKeys().stream()
-					.map(subcommandRegistry::getSubcommand)
-					.filter(Optional::isPresent)
-					.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
-					.map(subcommand -> subcommand.get().getName())
-					.filter(subCommandName -> subCommandName.toLowerCase().startsWith(args[1].toLowerCase()))
-					.filter(subCommandName -> !subCommandName.equalsIgnoreCase(this.name))
-					.collect(Collectors.toList());
-		}
-		return Collections.emptyList();
+		return (args.length == 2 && args[0].equalsIgnoreCase(this.name))
+				? subcommandRegistry.matchingNames(sender, args[1])
+				: Collections.emptyList();
 	}
 
 
@@ -82,7 +72,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission(permissionNode))
 		{
-			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_HELP).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -96,18 +86,18 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 			return true;
 		}
 
-		// if no arguments, display usage for all commands
+		// if no arguments, display usage for all commands, else display subcommand help message or invalid command message
 		if (args.isEmpty())
 		{
 			displayUsageAll(sender);
-			return true;
 		}
-
-		// display subcommand help message or invalid command message
-		subcommandRegistry.getSubcommand(args.get(0)).ifPresentOrElse(
-				subcommand -> sendCommandHelpMessage(sender, subcommand),
-				() -> sendCommandInvalidMessage(sender)
-		);
+		else
+		{
+			subcommandRegistry.getSubcommand(args.getFirst()).ifPresentOrElse(
+					subcommand -> sendCommandHelpMessage(sender, subcommand),
+					() -> sendCommandInvalidMessage(sender)
+			);
+		}
 
 		return true;
 	}
@@ -157,7 +147,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 	{
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
-		subcommandRegistry.getKeys().stream()
+		subcommandRegistry.getSubcommandNames().stream()
 				.map(subcommandRegistry::getSubcommand)
 				.filter(Optional::isPresent)
 				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
