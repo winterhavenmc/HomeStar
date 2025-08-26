@@ -60,7 +60,7 @@ final class StatusSubcommand extends AbstractSubcommand
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission(permissionNode))
 		{
-			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_STATUS).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
