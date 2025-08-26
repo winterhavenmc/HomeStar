@@ -30,16 +30,9 @@ import java.time.Duration;
  */
 public final class TeleportHandler
 {
-	// reference to main class
 	private final PluginMain plugin;
-
-	// Map containing player UUID as key and cooldown expire time in milliseconds as value
 	private final CooldownMap cooldownMap;
-
-	// Map containing player UUID as key and warmup task id as value
 	private final WarmupMap warmupMap;
-
-	// teleport executor instance that serves all teleporters
 	private final TeleportExecutor teleportExecutor;
 
 
