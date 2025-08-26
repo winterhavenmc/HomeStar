@@ -48,7 +48,6 @@ public final class CommandManager implements TabExecutor
 	 */
 	public CommandManager(final PluginMain plugin)
 	{
-		// set reference to main class
 		this.plugin = plugin;
 
 		// register this class as command executor
