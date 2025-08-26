@@ -21,6 +21,7 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+import com.winterhavenmc.library.messagebuilder.ItemForge;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -71,7 +72,7 @@ final class DestroySubcommand extends AbstractSubcommand
 		ItemStack playerItem = player.getInventory().getItemInMainHand();
 
 		// check that player is holding a homestar stack
-		if (!plugin.homeStarUtility.isItem(playerItem))
+		if (!ItemForge.isCustomItem(playerItem))
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_DESTROY_NO_MATCH).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
