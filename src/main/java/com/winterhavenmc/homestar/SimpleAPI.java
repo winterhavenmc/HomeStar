@@ -259,17 +259,4 @@ public final class SimpleAPI
 		return plugin.messageBuilder.getItemName().orElse("HomeStar");
 	}
 
-
-	/**
-	 * Set MetaData on ItemStack using custom display name and lore from language file.<br>
-	 * Display name additionally has hidden itemTag to make it identifiable as a HomeStar item.
-	 *
-	 * @param itemStack the ItemStack on which to set HomeStar MetaData
-	 * @deprecated use HomeStar.setMetaData()
-	 */
-	private static void setMetaData(final ItemStack itemStack)
-	{
-		plugin.homeStarUtility.setMetaData(itemStack);
-	}
-
 }
