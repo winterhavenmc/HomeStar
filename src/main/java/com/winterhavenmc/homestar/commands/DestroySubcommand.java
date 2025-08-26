@@ -78,11 +78,12 @@ final class DestroySubcommand extends AbstractSubcommand
 			return true;
 		}
 
-		int quantity = playerItem.getAmount();
+		ItemStack originalItem = playerItem.clone();
 		playerItem.setAmount(0);
 		player.getInventory().setItemInMainHand(playerItem);
+
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_DESTROY)
-				.setMacro(Macro.ITEM_QUANTITY, quantity)
+				.setMacro(Macro.ITEM, originalItem)
 				.send();
 		plugin.soundConfig.playSound(player, SoundId.COMMAND_SUCCESS_DESTROY);
 		return true;
