@@ -15,6 +15,13 @@ COMMAND_INVALID:
   pitch: 1
 
 
+COMMAND_SUCCESS_DESTROY:
+  enabled: true
+  player-only: true
+  sound: minecraft:entity.item.break
+  volume: 1
+  pitch: 1
+
 COMMAND_SUCCESS_GIVE_SENDER:
   enabled: true
   player-only: true
@@ -29,12 +36,13 @@ COMMAND_SUCCESS_GIVE_TARGET:
   volume: 1
   pitch: 1
 
-COMMAND_SUCCESS_DESTROY:
+COMMAND_SUCCESS_RELOAD:
   enabled: true
   player-only: true
-  sound: minecraft:entity.item.break
+  sound: minecraft:block.note_block.chime
   volume: 1
   pitch: 1
+
 
 TELEPORT_DENIED_PERMISSION:
   enabled: true
