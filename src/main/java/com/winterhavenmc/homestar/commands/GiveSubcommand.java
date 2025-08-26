@@ -75,7 +75,7 @@ final class GiveSubcommand extends AbstractSubcommand
 		// if command sender does not have permission to give HomeStars, output error message and return true
 		if (!sender.hasPermission(permissionNode))
 		{
-			plugin.messageBuilder.compose(sender, MessageId.PERMISSION_DENIED_GIVE).send();
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_GIVE_PERMISSION).send();
 			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
@@ -122,7 +122,7 @@ final class GiveSubcommand extends AbstractSubcommand
 			}
 			catch (NumberFormatException exception)
 			{
-				plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_QUANTITY_INVALID).send();
+				plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_GIVE_QUANTITY_INVALID).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
