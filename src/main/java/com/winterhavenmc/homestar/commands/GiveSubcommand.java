@@ -179,8 +179,8 @@ final class GiveSubcommand extends AbstractSubcommand
 		{
 			// send message and play sound to giver
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_GIVE)
-					.setMacro(Macro.ITEM_QUANTITY, quantity)
-					.setMacro(Macro.TARGET_PLAYER, targetPlayer)
+					.setMacro(Macro.QUANTITY, quantity)
+					.setMacro(Macro.PLAYER, targetPlayer)
 					.send();
 
 			// if giver is in game, play sound
@@ -191,15 +191,15 @@ final class GiveSubcommand extends AbstractSubcommand
 
 			// send message to target player
 			plugin.messageBuilder.compose(targetPlayer, MessageId.COMMAND_SUCCESS_GIVE_TARGET)
-					.setMacro(Macro.ITEM_QUANTITY, quantity)
-					.setMacro(Macro.TARGET_PLAYER, sender)
+					.setMacro(Macro.QUANTITY, quantity)
+					.setMacro(Macro.PLAYER, sender)
 					.send();
 		}
 		else
 		{
 			// send message when giving to self
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_GIVE_SELF)
-					.setMacro(Macro.ITEM_QUANTITY, quantity)
+					.setMacro(Macro.QUANTITY, quantity)
 					.send();
 		}
 
