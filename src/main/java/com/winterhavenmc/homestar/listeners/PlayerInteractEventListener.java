@@ -18,6 +18,7 @@
 package com.winterhavenmc.homestar.listeners;
 
 import com.winterhavenmc.homestar.PluginMain;
+import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
 import com.winterhavenmc.library.messagebuilder.ItemForge;
@@ -116,7 +117,9 @@ public final class PlayerInteractEventListener implements Listener
 			// if players current world is not enabled in config, do nothing and return
 			if (!plugin.worldManager.isEnabled(player.getWorld()))
 			{
-				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_WORLD_DISABLED).send();
+				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_WORLD_DISABLED)
+						.setMacro(Macro.ITEM, event.getItem())
+						.send();
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_DENIED_WORLD_DISABLED);
 				return;
 			}
