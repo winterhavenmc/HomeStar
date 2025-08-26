@@ -27,7 +27,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 /**
@@ -87,18 +86,18 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 			return true;
 		}
 
-		// if no arguments, display usage for all commands
+		// if no arguments, display usage for all commands, else display subcommand help message or invalid command message
 		if (args.isEmpty())
 		{
 			displayUsageAll(sender);
-			return true;
 		}
-
-		// display subcommand help message or invalid command message
-		subcommandRegistry.getSubcommand(args.getFirst()).ifPresentOrElse(
-				subcommand -> sendCommandHelpMessage(sender, subcommand),
-				() -> sendCommandInvalidMessage(sender)
-		);
+		else
+		{
+			subcommandRegistry.getSubcommand(args.getFirst()).ifPresentOrElse(
+					subcommand -> sendCommandHelpMessage(sender, subcommand),
+					() -> sendCommandInvalidMessage(sender)
+			);
+		}
 
 		return true;
 	}
@@ -148,7 +147,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 	{
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_USAGE_HEADER).send();
 
-		subcommandRegistry.getKeys().stream()
+		subcommandRegistry.getSubcommandNames().stream()
 				.map(subcommandRegistry::getSubcommand)
 				.filter(Optional::isPresent)
 				.filter(subcommand -> sender.hasPermission(subcommand.get().getPermissionNode()))
