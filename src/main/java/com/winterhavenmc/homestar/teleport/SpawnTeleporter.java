@@ -44,11 +44,12 @@ final class SpawnTeleporter extends AbstractTeleporter implements Teleporter
 	@Override
 	public void initiate(final Player player)
 	{
+		String spawnName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.SPAWN").orElse("Spawn");
+		String homeName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.HOME").orElse("Home");
+
 		getSpawnDestination(player).ifPresentOrElse(
-				location -> execute(player, location, plugin.messageBuilder.getSpawnDisplayName()
-						.orElse("Spawn"), player.getInventory().getItemInMainHand()),
-				() -> sendInvalidDestinationMessage(player, plugin.messageBuilder.getSpawnDisplayName()
-						.orElse("Spawn"))
+				location -> execute(player, location, spawnName, player.getInventory().getItemInMainHand()),
+				() -> sendInvalidDestinationMessage(player, homeName)
 		);
 	}
 
