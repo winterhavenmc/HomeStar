@@ -124,7 +124,7 @@ public final class PlayerInteractEventListener implements Listener
 			// if player does not have homestar.use permission, send message and return
 			if (!player.hasPermission("homestar.use"))
 			{
-				plugin.messageBuilder.compose(player, MessageId.PERMISSION_DENIED_USE).send();
+				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_PERMISSION).send();
 				plugin.soundConfig.playSound(player, SoundId.TELEPORT_DENIED_PERMISSION);
 				return;
 			}
