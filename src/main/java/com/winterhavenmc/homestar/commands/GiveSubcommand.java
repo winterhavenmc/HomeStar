@@ -136,7 +136,9 @@ final class GiveSubcommand extends AbstractSubcommand
 		quantity = Math.min(maxQuantity, quantity);
 
 		// add specified quantity of homestar(s) to player inventory
-		HashMap<Integer, ItemStack> noFit = targetPlayer.getInventory().addItem(plugin.homeStarUtility.create(quantity));
+		ItemStack item = plugin.homeStarUtility.create(quantity);
+
+		HashMap<Integer, ItemStack> noFit = targetPlayer.getInventory().addItem(item);
 
 		// count items that didn't fit in inventory
 		int noFitCount = 0;
@@ -156,13 +158,22 @@ final class GiveSubcommand extends AbstractSubcommand
 		// subtract noFitCount from quantity
 		quantity = quantity - noFitCount;
 
-		// don't display messages if giving item to self
-		if (!sender.getName().equals(targetPlayer.getName()))
+
+		if (sender.getName().equals(targetPlayer.getName()))
+		{
+			// send message when giving to self
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_GIVE_SELF)
+					.setMacro(Macro.QUANTITY, quantity)
+					.setMacro(Macro.ITEM, item)
+					.send();
+		}
+		else
 		{
 			// send message and play sound to giver
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_GIVE)
-					.setMacro(Macro.QUANTITY, quantity)
 					.setMacro(Macro.PLAYER, targetPlayer)
+					.setMacro(Macro.QUANTITY, quantity)
+					.setMacro(Macro.ITEM, item)
 					.send();
 
 			// if giver is in game, play sound
@@ -173,15 +184,9 @@ final class GiveSubcommand extends AbstractSubcommand
 
 			// send message to target player
 			plugin.messageBuilder.compose(targetPlayer, MessageId.COMMAND_SUCCESS_GIVE_TARGET)
-					.setMacro(Macro.QUANTITY, quantity)
 					.setMacro(Macro.PLAYER, sender)
-					.send();
-		}
-		else
-		{
-			// send message when giving to self
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_GIVE_SELF)
 					.setMacro(Macro.QUANTITY, quantity)
+					.setMacro(Macro.ITEM, item)
 					.send();
 		}
 
