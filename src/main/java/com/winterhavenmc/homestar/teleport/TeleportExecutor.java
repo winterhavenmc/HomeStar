@@ -26,6 +26,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
+import java.time.Duration;
+
 import static com.winterhavenmc.library.time.TimeUnit.SECONDS;
 
 
@@ -70,7 +72,8 @@ class TeleportExecutor
 		// if player is less than configured minimum distance from destination, send player proximity message and return
 		if (isUnderMinimumDistance(player, location))
 		{
-			plugin.messageBuilder.compose(player, MessageId.TELEPORT_MIN_DISTANCE)
+			plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_MIN_DISTANCE)
+					.setMacro(Macro.ITEM, playerItem)
 					.setMacro(Macro.DESTINATION, destinationName)
 					.send();
 			return;
@@ -106,14 +109,14 @@ class TeleportExecutor
 	private void sendWarmupMessage(final Player player, final String destinationName)
 	{
 		// get configured warmup time
-		long warmupTime = plugin.getConfig().getLong("teleport-warmup");
+		Duration warmupTime = Duration.ofSeconds(plugin.getConfig().getLong("teleport-warmup"));
 
 		// if warmup time is greater than zero, send player warmup message
-		if (warmupTime > 0)
+		if (warmupTime.isPositive())
 		{
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_WARMUP)
 					.setMacro(Macro.DESTINATION, destinationName)
-					.setMacro(Macro.DURATION, SECONDS.toMillis(warmupTime))
+					.setMacro(Macro.DURATION, warmupTime)
 					.send();
 
 			// if enabled, play teleport warmup sound effect
@@ -185,7 +188,7 @@ class TeleportExecutor
 		{
 
 			// send message to console
-			plugin.messageBuilder.compose(plugin.getServer().getConsoleSender(), MessageId.LOG_USAGE)
+			plugin.messageBuilder.compose(plugin.getServer().getConsoleSender(), MessageId.TELEPORT_LOG_USAGE)
 					.setMacro(Macro.PLAYER, player)
 					.setMacro(Macro.ITEM, player.getInventory().getItemInMainHand())
 					.send();
