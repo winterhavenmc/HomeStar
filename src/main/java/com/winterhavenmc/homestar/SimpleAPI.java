@@ -68,7 +68,7 @@ public final class SimpleAPI
 	 */
 	public static boolean isHomeStar(final ItemStack itemStack)
 	{
-		return plugin.homeStarUtility.isItem(itemStack);
+		return ItemForge.isCustomItem(itemStack);
 	}
 
 
