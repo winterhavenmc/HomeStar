@@ -5,6 +5,9 @@ CONSTANTS:
   TIME:
     LESS_THAN: "less than {DURATION}"
     UNLIMITED: "unlimited"
+  LOCATION:
+    SPAWN: "Spawn"
+    HOME: "Home"
 
 
 ###########
@@ -16,8 +19,8 @@ ITEMS:
     DISPLAY_NAME: "<green>HomeStar</green>"
     PLURAL_NAME: "<choice:'0#zero HomeStars|1#one HomeStar|1<{QUANTITY} HomeStars'>"
     LORE:
-      - '<yellow>Use to Return</yellow>'
-      - '<yellow>to World Spawn</yellow>'
+      - "<yellow>Use to Return</yellow>"
+      - "<yellow>to World Spawn</yellow>"
 
 
 # Message placeholders:
@@ -44,67 +47,94 @@ ITEMS:
 #   TITLE_FADE_IN, TITLE_STAY, TITLE_FADE_OUT: integer values to override the default title fade timings (in ticks)
 
 MESSAGES:
+  COMMAND_SUCCESS_DESTROY:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <aqua>{ITEM.PLURAL_NAME}</aqua> destroyed!"
+
+  COMMAND_SUCCESS_GIVE:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> You gave <aqua>{ITEM.PLURAL_NAME}</aqua> to <aqua>{PLAYER}</aqua>."
+
+  COMMAND_SUCCESS_GIVE_SELF:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> You gave yourself <aqua>{ITEM.PLURAL_NAME}</aqua>."
+
+  COMMAND_SUCCESS_GIVE_TARGET:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <aqua>{PLAYER}</aqua> gave you <aqua>{ITEM.PLURAL_NAME}</aqua>."
+
+  COMMAND_SUCCESS_RELOAD:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <aqua>configuration reloaded.</aqua>"
+
+
   COMMAND_FAIL_ARGS_COUNT_OVER:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <red>Too many arguments!</red>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Too many arguments!</red>"
 
   COMMAND_FAIL_ARGS_COUNT_UNDER:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <red>Too few arguments!</red>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Too few arguments!</red>"
 
   COMMAND_FAIL_INVALID_COMMAND:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <red>Invalid command!</red>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Invalid command!</red>"
 
   COMMAND_FAIL_DESTROY_CONSOLE:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <red>You must be in game to destroy HomeStar items!</red>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You must be in game to destroy {PLUGIN} items!</red>"
+
+  COMMAND_FAIL_DESTROY_PERMISSION:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You do not have permission to destroy <aqua>{PLUGIN}</aqua> items!</red>"
 
   COMMAND_FAIL_DESTROY_NO_MATCH:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <red>The item you are holding is not a HomeStar item!</red>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>The item you are holding is not a {PLUGIN} item!</red>"
 
   COMMAND_FAIL_GIVE_INVENTORY_FULL:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <aqua>Could not give HomeStar to {PLAYER} because their inventory is full.</aqua>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Could not give <aqua>{ITEM.DISPLAY_NAME}</aqua> to <aqua>{PLAYER}</aqua> because their inventory is full.</red>"
 
   COMMAND_FAIL_PLAYER_NOT_FOUND:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <aqua>That player could not be found.</aqua>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>That player could not be found.</red>"
 
   COMMAND_FAIL_QUANTITY_INVALID:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <red>Invalid quantity!</red>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Invalid quantity!</red>"
+
+  COMMAND_FAIL_GIVE_ITEM_INVALID:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>A configuration error prevented the creation of a valid <aqua>[{PLUGIN}]</aqua> item.</red>"
+
+  COMMAND_FAIL_GIVE_PLAYER_NOT_FOUND:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>That player could not be found.</red>"
+
+  COMMAND_FAIL_GIVE_PERMISSION:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You do not have permission to give <aqua>{PLUGIN}</aqua> items!</red>"
+
+  COMMAND_FAIL_HELP_PERMISSION:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You do not have permission to view {PLUGIN} command help!</red>"
+
+  COMMAND_FAIL_RELOAD_PERMISSION:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You do not have permission to reload the <aqua>{PLUGIN}</aqua> configuration!</red>"
+
+  COMMAND_FAIL_STATUS_PERMISSION:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You do not have permission to view {PLUGIN} settings!</red>"
+
+  COMMAND_FAIL_GIVE_QUANTITY_INVALID:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Invalid quantity!</red>"
+
+  #  COMMAND_FAIL_GIVE_PLAYER_NOT_ONLINE:
+  #    MESSAGE_TEXT: "<dark_aqua>That player is not online.</dark_aqua>"
 
 
   COMMAND_HELP_INVALID:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <red>That is not a valid command!</red>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>That is not a valid command!</red>"
 
   COMMAND_HELP_DESTROY:
-    MESSAGE_TEXT: "<yellow>Destroys the stack of HomeStars you are holding.</yellow>"
+    MESSAGE_TEXT: "<yellow>Destroys the stack of {PLUGIN} items you are holding.</yellow>"
 
   COMMAND_HELP_GIVE:
-    MESSAGE_TEXT: "<yellow>Gives a HomeStar to a player.</yellow>"
+    MESSAGE_TEXT: "<yellow>Gives a {PLUGIN} item to a player.</yellow>"
 
   COMMAND_HELP_HELP:
-    MESSAGE_TEXT: "<yellow>Displays help for HomeStar commands.</yellow>"
+    MESSAGE_TEXT: "<yellow>Displays help for {PLUGIN} commands.</yellow>"
 
   COMMAND_HELP_RELOAD:
-    MESSAGE_TEXT: "<yellow>Reloads the configuration without needing to restart the server.</yellow>"
+    MESSAGE_TEXT: "<yellow>Reloads the {PLUGIN} configuration without needing to restart the server.</yellow>"
 
   COMMAND_HELP_STATUS:
-    MESSAGE_TEXT: "<yellow>Displays plugin configuration settings.</yellow>"
+    MESSAGE_TEXT: "<yellow>Displays {PLUGIN} plugin configuration settings.</yellow>"
 
   COMMAND_HELP_USAGE_HEADER:
-    MESSAGE_TEXT: "<yellow>Command usage:</yellow>"
-
-
-  COMMAND_SUCCESS_DESTROY:
-    MESSAGE_TEXT: '<dark_aqua>[HomeStar]</dark_aqua> <aqua>{ITEM.PLURAL_NAME} destroyed!</aqua>'
-
-  COMMAND_SUCCESS_GIVE:
-    MESSAGE_TEXT: "<dark_aqua>You gave <aqua>{ITEM.PLURAL_NAME}</aqua> to <aqua>{PLAYER}</aqua>.</dark_aqua>"
-
-  COMMAND_SUCCESS_GIVE_SELF:
-    string: "<dark_aqua>You gave yourself <aqua>{ITEM.PLURAL_NAME}</aqua>.</dark_aqua>"
-
-  COMMAND_SUCCESS_GIVE_TARGET:
-    MESSAGE_TEXT: "<dark_aqua>{PLAYER} gave you <aqua>{ITEM.PLURAL_NAME}</aqua>.</dark_aqua>"
-
-  COMMAND_SUCCESS_RELOAD:
-    MESSAGE_TEXT: "<dark_aqua>[HomeStar]</dark_aqua> <aqua>configuration reloaded.</aqua>"
+    MESSAGE_TEXT: "<yellow>{Plugin} command usage:</yellow>"
 
 
   #########################
@@ -162,62 +192,48 @@ MESSAGES:
     MESSAGE_TEXT: "<green>Cancel on interaction:</green> {SETTING}"
 
 
-  PERMISSION_DENIED_DESTROY:
-    MESSAGE_TEXT: "<red>You do not have permission to destroy HomeStar items!</red>"
 
-  PERMISSION_DENIED_GIVE:
-    MESSAGE_TEXT: "<red>You do not have permission to give HomeStar items!</red>"
-
-  PERMISSION_DENIED_RELOAD:
-    MESSAGE_TEXT: "<red>You do not have permission to reload the configuration!</red>"
-
-  PERMISSION_DENIED_STATUS:
-    MESSAGE_TEXT: '<red>You do not have permission to view HomeStar settings!</red>'
-
-  PERMISSION_DENIED_USE:
+  TELEPORT_FAIL_PERMISSION:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You do not have permission to use a <aqua>{ITEM.DISPLAY_NAME}</aqua> in <aqua>{RECIPIENT.LOCATION.WORLD}</aqua>.</red>"
     REPEAT_DELAY: 1
-    MESSAGE_TEXT: "<red>You do not have permission to use <aqua>{ITEM.DISPLAY_NAME}</aqua> in <aqua>{RECIPIENT.LOCATION.WORLD}</aqua>.</red>"
-
-  PERMISSION_DENIED_HELP:
-    MESSAGE_TEXT: "<red>You do not have permission to view HomeStar help!</red>"
-    
-
-  TELEPORT_CANCELLED_DAMAGE:
-    MESSAGE_TEXT: "<red>Teleport cancelled by damage!</red>"
-
-  TELEPORT_CANCELLED_INTERACTION:
-    MESSAGE_TEXT: "<red>Teleport cancelled by interaction!</red>"
-
-  TELEPORT_CANCELLED_MOVEMENT:
-    MESSAGE_TEXT: "<red>Teleport cancelled by movement!</red>"
-
-  TELEPORT_CANCELLED_NO_ITEM:
-    MESSAGE_TEXT: "<red>You no longer have a <aqua>{ITEM.DISPLAY_NAME}</aqua> item!</red>"
-
-  TELEPORT_COOLDOWN:
-    REPEAT_DELAY: 1
-    MESSAGE_TEXT: '<dark_aqua>You need to wait <aqua>{DURATION}</aqua> to use another <aqua>{ITEM.DISPLAY_NAME}</aqua>.</dark_aqua>'
 
   TELEPORT_FAIL_NO_BEDSPAWN:
-    MESSAGE_TEXT: '<dark_aqua>Bed spawn is missing or obstructed!</dark_aqua>'
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Bed spawn is missing or obstructed!</red>"
 
-  TELEPORT_FAIL_SHIFT_CLICK:
+  TELEPORT_FAIL_MIN_DISTANCE:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You are too close to <aqua>{DESTINATION}</aqua> to use a <aqua>{ITEM.DISPLAY_NAME}</aqua>.</red>"
     REPEAT_DELAY: 1
-    MESSAGE_TEXT: "<dark_aqua>You must shift-click to use a <aqua>{ITEM.DISPLAY_NAME}</aqua>.</dark_aqua>"
 
   TELEPORT_FAIL_WORLD_DISABLED:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red><aqua>{ITEM.DISPLAY_NAME}</aqua> use is not enabled in <aqua>{RECIPIENT.LOCATION.WORLD}</aqua>.</red>"
     REPEAT_DELAY: 1
-    MESSAGE_TEXT: "<dark_aqua>HomeStars are not enabled in this world.</dark_aqua>"
 
-  TELEPORT_MIN_DISTANCE:
+  TELEPORT_FAIL_SHIFT_CLICK:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> You must shift-click to use a <aqua>{ITEM.DISPLAY_NAME}</aqua>."
     REPEAT_DELAY: 1
-    MESSAGE_TEXT: "<dark_aqua>You are too close to <aqua>{DESTINATION}</aqua> to use a <aqua>{ITEM.DISPLAY_NAME}</aqua>.</dark_aqua>"
+
+  TELEPORT_CANCELLED_DAMAGE:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Teleport cancelled by damage!</red>"
+
+  TELEPORT_CANCELLED_INTERACTION:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Teleport cancelled by interaction!</red>"
+
+  TELEPORT_CANCELLED_MOVEMENT:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Teleport cancelled by movement!</red>"
+
+  TELEPORT_CANCELLED_NO_ITEM:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You no longer have a <aqua>{ITEM.DISPLAY_NAME}</aqua> item!</red>"
 
   TELEPORT_SUCCESS:
-    MESSAGE_TEXT: "<dark_aqua>Returned to <aqua>{DESTINATION}<aqua>.</dark_aqua>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> Returned to <aqua>{DESTINATION}<aqua>."
+    TITLE_TEXT: "<dark_aqua>{DESTINATION}</dark_aqua>"
 
   TELEPORT_WARMUP:
-    MESSAGE_TEXT: "<dark_aqua>Teleporting to <aqua>{DESTINATION}</aqua> in <aqua>{DURATION}</aqua>...</dark_aqua>"
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> Teleporting to <aqua>{DESTINATION}</aqua> in <aqua>{DURATION}</aqua>..."
 
-  LOG_USAGE:
+  TELEPORT_COOLDOWN:
+    MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> You need to wait <aqua>{DURATION}</aqua> to use another <aqua>{ITEM.DISPLAY_NAME}</aqua>."
+    REPEAT_DELAY: 1
+
+  TELEPORT_LOG_USAGE:
     MESSAGE_TEXT: "<aqua>{PLAYER}</aqua> used a <aqua>{ITEM.DISPLAY_NAME}</aqua> in <aqua>{PLAYER.LOCATION.WORLD}</aqua>."
