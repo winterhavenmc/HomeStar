@@ -88,7 +88,7 @@ public final class CommandManager implements TabExecutor
 		}
 
 		// return list of subcommands for which sender has permission
-		return getMatchingSubcommandNames(sender, args[0]);
+		return subcommandRegistry.matchingNames(sender, args[0]);
 	}
 
 
