@@ -21,17 +21,15 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 
 final class GiveSubcommand extends AbstractSubcommand
