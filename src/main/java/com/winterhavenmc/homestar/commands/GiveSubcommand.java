@@ -60,29 +60,12 @@ final class GiveSubcommand extends AbstractSubcommand
 	public List<String> onTabComplete(final CommandSender sender, final Command command,
 	                                  final String alias, final String[] args)
 	{
-
-		List<String> returnList = new ArrayList<>();
-
-		// return list of matching players
-		if (args.length == 2)
+		return switch (args.length)
 		{
-			return plugin.getServer().getOnlinePlayers().stream()
-					.map(HumanEntity::getName)
-					.filter(playerName -> matchPrefix(playerName, args[1]))
-					.collect(Collectors.toList());
-		}
-
-		// return some useful quantities
-		else if (args.length == 3)
-		{
-			returnList.add("1");
-			returnList.add("2");
-			returnList.add("3");
-			returnList.add("5");
-			returnList.add("10");
-		}
-
-		return returnList;
+			case 2 -> null; // return null for list of matching online players
+			case 3 -> List.of("1", "2", "3", "5", "10"); // return some useful quantities
+			default -> List.of(); // return empty list
+		};
 	}
 
 
