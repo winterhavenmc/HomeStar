@@ -119,7 +119,8 @@ final class GiveSubcommand extends AbstractSubcommand
 			try
 			{
 				quantity = Integer.parseInt(args.get(1));
-			} catch (NumberFormatException e)
+			}
+			catch (NumberFormatException exception)
 			{
 				plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_QUANTITY_INVALID).send();
 				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
