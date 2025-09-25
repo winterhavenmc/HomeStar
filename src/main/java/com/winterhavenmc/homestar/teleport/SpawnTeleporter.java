@@ -23,6 +23,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import static com.winterhavenmc.homestar.util.HomeStarUtility.HOME_KEY;
+import static com.winterhavenmc.homestar.util.HomeStarUtility.SPAWN_KEY;
+
 
 final class SpawnTeleporter extends AbstractTeleporter implements Teleporter
 {
@@ -44,8 +47,8 @@ final class SpawnTeleporter extends AbstractTeleporter implements Teleporter
 	@Override
 	public void initiate(final Player player)
 	{
-		String spawnName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.SPAWN").orElse("Spawn");
-		String homeName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.HOME").orElse("Home");
+		String homeName = plugin.messageBuilder.constants().getString(HOME_KEY).orElse("Home");
+		String spawnName = plugin.messageBuilder.constants().getString(SPAWN_KEY).orElse("Spawn");
 
 		getSpawnDestination(player).ifPresentOrElse(
 				location -> execute(player, location, spawnName, player.getInventory().getItemInMainHand()),

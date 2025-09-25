@@ -18,6 +18,8 @@
 package com.winterhavenmc.homestar.util;
 
 import com.winterhavenmc.homestar.PluginMain;
+import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
 import org.bukkit.inventory.ItemStack;
 import java.util.Optional;
 
@@ -27,6 +29,8 @@ import java.util.Optional;
  */
 public final class HomeStarUtility
 {
+	public static final ValidConstantKey HOME_KEY = ConstantKey.of("LOCATION.HOME").isValid().orElseThrow();
+	public static final ValidConstantKey SPAWN_KEY = ConstantKey.of("LOCATION.SPAWN").isValid().orElseThrow();
 	private final PluginMain plugin;
 
 	/**
