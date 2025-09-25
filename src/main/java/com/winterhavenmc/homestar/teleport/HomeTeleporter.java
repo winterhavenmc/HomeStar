@@ -21,6 +21,7 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
 
+import com.winterhavenmc.homestar.util.HomeStarUtility;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -46,12 +47,11 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter
 	@Override
 	public void initiate(final Player player)
 	{
-		String homeName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.HOME").orElse("Home");
-
-		getHomeDestination(player).ifPresentOrElse(
+		plugin.messageBuilder.constants().getString(HomeStarUtility.HOME_KEY)
+				.ifPresent(homeName -> getHomeDestination(player).ifPresentOrElse(
 				destination -> execute(player, destination, homeName, player.getInventory().getItemInMainHand()),
 				() -> fallbackToSpawn(player)
-		);
+		));
 	}
 
 
@@ -69,14 +69,13 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter
 	 */
 	void fallbackToSpawn(final Player player)
 	{
-		String spawnName = plugin.messageBuilder.getConstantResolver().getString("LOCATION.SPAWN").orElse("Spawn");
-
 		if (plugin.getConfig().getBoolean("bedspawn-fallback"))
 		{
-			getSpawnDestination(player).ifPresentOrElse(
-					destination -> new SpawnTeleporter(plugin, teleportExecutor).initiate(player),
-					() -> sendInvalidDestinationMessage(player, spawnName)
-			);
+			plugin.messageBuilder.constants().getString(HomeStarUtility.SPAWN_KEY)
+					.ifPresent(homeName -> getSpawnDestination(player)
+							.ifPresentOrElse(location -> new SpawnTeleporter(plugin, teleportExecutor).initiate(player),
+									() -> sendInvalidDestinationMessage(player, homeName)
+			));
 		}
 		else
 		{
