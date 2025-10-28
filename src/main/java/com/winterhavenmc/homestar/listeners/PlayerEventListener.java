@@ -20,7 +20,6 @@ package com.winterhavenmc.homestar.listeners;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
-import com.winterhavenmc.library.messagebuilder.ItemForge;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -108,7 +107,7 @@ public final class PlayerEventListener implements Listener
 		// if crafting inventory contains HomeStar item, set result item to null
 		for (ItemStack itemStack : event.getInventory())
 		{
-			if (ItemForge.isCustomItem(itemStack))
+			if (plugin.messageBuilder.items().isItem(itemStack))
 			{
 				event.getInventory().setResult(null);
 			}
@@ -172,7 +171,7 @@ public final class PlayerEventListener implements Listener
 	{
 		plugin.teleportHandler.cancelTeleport(player);
 		plugin.messageBuilder.compose(player, messageId).send();
-		plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
+		plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_CANCELLED);
 	}
 
 }

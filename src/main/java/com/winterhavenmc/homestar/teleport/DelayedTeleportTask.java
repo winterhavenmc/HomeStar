@@ -128,14 +128,14 @@ final class DelayedTeleportTask extends BukkitRunnable
 				if (notRemoved)
 				{
 					plugin.messageBuilder.compose(player, MessageId.TELEPORT_CANCELLED_NO_ITEM).send();
-					plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED_NO_ITEM);
+					plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_CANCELLED_NO_ITEM);
 					plugin.teleportHandler.startPlayerCooldown(player);
 					return;
 				}
 			}
 
 			// play pre-teleport sound if sound effects are enabled
-			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_DEPARTURE);
+			plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_SUCCESS_DEPARTURE);
 
 			// teleport player to destination
 			player.teleport(destination);
@@ -144,7 +144,7 @@ final class DelayedTeleportTask extends BukkitRunnable
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_SUCCESS).setMacro(Macro.DESTINATION, destinationName).send();
 
 			// play post-teleport sound if sound effects are enabled
-			plugin.soundConfig.playSound(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);
+			plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_SUCCESS_ARRIVAL);
 
 			// if lightning is enabled in config, strike lightning at spawn location
 			if (plugin.getConfig().getBoolean("lightning"))

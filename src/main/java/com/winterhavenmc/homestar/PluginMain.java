@@ -24,9 +24,6 @@ import com.winterhavenmc.homestar.teleport.TeleportHandler;
 import com.winterhavenmc.homestar.util.HomeStarUtility;
 import com.winterhavenmc.homestar.util.MetricsHandler;
 import com.winterhavenmc.library.messagebuilder.MessageBuilder;
-import com.winterhavenmc.library.soundconfig.SoundConfiguration;
-import com.winterhavenmc.library.soundconfig.YamlSoundConfiguration;
-import com.winterhavenmc.library.worldmanager.WorldManager;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -40,9 +37,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class PluginMain extends JavaPlugin
 {
 	public MessageBuilder messageBuilder;
-	public SoundConfiguration soundConfig;
 	public TeleportHandler teleportHandler;
-	public WorldManager worldManager;
 	public CommandManager commandManager;
 	public HomeStarUtility homeStarUtility;
 
@@ -55,12 +50,6 @@ public final class PluginMain extends JavaPlugin
 
 		// instantiate message builder
 		messageBuilder = MessageBuilder.create(this);
-
-		// instantiate sound configuration
-		soundConfig = new YamlSoundConfiguration(this);
-
-		// instantiate world manager
-		worldManager = new WorldManager(this);
 
 		// instantiate teleport manager
 		teleportHandler = new TeleportHandler(this);

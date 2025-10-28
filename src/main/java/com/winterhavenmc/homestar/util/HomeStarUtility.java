@@ -18,8 +18,10 @@
 package com.winterhavenmc.homestar.util;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.library.messagebuilder.keys.ConstantKey;
-import com.winterhavenmc.library.messagebuilder.keys.ValidConstantKey;
+import com.winterhavenmc.library.messagebuilder.models.keys.ConstantKey;
+import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
+import com.winterhavenmc.library.messagebuilder.models.keys.ValidConstantKey;
+import com.winterhavenmc.library.messagebuilder.models.keys.ValidItemKey;
 import org.bukkit.inventory.ItemStack;
 import java.util.Optional;
 
@@ -31,6 +33,7 @@ public final class HomeStarUtility
 {
 	public static final ValidConstantKey HOME_KEY = ConstantKey.of("LOCATION.HOME").isValid().orElseThrow();
 	public static final ValidConstantKey SPAWN_KEY = ConstantKey.of("LOCATION.SPAWN").isValid().orElseThrow();
+	public static final String ITEM_KEY_STRING = "HOMESTAR";
 	private final PluginMain plugin;
 
 	/**
@@ -54,7 +57,8 @@ public final class HomeStarUtility
 	{
 		int quantity = Math.max(1, passedQuantity);
 
-		Optional<ItemStack> itemStack = plugin.messageBuilder.itemForge().createItem("HOMESTAR");
+		ValidItemKey validItemKey = ItemKey.of(ITEM_KEY_STRING).isValid().orElseThrow();
+		Optional<ItemStack> itemStack = plugin.messageBuilder.items().createItem(validItemKey);
 		if (itemStack.isPresent())
 		{
 			ItemStack returnItem = itemStack.get();

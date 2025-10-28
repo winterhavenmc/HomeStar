@@ -28,7 +28,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.time.Duration;
 
-import static com.winterhavenmc.library.time.TimeUnit.SECONDS;
+import static com.winterhavenmc.library.messagebuilder.models.time.TimeUnit.SECONDS;
 
 
 class TeleportExecutor
@@ -120,7 +120,7 @@ class TeleportExecutor
 					.send();
 
 			// if enabled, play teleport warmup sound effect
-			plugin.soundConfig.playSound(player, SoundId.TELEPORT_WARMUP);
+			plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_WARMUP);
 		}
 	}
 
