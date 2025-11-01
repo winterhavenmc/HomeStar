@@ -19,7 +19,6 @@ package com.winterhavenmc.homestar.listeners;
 
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -171,7 +170,6 @@ public final class PlayerEventListener implements Listener
 	{
 		plugin.teleportHandler.cancelTeleport(player);
 		plugin.messageBuilder.compose(player, messageId).send();
-		plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_CANCELLED);
 	}
 
 }

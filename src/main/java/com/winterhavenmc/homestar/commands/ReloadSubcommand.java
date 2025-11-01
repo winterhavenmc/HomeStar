@@ -19,7 +19,7 @@ package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
+
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -53,7 +53,6 @@ final class ReloadSubcommand extends AbstractSubcommand
 		if (!sender.hasPermission(permissionNode))
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_RELOAD_PERMISSION).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -61,7 +60,6 @@ final class ReloadSubcommand extends AbstractSubcommand
 		if (args.size() > getMaxArgs())
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -69,18 +67,11 @@ final class ReloadSubcommand extends AbstractSubcommand
 		// reload main configuration
 		plugin.reloadConfig();
 
-		// update enabledWorlds list
-		plugin.worldManager.reload();
-
 		// reload messages
 		plugin.messageBuilder.reload();
 
-		// reload sounds
-		plugin.soundConfig.reload();
-
 		// send reloaded message
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_SUCCESS_RELOAD).send();
-		plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_RELOAD);
 		return true;
 	}
 

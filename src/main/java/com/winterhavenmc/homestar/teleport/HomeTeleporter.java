@@ -79,8 +79,7 @@ final class HomeTeleporter extends AbstractTeleporter implements Teleporter
 		}
 		else
 		{
-			plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN).send();
-			plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_CANCELLED);
+			plugin.messageBuilder.compose(player, MessageId.TELEPORT_CANCELLED_NO_BEDSPAWN).send();
 		}
 	}
 

@@ -21,6 +21,7 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -128,7 +129,6 @@ final class DelayedTeleportTask extends BukkitRunnable
 				if (notRemoved)
 				{
 					plugin.messageBuilder.compose(player, MessageId.TELEPORT_CANCELLED_NO_ITEM).send();
-					plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_CANCELLED_NO_ITEM);
 					plugin.teleportHandler.startPlayerCooldown(player);
 					return;
 				}

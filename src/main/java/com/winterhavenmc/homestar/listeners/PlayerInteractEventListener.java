@@ -117,10 +117,9 @@ public final class PlayerInteractEventListener implements Listener
 			// if players current world is not enabled in config, do nothing and return
 			if (!plugin.messageBuilder.worlds().isEnabled(player.getWorld().getUID()))
 			{
-				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_WORLD_DISABLED)
+				plugin.messageBuilder.compose(player, MessageId.TELEPORT_DENIED_WORLD_DISABLED)
 						.setMacro(Macro.ITEM, event.getItem())
 						.send();
-				plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_DENIED_WORLD_DISABLED);
 				return;
 			}
 
@@ -128,7 +127,6 @@ public final class PlayerInteractEventListener implements Listener
 			if (!player.hasPermission("homestar.use"))
 			{
 				plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_PERMISSION).send();
-				plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_DENIED_PERMISSION);
 				return;
 			}
 
@@ -174,7 +172,6 @@ public final class PlayerInteractEventListener implements Listener
 			// cancel teleport and send message, play sound
 			plugin.teleportHandler.cancelTeleport(player);
 			plugin.messageBuilder.compose(player, MessageId.TELEPORT_CANCELLED_INTERACTION).send();
-			plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_CANCELLED);
 			return true;
 		}
 		return false;

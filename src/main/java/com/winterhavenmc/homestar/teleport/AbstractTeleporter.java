@@ -20,7 +20,6 @@ package com.winterhavenmc.homestar.teleport;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -103,10 +102,9 @@ abstract class AbstractTeleporter
 	 */
 	void sendInvalidDestinationMessage(final Player player, final String destinationName)
 	{
-		plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN)
+		plugin.messageBuilder.compose(player, MessageId.TELEPORT_CANCELLED_NO_BEDSPAWN)
 				.setMacro(Macro.DESTINATION, destinationName)
 				.send();
-		plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_CANCELLED);
 	}
 
 

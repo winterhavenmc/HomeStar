@@ -20,7 +20,7 @@ package com.winterhavenmc.homestar.teleport;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -63,7 +63,7 @@ class TeleportExecutor
 		// if destination location is null, send invalid destination message and return
 		if (location == null)
 		{
-			plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN)
+			plugin.messageBuilder.compose(player, MessageId.TELEPORT_CANCELLED_NO_BEDSPAWN)
 					.setMacro(Macro.DESTINATION, destinationName)
 					.send();
 			return;
@@ -118,9 +118,6 @@ class TeleportExecutor
 					.setMacro(Macro.DESTINATION, destinationName)
 					.setMacro(Macro.DURATION, warmupTime)
 					.send();
-
-			// if enabled, play teleport warmup sound effect
-			plugin.messageBuilder.sounds().play(player, SoundId.TELEPORT_WARMUP);
 		}
 	}
 

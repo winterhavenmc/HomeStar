@@ -74,7 +74,6 @@ final class GiveSubcommand extends AbstractSubcommand
 		if (!sender.hasPermission(permissionNode))
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_GIVE_PERMISSION).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -82,7 +81,6 @@ final class GiveSubcommand extends AbstractSubcommand
 		if (args.size() < getMinArgs())
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_UNDER).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -91,7 +89,6 @@ final class GiveSubcommand extends AbstractSubcommand
 		if (args.size() > getMaxArgs())
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -106,7 +103,6 @@ final class GiveSubcommand extends AbstractSubcommand
 		if (targetPlayer == null)
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_PLAYER_NOT_FOUND).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -121,7 +117,6 @@ final class GiveSubcommand extends AbstractSubcommand
 			catch (NumberFormatException exception)
 			{
 				plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_GIVE_QUANTITY_INVALID).send();
-				plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 				return true;
 			}
 		}
@@ -151,7 +146,6 @@ final class GiveSubcommand extends AbstractSubcommand
 		if (noFitCount == quantity)
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_GIVE_INVENTORY_FULL).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -179,7 +173,7 @@ final class GiveSubcommand extends AbstractSubcommand
 			// if giver is in game, play sound
 			if (sender instanceof Player)
 			{
-				plugin.soundConfig.playSound(sender, SoundId.COMMAND_SUCCESS_GIVE_SENDER);
+				plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_SUCCESS_GIVE_SENDER);
 			}
 
 			// send message to target player
@@ -191,7 +185,7 @@ final class GiveSubcommand extends AbstractSubcommand
 		}
 
 		// play sound to target player
-		plugin.soundConfig.playSound(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
+		plugin.messageBuilder.sounds().play(targetPlayer, SoundId.COMMAND_SUCCESS_GIVE_TARGET);
 		return true;
 	}
 
