@@ -44,7 +44,7 @@ COMMAND_SUCCESS_RELOAD:
   pitch: 1
 
 
-TELEPORT_DENIED_PERMISSION:
+TELEPORT_FAIL_PERMISSION:
   enabled: true
   player-only: true
   sound: minecraft:block.note_block.bass

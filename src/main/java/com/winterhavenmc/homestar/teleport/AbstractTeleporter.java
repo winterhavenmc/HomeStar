@@ -20,7 +20,6 @@ package com.winterhavenmc.homestar.teleport;
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -91,16 +90,7 @@ abstract class AbstractTeleporter
 		}
 
 		// get spawn location for player
-		Location location = plugin.worldManager.getSpawnLocation(player.getWorld());
-
-		// if location is null, return empty optional
-		if (location == null)
-		{
-			return Optional.empty();
-		}
-
-		// return destination for player spawn
-		return Optional.of(location);
+		return plugin.messageBuilder.worlds().spawnLocation(player.getWorld().getUID());
 	}
 
 
@@ -112,10 +102,9 @@ abstract class AbstractTeleporter
 	 */
 	void sendInvalidDestinationMessage(final Player player, final String destinationName)
 	{
-		plugin.messageBuilder.compose(player, MessageId.TELEPORT_FAIL_NO_BEDSPAWN)
+		plugin.messageBuilder.compose(player, MessageId.TELEPORT_CANCELLED_NO_BEDSPAWN)
 				.setMacro(Macro.DESTINATION, destinationName)
 				.send();
-		plugin.soundConfig.playSound(player, SoundId.TELEPORT_CANCELLED);
 	}
 
 
@@ -146,7 +135,7 @@ abstract class AbstractTeleporter
 				// check if normal world matches passed world minus nether/end suffix
 				if (checkWorld.getName().equals(player.getWorld().getName().replaceFirst("(_nether$|_the_end$)", "")))
 				{
-					return Optional.of(plugin.worldManager.getSpawnLocation(checkWorld));
+					return plugin.messageBuilder.worlds().spawnLocation(checkWorld.getUID());
 				}
 
 				// if no match, add to list of normal worlds
@@ -157,11 +146,11 @@ abstract class AbstractTeleporter
 		// if only one normal world exists, return that world
 		if (normalWorlds.size() == 1)
 		{
-			return Optional.of(plugin.worldManager.getSpawnLocation(normalWorlds.getFirst()));
+			return plugin.messageBuilder.worlds().spawnLocation(normalWorlds.getFirst().getUID());
 		}
 
 		// if no matching normal world found and more than one normal world exists, return passed world spawn location
-		return Optional.of(plugin.worldManager.getSpawnLocation(player.getWorld()));
+		return plugin.messageBuilder.worlds().spawnLocation(player.getWorld().getUID());
 	}
 
 

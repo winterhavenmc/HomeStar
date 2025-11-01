@@ -17,7 +17,8 @@
 
 package com.winterhavenmc.homestar;
 
-import com.winterhavenmc.library.messagebuilder.ItemForge;
+import com.winterhavenmc.library.messagebuilder.models.keys.ItemKey;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -39,6 +40,7 @@ import java.util.Optional;
 public final class SimpleAPI
 {
 	private final static PluginMain plugin = JavaPlugin.getPlugin(PluginMain.class);
+	private final static String ITEM_KEY_STRING = "HOMESTAR";
 
 
 	/**
@@ -70,7 +72,7 @@ public final class SimpleAPI
 	 */
 	public static boolean isHomeStar(final ItemStack itemStack)
 	{
-		return ItemForge.isCustomItem(itemStack);
+		return plugin.messageBuilder.items().isItem(itemStack);
 	}
 
 
@@ -212,7 +214,7 @@ public final class SimpleAPI
 	 */
 	public static List<String> getEnabledWorldNamesList()
 	{
-		return new ArrayList<>(plugin.worldManager.getEnabledWorldNames());
+		return new ArrayList<>(plugin.messageBuilder.worlds().enabledNames());
 	}
 
 
@@ -223,7 +225,7 @@ public final class SimpleAPI
 	 */
 	public static Collection<String> getEnabledWorldNamesCollection()
 	{
-		return plugin.worldManager.getEnabledWorldNames();
+		return plugin.messageBuilder.worlds().enabledNames();
 	}
 
 
@@ -246,7 +248,7 @@ public final class SimpleAPI
 	 */
 	public static Optional<ItemStack> getDefaultItem()
 	{
-		return plugin.messageBuilder.itemForge().createItem("HOMESTAR");
+		return plugin.messageBuilder.items().createItem(ItemKey.of(ITEM_KEY_STRING).isValid().orElseThrow());
 	}
 
 
@@ -258,7 +260,7 @@ public final class SimpleAPI
 	 */
 	public static String getItemName()
 	{
-		return plugin.messageBuilder.itemForge().getItemName("HOMESTAR").orElse("HomeStar");
+		return plugin.messageBuilder.items().name(ItemKey.of(ITEM_KEY_STRING).isValid().orElseThrow()).orElse("HomeStar");
 	}
 
 }

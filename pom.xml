@@ -31,21 +31,13 @@
 		<url>https://github.com/winterhavenmc/HomeStar/issues</url>
 	</issueManagement>
 
-	<profiles>
-		<profile>
+	<distributionManagement>
+		<repository>
 			<id>repsy</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<distributionManagement>
-				<repository>
-					<id>repsy</id>
-					<name>Repsy.io winterhavenmc Maven Packages</name>
-					<url>https://repo.repsy.io/mvn/winterhavenmc/public/</url>
-				</repository>
-			</distributionManagement>
-		</profile>
-	</profiles>
+			<name>Repsy.io winterhavenmc Maven Packages</name>
+			<url>https://repo.repsy.io/mvn/winterhavenmc/public/</url>
+		</repository>
+	</distributionManagement>
 
 	<repositories>
 		<repository>
@@ -65,23 +57,9 @@
 
 		<!-- MessageBuilderLib -->
 		<dependency>
-			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>message-builder-lib</artifactId>
+			<groupId>com.winterhavenmc.messagebuilder</groupId>
+			<artifactId>bootstrap</artifactId>
 			<version>2.0.0-SNAPSHOT</version>
-		</dependency>
-
-		<!-- SoundConfigLib -->
-		<dependency>
-			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>sound-config-lib</artifactId>
-			<version>1.21.0-SNAPSHOT</version>
-		</dependency>
-
-		<!-- WorldManagerLib -->
-		<dependency>
-			<groupId>com.winterhaven-mc</groupId>
-			<artifactId>world-manager-lib</artifactId>
-			<version>1.21.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- bStats -->

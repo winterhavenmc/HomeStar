@@ -141,10 +141,10 @@ MESSAGES:
   # Status command messages
   #########################
   COMMAND_STATUS_HEADER:
-    MESSAGE_TEXT: "<newline><gradient:blue:aqua><strikethrough>                         =</strikethrough>[</gradient> <dark_aqua>{PLUGIN}</dark_aqua> <gradient:aqua:blue>]<strikethrough>=                         </strikethrough></gradient>"
+    MESSAGE_TEXT: "<newline><gradient:blue:aqua><strikethrough>                         =</strikethrough>[</gradient> <dark_aqua><b>{PLUGIN}</b></dark_aqua> <gradient:aqua:blue>]<strikethrough>=                         </strikethrough></gradient><newline>"
 
   COMMAND_STATUS_FOOTER:
-    MESSAGE_TEXT: "<newline><dark_aqua>Proudly built with <click:open_url:{URL}><blue><underlined>MessageBuilderLib<underlined></blue></click></dark_aqua>"
+    MESSAGE_TEXT: "<newline><click:open_url:{PLUGIN.URL}><blue><underlined>{PLUGIN.URL}</underlined></blue></click><newline>"
 
   COMMAND_STATUS_PLUGIN_VERSION:
     MESSAGE_TEXT: "<green>Version:</green> {SETTING}"
@@ -197,14 +197,14 @@ MESSAGES:
     MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You do not have permission to use a <aqua>{ITEM.DISPLAY_NAME}</aqua> in <aqua>{RECIPIENT.LOCATION.WORLD}</aqua>.</red>"
     REPEAT_DELAY: 1
 
-  TELEPORT_FAIL_NO_BEDSPAWN:
+  TELEPORT_CANCELLED_NO_BEDSPAWN:
     MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>Bed spawn is missing or obstructed!</red>"
 
   TELEPORT_FAIL_MIN_DISTANCE:
     MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>You are too close to <aqua>{DESTINATION}</aqua> to use a <aqua>{ITEM.DISPLAY_NAME}</aqua>.</red>"
     REPEAT_DELAY: 1
 
-  TELEPORT_FAIL_WORLD_DISABLED:
+  TELEPORT_DENIED_WORLD_DISABLED:
     MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red><aqua>{ITEM.DISPLAY_NAME}</aqua> use is not enabled in <aqua>{RECIPIENT.LOCATION.WORLD}</aqua>.</red>"
     REPEAT_DELAY: 1
 

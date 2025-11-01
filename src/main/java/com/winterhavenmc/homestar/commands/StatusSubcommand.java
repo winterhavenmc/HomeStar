@@ -21,7 +21,9 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.messages.Macro;
 import com.winterhavenmc.homestar.messages.MessageId;
 import com.winterhavenmc.homestar.sounds.SoundId;
-import com.winterhavenmc.library.messagebuilder.resources.configuration.LocaleProvider;
+
+import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
+import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -34,7 +36,7 @@ import java.util.Objects;
 final class StatusSubcommand extends AbstractSubcommand
 {
 	private final PluginMain plugin;
-	private final LocaleProvider localeProvider;
+	private final ConfigRepository configRepository;
 
 
 
@@ -50,7 +52,7 @@ final class StatusSubcommand extends AbstractSubcommand
 		this.permissionNode = "homestar.status";
 		this.usageString = "/homestar status";
 		this.description = MessageId.COMMAND_HELP_STATUS;
-		this.localeProvider = LocaleProvider.create(plugin);
+		this.configRepository = BukkitConfigRepository.create(plugin);
 	}
 
 
@@ -61,7 +63,6 @@ final class StatusSubcommand extends AbstractSubcommand
 		if (!sender.hasPermission(permissionNode))
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -69,7 +70,6 @@ final class StatusSubcommand extends AbstractSubcommand
 		if (args.size() > getMaxArgs())
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -133,7 +133,7 @@ final class StatusSubcommand extends AbstractSubcommand
 	private void displayLocaleSetting(final CommandSender sender)
 	{
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_STATUS_LOCALE)
-				.setMacro(Macro.SETTING, localeProvider.getLocale().toLanguageTag())
+				.setMacro(Macro.SETTING, configRepository.locale().toLanguageTag())
 				.send();
 	}
 
@@ -235,7 +235,7 @@ final class StatusSubcommand extends AbstractSubcommand
 	private void displayEnabledWorlds(final CommandSender sender)
 	{
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_STATUS_ENABLED_WORLDS)
-				.setMacro(Macro.SETTING, plugin.worldManager.getEnabledWorldNames().toString())
+				.setMacro(Macro.SETTING, plugin.messageBuilder.worlds().enabledNames().toString())
 				.send();
 	}
 

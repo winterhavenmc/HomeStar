@@ -73,7 +73,6 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		if (!sender.hasPermission(permissionNode))
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			return true;
 		}
 
@@ -81,7 +80,6 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		if (args.size() > getMaxArgs())
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_ARGS_COUNT_OVER).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_FAIL);
 			displayUsage(sender);
 			return true;
 		}
@@ -120,7 +118,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		else
 		{
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-			plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
+			plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
 		}
 	}
 
@@ -133,7 +131,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 	private void sendCommandInvalidMessage(CommandSender sender)
 	{
 		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-		plugin.soundConfig.playSound(sender, SoundId.COMMAND_INVALID);
+		plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
 		displayUsageAll(sender);
 	}
 
