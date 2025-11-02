@@ -51,7 +51,7 @@
 		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
-			<version>1.21.8-R0.1-SNAPSHOT</version>
+			<version>1.21.10-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
 		</dependency>
 
@@ -142,40 +142,36 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
-						<configuration>
-							<minimizeJar>true</minimizeJar>
-							<filters>
-								<filter>
-									<artifact>*.*</artifact>
-									<excludes>
-										<exclude>META-INF/MANIFEST.MF</exclude>
-										<exclude>META-INF/*.SF</exclude>
-										<exclude>META-INF/*.DSA</exclude>
-										<exclude>META-INF/*.RSA</exclude>
-									</excludes>
-								</filter>
-							</filters>
-							<artifactSet>
-								<includes>
-									<include>com.winterhaven-mc:message-builder-lib</include>
-									<include>com.winterhaven-mc:sound-config-lib</include>
-									<include>com.winterhaven-mc:world-manager-lib</include>
-									<include>org.bstats</include>
-								</includes>
-							</artifactSet>
-							<relocations>
-								<relocation>
-									<pattern>com.winterhavenmc.library</pattern>
-									<shadedPattern>com.winterhavenmc.homestar.shaded</shadedPattern>
-								</relocation>
-								<relocation>
-									<pattern>org.bstats</pattern>
-									<shadedPattern>com.winterhavenmc.homestar.shaded</shadedPattern>
-								</relocation>
-							</relocations>
-						</configuration>
 					</execution>
 				</executions>
+				<configuration>
+					<minimizeJar>true</minimizeJar>
+					<filters>
+						<filter>
+							<!-- Apply only to dependencies (not the plugin module itself) -->
+							<artifact>*:*</artifact>
+							<excludes>
+								<exclude>META-INF/*.SF</exclude>
+								<exclude>META-INF/*.DSA</exclude>
+								<exclude>META-INF/*.RSA</exclude>
+								<!-- optionally exclude MANIFEST.MF from dependencies if not needed -->
+								<exclude>META-INF/MANIFEST.MF</exclude>
+							</excludes>
+						</filter>
+					</filters>
+
+					<!-- relocate these packages on the class path to avoid conflicts with other plugins -->
+					<relocations>
+						<relocation>
+							<pattern>com.winterhavenmc.library</pattern>
+							<shadedPattern>com.winterhavenmc.homestar.shaded</shadedPattern>
+						</relocation>
+						<relocation>
+							<pattern>org.bstats</pattern>
+							<shadedPattern>com.winterhavenmc.homestar.shaded</shadedPattern>
+						</relocation>
+					</relocations>
+				</configuration>
 			</plugin>
 
 			<!-- Create Javadoc jar -->

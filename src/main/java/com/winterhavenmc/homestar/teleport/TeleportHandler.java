@@ -18,8 +18,8 @@
 package com.winterhavenmc.homestar.teleport;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.messages.Macro;
-import com.winterhavenmc.homestar.messages.MessageId;
+import com.winterhavenmc.homestar.util.Macro;
+import com.winterhavenmc.homestar.util.MessageId;
 import org.bukkit.entity.Player;
 
 import java.time.Duration;

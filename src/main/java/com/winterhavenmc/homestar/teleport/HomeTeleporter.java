@@ -18,8 +18,7 @@
 package com.winterhavenmc.homestar.teleport;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
+import com.winterhavenmc.homestar.util.MessageId;
 
 import com.winterhavenmc.homestar.util.HomeStarUtility;
 import org.bukkit.Location;

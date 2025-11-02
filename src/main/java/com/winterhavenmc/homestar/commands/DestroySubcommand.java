@@ -18,8 +18,8 @@
 package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.messages.Macro;
-import com.winterhavenmc.homestar.messages.MessageId;
+import com.winterhavenmc.homestar.util.Macro;
+import com.winterhavenmc.homestar.util.MessageId;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
