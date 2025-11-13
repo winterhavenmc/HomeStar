@@ -18,7 +18,7 @@
 package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.messages.MessageId;
+import com.winterhavenmc.homestar.util.MessageId;
 
 import org.bukkit.command.CommandSender;
 

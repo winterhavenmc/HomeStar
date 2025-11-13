@@ -18,7 +18,7 @@
 package com.winterhavenmc.homestar.listeners;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.messages.MessageId;
+import com.winterhavenmc.homestar.util.MessageId;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

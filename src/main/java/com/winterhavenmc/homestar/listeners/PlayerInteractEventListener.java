@@ -18,9 +18,8 @@
 package com.winterhavenmc.homestar.listeners;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.messages.Macro;
-import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
+import com.winterhavenmc.homestar.util.Macro;
+import com.winterhavenmc.homestar.util.MessageId;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;

@@ -18,9 +18,9 @@
 package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
-import com.winterhavenmc.homestar.messages.Macro;
-import com.winterhavenmc.homestar.messages.MessageId;
-import com.winterhavenmc.homestar.sounds.SoundId;
+import com.winterhavenmc.homestar.util.Macro;
+import com.winterhavenmc.homestar.util.MessageId;
+import com.winterhavenmc.homestar.util.SoundId;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
