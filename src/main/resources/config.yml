@@ -4,7 +4,7 @@
 language: en-US
 
 # Locale (used for time and number formatting)
-locale: en-US
+#locale: en-US
 
 # Timezone (uses system default if not set. valid tz identifiers listed here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones#List)
 #timezone: America/Chicago
