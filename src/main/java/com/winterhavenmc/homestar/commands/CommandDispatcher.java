@@ -32,7 +32,7 @@ import java.util.*;
 /**
  * Class that implements command executor and tab completer for HomeStar commands
  */
-public final class CommandManager implements TabExecutor
+public final class CommandDispatcher implements TabExecutor
 {
 	// reference to main class
 	private final PluginMain plugin;
@@ -42,11 +42,11 @@ public final class CommandManager implements TabExecutor
 
 
 	/**
-	 * Class constructor for CommandManager
+	 * Class constructor for CommandDispatcher
 	 *
 	 * @param plugin reference to main class
 	 */
-	public CommandManager(final PluginMain plugin)
+	public CommandDispatcher(final PluginMain plugin)
 	{
 		this.plugin = plugin;
 
