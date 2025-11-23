@@ -54,12 +54,10 @@ public final class CommandDispatcher implements TabExecutor
 		Objects.requireNonNull(plugin.getCommand("homestar")).setExecutor(this);
 
 		// register subcommands
-		for (SubcommandType subcommandType : SubcommandType.values())
-		{
-			subcommandRegistry.register(subcommandType.create(plugin));
-		}
-
-		// register help command
+		subcommandRegistry.register(new DestroySubcommand(plugin));
+		subcommandRegistry.register(new GiveSubcommand(plugin));
+		subcommandRegistry.register(new ReloadSubcommand(plugin));
+		subcommandRegistry.register(new StatusSubcommand(plugin));
 		subcommandRegistry.register(new HelpSubcommand(plugin, subcommandRegistry));
 	}
 
