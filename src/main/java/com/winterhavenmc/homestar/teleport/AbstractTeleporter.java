@@ -55,23 +55,9 @@ abstract class AbstractTeleporter
 	 */
 	final Optional<Location> getHomeDestination(final Player player)
 	{
-		// if player is null, return empty optional
-		if (player == null)
-		{
-			return Optional.empty();
-		}
-
-		// get player bed spawn location
-		Location location = player.getRespawnLocation();
-
-		// if location is null, return empty optional
-		if (location == null)
-		{
-			return Optional.empty();
-		}
-
-		// return optional wrapped destination for player bed spawn location
-		return Optional.of(location);
+		return (player == null || player.getRespawnLocation() == null)
+				? Optional.empty()
+				: Optional.of(player.getRespawnLocation());
 	}
 
 
@@ -83,14 +69,9 @@ abstract class AbstractTeleporter
 	 */
 	final Optional<Location> getSpawnDestination(final Player player)
 	{
-		// if player is null, return empty optional
-		if (player == null)
-		{
-			return Optional.empty();
-		}
-
-		// get spawn location for player
-		return plugin.messageBuilder.worlds().spawnLocation(player.getWorld().getUID());
+		return (player == null)
+				? Optional.empty()
+				: plugin.messageBuilder.worlds().spawnLocation(player.getWorld().getUID());
 	}
 
 

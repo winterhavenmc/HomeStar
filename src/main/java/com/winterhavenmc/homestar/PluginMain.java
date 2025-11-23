@@ -17,7 +17,7 @@
 
 package com.winterhavenmc.homestar;
 
-import com.winterhavenmc.homestar.commands.CommandManager;
+import com.winterhavenmc.homestar.commands.CommandDispatcher;
 import com.winterhavenmc.homestar.listeners.PlayerEventListener;
 import com.winterhavenmc.homestar.listeners.PlayerInteractEventListener;
 import com.winterhavenmc.homestar.teleport.TeleportHandler;
@@ -38,7 +38,7 @@ public final class PluginMain extends JavaPlugin
 {
 	public MessageBuilder messageBuilder;
 	public TeleportHandler teleportHandler;
-	public CommandManager commandManager;
+	public CommandDispatcher commandDispatcher;
 	public HomeStarUtility homeStarUtility;
 
 
@@ -55,7 +55,7 @@ public final class PluginMain extends JavaPlugin
 		teleportHandler = new TeleportHandler(this);
 
 		// instantiate command manager
-		commandManager = new CommandManager(this);
+		commandDispatcher = new CommandDispatcher(this);
 
 		// instantiate player event listeners
 		new PlayerEventListener(this);

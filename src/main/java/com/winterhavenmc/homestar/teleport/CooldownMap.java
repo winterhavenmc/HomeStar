@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import static com.winterhavenmc.library.messagebuilder.models.time.TimeUnit.SECONDS;
 
 
-class CooldownMap
+final class CooldownMap
 {
 	private final JavaPlugin plugin;
 

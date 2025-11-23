@@ -26,7 +26,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 
-class WarmupMap
+final class WarmupMap
 {
 	// reference to plugin main class
 	private final JavaPlugin plugin;
