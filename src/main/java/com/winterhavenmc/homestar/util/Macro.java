@@ -30,4 +30,9 @@ public enum Macro
 	PLUGIN,
 	SETTING,
 	URL,
+
+	NUMBER_LOCALE,
+	DATE_LOCALE,
+	TIME_LOCALE,
+	LOG_LOCALE,
 }
