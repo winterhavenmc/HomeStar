@@ -19,7 +19,7 @@ package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.util.MessageId;
-import com.winterhavenmc.homestar.util.SoundId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -84,9 +84,10 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		}
 
 		// if no arguments, display usage for all commands, else display subcommand help message or invalid command message
-		if (args.isEmpty())
+		else if (args.isEmpty())
 		{
 			displayUsageAll(sender);
+			return true;
 		}
 		else
 		{
@@ -94,9 +95,8 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 					subcommand -> sendCommandHelpMessage(sender, subcommand),
 					() -> sendCommandInvalidMessage(sender)
 			);
+			return true;
 		}
-
-		return true;
 	}
 
 
