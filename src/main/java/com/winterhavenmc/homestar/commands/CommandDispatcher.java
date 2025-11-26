@@ -108,7 +108,6 @@ public final class CommandDispatcher implements TabExecutor
 		{
 			optionalSubcommand = subcommandRegistry.getSubcommand("help");
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
-			plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
 		}
 
 		// execute subcommand

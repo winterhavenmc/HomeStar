@@ -116,8 +116,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		}
 		else
 		{
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-			plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_INVALID_HELP).send();
 		}
 	}
 
@@ -129,8 +128,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 	 */
 	private void sendCommandInvalidMessage(CommandSender sender)
 	{
-		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-		plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_INVALID_HELP).send();
 		displayUsageAll(sender);
 	}
 
