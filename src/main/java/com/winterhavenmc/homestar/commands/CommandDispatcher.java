@@ -19,7 +19,6 @@ package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.util.MessageId;
-import com.winterhavenmc.homestar.util.SoundId;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -108,7 +107,6 @@ public final class CommandDispatcher implements TabExecutor
 		{
 			optionalSubcommand = subcommandRegistry.getSubcommand("help");
 			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_INVALID_COMMAND).send();
-			plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
 		}
 
 		// execute subcommand

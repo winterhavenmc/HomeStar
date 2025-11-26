@@ -19,7 +19,7 @@ package com.winterhavenmc.homestar.commands;
 
 import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.util.MessageId;
-import com.winterhavenmc.homestar.util.SoundId;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -72,8 +72,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission(permissionNode))
 		{
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION).send();
-			return true;
+			return plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION).send();
 		}
 
 		// check max arguments
@@ -85,9 +84,10 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		}
 
 		// if no arguments, display usage for all commands, else display subcommand help message or invalid command message
-		if (args.isEmpty())
+		else if (args.isEmpty())
 		{
 			displayUsageAll(sender);
+			return true;
 		}
 		else
 		{
@@ -95,9 +95,8 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 					subcommand -> sendCommandHelpMessage(sender, subcommand),
 					() -> sendCommandInvalidMessage(sender)
 			);
+			return true;
 		}
-
-		return true;
 	}
 
 
@@ -117,8 +116,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		}
 		else
 		{
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-			plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
+			plugin.messageBuilder.compose(sender, MessageId.COMMAND_INVALID_HELP).send();
 		}
 	}
 
@@ -130,8 +128,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 	 */
 	private void sendCommandInvalidMessage(CommandSender sender)
 	{
-		plugin.messageBuilder.compose(sender, MessageId.COMMAND_HELP_INVALID).send();
-		plugin.messageBuilder.sounds().play(sender, SoundId.COMMAND_INVALID);
+		plugin.messageBuilder.compose(sender, MessageId.COMMAND_INVALID_HELP).send();
 		displayUsageAll(sender);
 	}
 

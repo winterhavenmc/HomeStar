@@ -22,7 +22,6 @@ package com.winterhavenmc.homestar.util;
  */
 public enum SoundId
 {
-	COMMAND_INVALID,
 	COMMAND_SUCCESS_GIVE_SENDER,
 	COMMAND_SUCCESS_GIVE_TARGET,
 

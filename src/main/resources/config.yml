@@ -4,7 +4,7 @@
 language: en-US
 
 # NOTE: UNCOMMENT ONLY ONE OF THE FOLLOWING LOCALE SETTINGS
-# Locale for all context types (number, date, time, log)
+# global Locale setting for all locale types (number, date, time, log)
 #locale: en-US
 
 # locale settings for individual types; uses system default if unset or invalid

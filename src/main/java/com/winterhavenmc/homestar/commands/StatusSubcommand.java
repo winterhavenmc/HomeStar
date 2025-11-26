@@ -21,8 +21,6 @@ import com.winterhavenmc.homestar.PluginMain;
 import com.winterhavenmc.homestar.util.Macro;
 import com.winterhavenmc.homestar.util.MessageId;
 
-import com.winterhavenmc.library.messagebuilder.adapters.resources.configuration.BukkitConfigRepository;
-import com.winterhavenmc.library.messagebuilder.models.configuration.ConfigRepository;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -35,8 +33,6 @@ import java.util.Objects;
 final class StatusSubcommand extends AbstractSubcommand
 {
 	private final PluginMain plugin;
-	private final ConfigRepository configRepository;
-
 
 
 	/**
@@ -51,7 +47,6 @@ final class StatusSubcommand extends AbstractSubcommand
 		this.permissionNode = "homestar.status";
 		this.usageString = "/homestar status";
 		this.description = MessageId.COMMAND_HELP_STATUS;
-		this.configRepository = BukkitConfigRepository.create(plugin);
 	}
 
 
@@ -61,8 +56,7 @@ final class StatusSubcommand extends AbstractSubcommand
 		// if sender does not have permission to reload config, send error message and return true
 		if (!sender.hasPermission(permissionNode))
 		{
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION).send();
-			return true;
+			return plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_STATUS_PERMISSION).send();
 		}
 
 		// check max arguments
@@ -129,11 +123,38 @@ final class StatusSubcommand extends AbstractSubcommand
 	}
 
 
-	private void displayLocaleSetting(final CommandSender sender)
+	@SuppressWarnings("UnusedReturnValue")
+	private boolean displayLocaleSetting(final CommandSender sender)
 	{
-		plugin.messageBuilder.compose(sender, MessageId.COMMAND_STATUS_LOCALE)
-				.setMacro(Macro.SETTING, configRepository.locale().toLanguageTag())
+		return allEqual()
+				? displaySimpleLocaleSetting(sender)
+				: displayDetailedLocaleSetting(sender);
+	}
+
+
+	private boolean displaySimpleLocaleSetting(final CommandSender sender)
+	{
+		return plugin.messageBuilder.compose(sender, MessageId.COMMAND_STATUS_LOCALE)
+				.setMacro(Macro.SETTING, plugin.messageBuilder.config().locale().toLanguageTag())
 				.send();
+	}
+
+
+	private boolean displayDetailedLocaleSetting(final CommandSender sender)
+	{
+		return plugin.messageBuilder.compose(sender, MessageId.COMMAND_STATUS_LOCALE_DETAIL)
+				.setMacro(Macro.NUMBER_LOCALE, plugin.messageBuilder.config().numberLocale().toLanguageTag())
+				.setMacro(Macro.DATE_LOCALE, plugin.messageBuilder.config().dateLocale().toLanguageTag())
+				.setMacro(Macro.TIME_LOCALE, plugin.messageBuilder.config().timeLocale().toLanguageTag())
+				.setMacro(Macro.LOG_LOCALE, plugin.messageBuilder.config().logLocale().toLanguageTag())
+				.send();
+	}
+
+	private boolean allEqual()
+	{
+		return (plugin.messageBuilder.config().numberLocale().equals(plugin.messageBuilder.config().dateLocale())
+				&& plugin.messageBuilder.config().numberLocale().equals(plugin.messageBuilder.config().timeLocale())
+				&& plugin.messageBuilder.config().numberLocale().equals(plugin.messageBuilder.config().logLocale()));
 	}
 
 
