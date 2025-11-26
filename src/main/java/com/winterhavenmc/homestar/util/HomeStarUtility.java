@@ -36,6 +36,7 @@ public final class HomeStarUtility
 	public static final String ITEM_KEY_STRING = "HOMESTAR";
 	private final PluginMain plugin;
 
+
 	/**
 	 * class constructor
 	 *
