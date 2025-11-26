@@ -72,8 +72,7 @@ final class HelpSubcommand extends AbstractSubcommand implements Subcommand
 		// if command sender does not have permission to display help, output error message and return true
 		if (!sender.hasPermission(permissionNode))
 		{
-			plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION).send();
-			return true;
+			return plugin.messageBuilder.compose(sender, MessageId.COMMAND_FAIL_HELP_PERMISSION).send();
 		}
 
 		// check max arguments
