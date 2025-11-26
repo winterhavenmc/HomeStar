@@ -115,7 +115,7 @@ MESSAGES:
   #    MESSAGE_TEXT: "<dark_aqua>That player is not online.</dark_aqua>"
 
 
-  COMMAND_HELP_INVALID:
+  COMMAND_INVALID_HELP:
     MESSAGE_TEXT: "<dark_aqua>[{PLUGIN}]</dark_aqua> <red>That is not a valid command!</red>"
 
   COMMAND_HELP_DESTROY:
